@@ -23,8 +23,12 @@ export class NavBarComponent {
   ngOnInit() {
     this.items = [
       {
-        label: 'Cargar',
+        label: 'Cargar Datos',
         routerLink: 'upload',
+      },
+      {
+        label: 'Previsualizar',
+        routerLink: 'preview',
       },
       {
         label: 'Anonimizar',

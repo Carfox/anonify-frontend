@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { Menubar } from 'primeng/menubar';
 
 @Component({
   standalone: true,
-  selector: 'app-data-upload-layout',
+  selector: 'data-upload-layout',
+  imports: [Menubar, RouterModule],
   template: `
-    <h2>Subir Información</h2>
-    <nav>
-      <a routerLink="by-file">Cargar desde Archivo</a> |
-      <a routerLink="by-db">Cargar desde Base de Datos</a>
-    </nav>
+    <h2>Cargar Información</h2>
+    <div class="card">
+      <p-menubar [model]="items" />
+    </div>
     <router-outlet></router-outlet>
   `,
   styles: [
@@ -24,6 +26,22 @@ import { RouterModule } from '@angular/router';
       }
     `,
   ],
-  imports: [RouterModule],
 })
-export class DataUploadLayoutComponent {}
+export class DataUploadLayoutComponent {
+  items: MenuItem[] | undefined;
+
+  ngOnInit() {
+    this.items = [
+      {
+        label: 'Subir por Archivo',
+        icon: 'pi pi-file',
+        routerLink: 'by-file',
+      },
+      {
+        label: 'Subir por Base de Datos',
+        icon: 'pi pi-database',
+        routerLink: 'by-db',
+      },
+    ];
+  }
+}
