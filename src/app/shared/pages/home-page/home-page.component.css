@@ -1,0 +1,12 @@
+/* Estilos personalizados opcionales */
+.h-screen {
+  height: 100vh;
+}
+
+.text-primary {
+  color: #007ad9; /* Azul principal */
+}
+
+.bg-white {
+  background-color: #ffffff;
+}

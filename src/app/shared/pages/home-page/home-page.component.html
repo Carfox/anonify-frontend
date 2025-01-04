@@ -1,1 +1,16 @@
-<p>home-page works!</p>
+<div class="flex align-items-center justify-content-center h-screen surface-50">
+  <div class="p-5 border-round shadow-2 bg-white text-center w-10 md:w-6 lg:w-4">
+    <h1 class="mb-3">Bienvenido a <span class="text-primary">Anonify</span></h1>
+    <p class="text-600 mb-5">
+      Protege tus datos y garantiza tu privacidad con nuestras técnicas avanzadas de anonimización.
+    </p>
+    <button
+      pButton
+      type="button"
+      label="Empezar"
+      icon="pi pi-arrow-right"
+      class="w-full p-button-raised p-button-primary"
+      (click)="onStart()">
+    </button>
+  </div>
+</div>
