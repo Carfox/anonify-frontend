@@ -5,11 +5,12 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class DataSharingService {
-  private tableSource = new BehaviorSubject<any>(Object); // Valor inicial vacío
+  private tableSource = new BehaviorSubject<any>(undefined); // Valor inicial vacío
   currentTableData$ = this.tableSource.asObservable(); // Observable público para suscribirse
 
   // Método para actualizar los datos
-  updateTable(newData: Object) {
-    this.tableSource.next(newData[0]);
+  updateTable(newData: any) {
+    console.log('DataSharingService: ', newData);
+    this.tableSource.next(newData);
   }
 }

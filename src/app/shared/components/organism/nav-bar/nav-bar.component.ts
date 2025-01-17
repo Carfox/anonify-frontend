@@ -1,16 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { StepsModule } from 'primeng/steps';
-import { Toast } from 'primeng/toast';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'shared-nav-bar',
   standalone: true,
-  imports: [Toast, StepsModule],
+  imports: [StepsModule],
   template: `
     <div class="card">
-      <!-- <p-toast /> -->
       <p-steps [model]="items" [readonly]="false" />
     </div>
   `,
@@ -31,8 +28,12 @@ export class NavBarComponent {
         routerLink: 'preview',
       },
       {
+        label: 'Identificadores',
+        routerLink: 'identifier',
+      },
+      {
         label: 'Anonimizar',
-        routerLink: 'anonimizar',
+        routerLink: 'anonymize',
       },
       {
         label: 'Resultados',
