@@ -5,9 +5,11 @@ import { providePrimeNG } from 'primeng/config';
 import Material from '@primeng/themes/material';
 
 import { routes } from './app.routes';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),

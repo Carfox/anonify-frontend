@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   imports: [Toast, StepsModule],
   template: `
     <div class="card">
-      <!-- <p-toast /> -->
+      <p-toast />
       <p-steps [model]="items" [readonly]="false" />
     </div>
   `,
@@ -25,14 +25,24 @@ export class NavBarComponent {
       {
         label: 'Cargar Datos',
         routerLink: 'upload',
+        title: 'Cargar Datos',
+        description: 'Ingrese los datos a cargar',
       },
       {
         label: 'Previsualizar',
         routerLink: 'preview',
+        title: 'Previsualizacion de datos',
+        description: 'Vista previa de los datos cargados',
+      },
+      {
+        label: 'Identificadores',
+        routerLink: 'identifier',
+        title: 'Identificadores',
+        description: 'Identifica los tipos de datos correspondientes sensibles',
       },
       {
         label: 'Anonimizar',
-        routerLink: 'anonimizar',
+        routerLink: 'anonymize',
       },
       {
         label: 'Resultados',

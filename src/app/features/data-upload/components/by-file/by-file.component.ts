@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataSharingService } from 'app/shared/services/data-sharing.service';
+import { FileService } from 'app/features/services/file.service';
 import { MessageService } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
-import { PrimeNG } from 'primeng/config';
-import { FileUpload, } from 'primeng/fileupload';
+import { FileUpload } from 'primeng/fileupload';
 import { ProgressBar, ProgressBarModule } from 'primeng/progressbar';
-import { Toast, ToastModule } from 'primeng/toast';
+import { ToastModule } from 'primeng/toast';
+import { DataSharingService } from 'app/shared/services/data-sharing.service';
 interface UploadEvent {
   originalEvent: Event;
   files: File[];
@@ -24,7 +23,6 @@ interface UploadEvent {
     BadgeModule,
     ProgressBar,
     ToastModule,
-    HttpClientModule,
     CommonModule,
   ],
   providers: [MessageService],
@@ -35,27 +33,36 @@ interface UploadEvent {
 export class ByFileComponent {
   uploadedFiles: any[] = [];
 
-  constructor(
-    private router: Router,
-    private messageService: MessageService) {}
+  constructor(private router: Router, private messageService: MessageService) {}
+  private fileService = inject(FileService);
   private dataSharingService = inject(DataSharingService);
 
   onUpload(event: any) {
-    for (let file of event.files) {
-      this.uploadedFiles.push(file);
-    }
-    console.log('archivo cargado', event.files[0]);
-    this.dataSharingService.updateTable(this.uploadedFiles[0]);
 
-    this.messageService.add({
-      severity: 'info',
-      summary: 'File Uploaded',
-      detail: '',
-    });
+    for (let file of event.files) {
+      this.fileService.postUploadFile(file).subscribe(
+        (response:any) => {
+          console.log('Upload successful', response);
+          localStorage.setItem('data', JSON.stringify(response.data));
+          this.messageService.add({
+            severity: 'info',
+            summary: 'File Uploaded',
+            detail: `${file.name} uploaded successfully, ${response.data.length} rows added`,
+          });
+        },
+        (error) => {
+          console.error('Upload failed', error);
+               this.messageService.add({
+                 severity: 'error',
+                 summary: 'File Upload Failed',
+                 detail: error.message,
+               });
+        }
+      );
+    }
   }
 
   goToPreview() {
     this.router.navigate(['/a/preview']);
   }
-
 }
