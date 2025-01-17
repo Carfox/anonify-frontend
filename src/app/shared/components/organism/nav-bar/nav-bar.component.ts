@@ -33,8 +33,6 @@ export class NavBarComponent {
       {
         label: 'Identificadores',
         routerLink: 'identifier',
-        title: 'Identificadores',
-        description: 'Identifica los tipos de datos correspondientes sensibles',
       },
       {
         label: 'Anonimizar',
