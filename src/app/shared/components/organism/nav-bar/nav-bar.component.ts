@@ -25,14 +25,10 @@ export class NavBarComponent {
       {
         label: 'Cargar Datos',
         routerLink: 'upload',
-        title: 'Cargar Datos',
-        description: 'Ingrese los datos a cargar',
       },
       {
         label: 'Previsualizar',
         routerLink: 'preview',
-        title: 'Previsualizacion de datos',
-        description: 'Vista previa de los datos cargados',
       },
       {
         label: 'Identificadores',
