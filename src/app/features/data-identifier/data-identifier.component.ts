@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
   standalone: true,
   imports: [],
-  template: `<p>data-identifier works!</p>`,
+  templateUrl: './data-identifier.component.html',
   styleUrl: './data-identifier.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataIdentifierComponent { }
+export class DataIdentifierComponent {}
