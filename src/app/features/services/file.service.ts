@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 export class FileService {
   private apiUrl = environment.apiUrl;
   private uploadCSV = environment.routes.uploadCSV.url;
+  private headersCSV = environment.routes.headersCSV.url;
 
   constructor(private http: HttpClient) {}
   postUploadFile(file: File) {
@@ -17,7 +18,7 @@ export class FileService {
     return this.http.post(`${this.apiUrl}${this.uploadCSV}`, formData);
   }
 
-  // getDownloadFile(): Observable<any> {
-  //   return this.http.get(`${this.apiUrl}${this.downloadTempCSV}`);
-  // }
+  getheadersFromFile() {
+    return this.http.get<any>(`${this.apiUrl}${this.headersCSV}`);
+  }
 }

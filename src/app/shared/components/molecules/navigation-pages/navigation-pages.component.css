@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+.disabled {
+  pointer-events: none; /* Impide interacción con el elemento */
+  opacity: 0.5; /* Reduce la opacidad para dar apariencia desactivada */
+  background-color: #f5f5f5; /* Color de fondo deshabilitado */
+  cursor: not-allowed; /* Cambia el cursor para reforzar la idea de desactivado */
+}

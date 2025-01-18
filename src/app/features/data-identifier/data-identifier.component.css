@@ -1,3 +1,30 @@
 :host {
   display: block;
 }
+/* Mejora de la accesibilidad del texto */
+.text-justify {
+  text-align: justify;
+}
+
+.p-card {
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.p-card-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.p-listbox {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.data-identifier-card {
+  transition: transform 0.2s;
+}
+
+.data-identifier-card:hover {
+  transform: scale(1.03); /* Efecto de escala al pasar el mouse */
+}

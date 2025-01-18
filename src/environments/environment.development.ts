@@ -10,9 +10,13 @@ export const environment = {
       url: '/preview',
       name: 'Vista previa',
     },
-    downloadTempCSV:{
+    downloadTempCSV: {
       url: '/download-temp-csv',
       name: 'Descargar CSV',
-    }
+    },
+    headersCSV: {
+      url: '/get-headers',
+      name: 'Obtiene los headers de un archivo previamente subido',
+    },
   },
 };

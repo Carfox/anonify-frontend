@@ -1,18 +1,17 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { Card } from 'primeng/card';
 import { Menubar } from 'primeng/menubar';
 
 @Component({
   standalone: true,
-  selector: 'data-upload-layout',
-  imports: [Menubar, RouterModule],
+  imports: [Menubar, RouterModule, Card],
   template: `
-    <h2>Cargar Información</h2>
-    <div class="card">
+    <p-card header="Cargar Información">
       <p-menubar [model]="items" />
-    </div>
-    <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
+    </p-card>
   `,
   styles: [
     `
