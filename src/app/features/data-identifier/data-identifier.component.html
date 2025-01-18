@@ -1,1 +1,16 @@
-data identifiers works
+  <p>
+    Se ha identificado los siguientes identificadores, categorizarlos en base a
+    su dependencia
+  </p>
+
+  <div class="card flex justify-center">
+    <p-listbox [options]="headers" [(ngModel)]="selectedHeader" optionLabel="name" class="w-full md:w-20" />
+    @for(identifierType of identifierTypeList; track identifierTypeList){
+      <data-identifier-card
+      [identifierType]="identifierType"
+      [headersData]="headers"
+      class="w-full md:w-20"
+      ></data-identifier-card>
+    }
+
+  </div>

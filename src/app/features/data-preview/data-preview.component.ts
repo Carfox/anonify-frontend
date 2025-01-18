@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { DataSharingService } from 'app/shared/services/data-sharing.service';
+import { Card } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, TableModule],
+  imports: [CommonModule, TableModule, Card, DividerModule],
   templateUrl: `./data-preview.component.html`,
   styleUrl: './data-preview.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,7 +21,7 @@ export class DataPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     try {
-      if(localStorage.getItem('data')){
+      if (localStorage.getItem('data')) {
         this.data = JSON.parse(localStorage.getItem('data'));
         this.generateColumns();
       }

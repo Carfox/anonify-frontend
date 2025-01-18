@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { NavigationService } from 'app/shared/services/navigation.service';
 import { MenuItem } from 'primeng/api';
 import { StepsModule } from 'primeng/steps';
 
@@ -15,34 +16,9 @@ import { StepsModule } from 'primeng/steps';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavBarComponent {
-  public items!: MenuItem[];
-
-  ngOnInit() {
-    this.items = [
-      {
-        label: 'Cargar Datos',
-        routerLink: 'upload',
-      },
-      {
-        label: 'Previsualizar',
-        routerLink: 'preview',
-      },
-      {
-        label: 'Identificadores',
-        routerLink: 'identifier',
-      },
-      {
-        label: 'Anonimizar',
-        routerLink: 'anonymize',
-      },
-      {
-        label: 'Resultados',
-        routerLink: 'review',
-      },
-    ];
+  public items = inject(NavigationService).items;
 
 
-  }
 
 
 }
