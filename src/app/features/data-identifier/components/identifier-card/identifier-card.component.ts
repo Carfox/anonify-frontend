@@ -1,5 +1,5 @@
 import { Listbox } from 'primeng/listbox';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { Header } from 'app/core/interfaces/header.interface';
@@ -46,19 +46,35 @@ import { CommonModule } from '@angular/common';
   styleUrl: './identifier-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IdentifierCardComponent {
+export class IdentifierCardComponent  implements OnInit{
+
   @Input({ required: true }) identifierType: IdentifierType;
   @Input({ required: true }) headersData: Header[];
   public headersSelected: Header[] = [];
   public selectedHeader!: string;
 
+  ngOnInit(): void {
+    if(localStorage.getItem(this.identifierType.value)){
+      this.headersSelected = JSON.parse(localStorage.getItem(this.identifierType.value) || '{}');
+    }
+}
+
   receiveHeadersData(event: any) {
-    console.log('Recibiendo datos', event);
+
     if(this.headersSelected.length > 0) {
       this.headersSelected = this.headersSelected.concat(event); // Actualizamos los datos recibidos
+       localStorage.setItem(
+         this.identifierType.value,
+         JSON.stringify(this.headersSelected)
+       );
     }else{
 
       this.headersSelected = event; // Actualizamos los datos recibidos
+      localStorage.setItem(
+        this.identifierType.value,
+        JSON.stringify(this.headersSelected)
+      );
+
     }
   }
 }
