@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { ProjectsComponent } from "../../../features/projects/projects.component";
 
 @Component({
   selector: 'app-home-page',

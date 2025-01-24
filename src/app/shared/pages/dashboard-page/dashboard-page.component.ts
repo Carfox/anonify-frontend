@@ -18,9 +18,9 @@ import { NavigationPagesComponent } from 'app/shared/components/molecules/naviga
   template: `
     <p-card header="Anonify">
       <shared-nav-bar />
+      <shared-nav-pages />
     </p-card>
     <router-outlet />
-    <shared-nav-pages />
   `,
   styleUrl: './dashboard-page.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

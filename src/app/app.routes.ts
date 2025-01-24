@@ -4,9 +4,14 @@ import { DashboardPageComponent } from './shared/pages/dashboard-page/dashboard-
 import { dataUploadRoutes } from './features/data-upload/data-upload.routes';
 import { DataPreviewComponent } from './features/data-preview/data-preview.component';
 import { DataIdentifierComponent } from './features/data-identifier/data-identifier.component';
+import { DataAnoymizeComponent } from './features/data-anoymize/data-anoymize.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { ProjectPageComponent } from './shared/pages/project-page/project-page.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomePageComponent, pathMatch: 'full' },
+  { path: 'auth', component: LoginComponent, pathMatch: 'full' },
+  { path: 'projects', component: ProjectPageComponent, pathMatch: 'full' },
   {
     path: 'a',
     component: DashboardPageComponent,
@@ -27,7 +32,7 @@ export const routes: Routes = [
       },
       {
         path: 'anonymize',
-        component: DataIdentifierComponent,
+        component: DataAnoymizeComponent,
         pathMatch: 'full',
       },
       // {
@@ -35,8 +40,8 @@ export const routes: Routes = [
       //   loadChildren: () => import('./features/projects/projects.module').then((m) => m.ProjectsModule),
       // },
 
-      { path: 'anonimizar', component: HomePageComponent, pathMatch: 'full' },
+      { path: 'review', component: DataAnoymizeComponent, pathMatch: 'full' },
     ],
   },
-  { path: '**', redirectTo:'home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];

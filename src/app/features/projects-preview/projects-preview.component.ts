@@ -8,4 +8,4 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './projects-preview.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectsPreviewCompvscoonent { }
+export class ProjectsPreviewComponent { }
