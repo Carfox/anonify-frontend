@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.buttons {
+  background-color: #f8f9fa; /* Fondo claro para destacar los botones */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para separación */
+  z-index: 1; /* Asegura que los botones estén encima de otros elementos */
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 0;
+}
+
+.project-list-container {
+  flex: 1;
+  overflow-y: auto; /* Permite desplazamiento si hay muchos proyectos */
+}

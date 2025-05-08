@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment.development';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileService {
-  private apiUrl = environment.apiUrl;
-  private uploadCSV = environment.routes.uploadCSV.url;
-  private headersCSV = environment.routes.headersCSV.url;
+  private apiUrl = environment.apiCarfox;
+  private uploadCSV = environment.routes.anoninaus.uploadCSV.url;
+  private headersCSV = environment.routes.anoninaus.headersCSV.url;
 
   constructor(private http: HttpClient) {}
   postUploadFile(file: File) {

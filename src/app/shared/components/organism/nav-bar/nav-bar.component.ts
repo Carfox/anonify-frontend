@@ -8,17 +8,14 @@ import { StepsModule } from 'primeng/steps';
   standalone: true,
   imports: [StepsModule],
   template: `
-    <div class="card">
+    <!-- <div class="card">
       <p-steps [model]="items" [readonly]="false" />
-    </div>
+    </div> -->
   `,
   styleUrl: './nav-bar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavBarComponent {
-  public items = inject(NavigationService).items;
-
-
-
+  // public items = inject(NavigationService).anonNavitems;
 
 }

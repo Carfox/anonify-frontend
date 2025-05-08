@@ -2,33 +2,19 @@ import { Injectable } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NavigationService {
+  constructor() {}
 
-  constructor() { }
-
-  public items: MenuItem[] = [
-        {
-          label: 'Cargar Datos',
-          routerLink: 'upload',
-        },
-        {
-          label: 'Previsualizar',
-          routerLink: 'preview',
-        },
-        {
-          label: 'Identificadores',
-          routerLink: 'identifier',
-        },
-        {
-          label: 'Anonimizar',
-          routerLink: 'anonymize',
-        },
-        {
-          label: 'Resultados',
-          routerLink: 'review',
-        },
-    ];
-
+  public navItems: MenuItem[] = [
+    {
+      label: 'Home',
+      routerLink: 'home',
+    },
+    {
+      label: 'Anonimización',
+      routerLink: '/a',
+    },
+  ];
 }

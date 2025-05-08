@@ -1,13 +1,12 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, inject, OnInit } from '@angular/core';
-import { Card } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { FileService } from '../services/file.service';
 import { CommonModule } from '@angular/common';
 import { Listbox } from 'primeng/listbox';
 import { FormsModule } from '@angular/forms';
 import { IdentifierCardComponent } from './components/identifier-card/identifier-card.component';
 import { Header } from 'app/core/interfaces/header.interface';
 import { IdentifierType } from 'app/core/interfaces/identifierType.interface';
+import { FileService } from 'app/core/services/file.service';
 
 @Component({
   standalone: true,
@@ -53,8 +52,8 @@ export class DataIdentifierComponent {
     private cdr: ChangeDetectorRef
   ) {
     this.fileService.getheadersFromFile().subscribe((res: any) => {
-      console.log(res.headers);
-      this.headers = res.headers;
+      console.log(res);
+      this.headers = res.data;
       this.cdr.detectChanges();
     });
   }
