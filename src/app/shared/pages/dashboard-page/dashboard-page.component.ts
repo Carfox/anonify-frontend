@@ -3,7 +3,6 @@ import { NavBarComponent } from '../../components/organism/nav-bar/nav-bar.compo
 import { RouterOutlet } from '@angular/router';
 import { DividerModule } from 'primeng/divider';
 import { Card } from 'primeng/card';
-import { NavigationPagesComponent } from 'app/shared/components/molecules/navigation-pages/navigation-pages.component';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -13,12 +12,12 @@ import { NavigationPagesComponent } from 'app/shared/components/molecules/naviga
     RouterOutlet,
     DividerModule,
     Card,
-    NavigationPagesComponent,
   ],
   template: `
-    <p-card header="Anonify">
+    <p-card header="Dashboard" class="w-full h-full">
+      <p-divider></p-divider>
       <shared-nav-bar />
-      <shared-nav-pages />
+      <!-- <shared-nav-pages /> -->
     </p-card>
     <router-outlet />
   `,

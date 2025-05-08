@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ProjectService } from './project.service';
 import { Button } from 'primeng/button';
 import { Project } from 'app/core/interfaces/project.interface';
@@ -102,8 +102,8 @@ import { MessageService } from 'primeng/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent {
-  public projects!: Project[];
-  private userID: string;
+  @Input({required: true}) projects: Project[];
+  @Input({required: true}) userID: string;
   public title: string;
   public description: string;
   constructor(
@@ -111,13 +111,6 @@ export class ProjectsComponent {
     private projectService: ProjectService
   ) {}
 
-  ngOnInit(): void {
-    this.projectService.allprojects.subscribe((res: any) => {
-      console.log(res);
-      this.projects = res.projects;
-      this.userID = res.id;
-    });
-  }
 
   getAllProjects(): void {
     this.projectService.allprojects.subscribe((res: any) => {

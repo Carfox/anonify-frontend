@@ -7,26 +7,14 @@ import { MenuItem } from 'primeng/api';
 export class NavigationService {
   constructor() {}
 
-  public items: MenuItem[] = [
+  public navItems: MenuItem[] = [
     {
-      label: 'Cargar Datos',
-      routerLink: 'upload',
+      label: 'Home',
+      routerLink: 'home',
     },
     {
-      label: 'Previsualizar',
-      routerLink: 'preview',
-    },
-    {
-      label: 'Identificadores',
-      routerLink: 'identifier',
-    },
-    {
-      label: 'Anonimizar',
-      routerLink: 'anonymize',
-    },
-    {
-      label: 'resultados',
-      routerLink: 'review',
+      label: 'Anonimización',
+      routerLink: '/a',
     },
   ];
 }

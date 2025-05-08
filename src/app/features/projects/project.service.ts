@@ -9,8 +9,8 @@ import { environment } from 'environments/environment.development';
 export class ProjectService {
   constructor(private http: HttpClient) {}
   private apiURL = environment.apiUrl;
-  private projectsURL = environment.routes.allProjects.url;
-  private newProject = environment.routes.addNewProject.url;
+  private projectsURL = undefined;
+  private newProject = undefined
 
   get allprojects() {
     return this.http.get(`${this.apiURL}${this.projectsURL}`);

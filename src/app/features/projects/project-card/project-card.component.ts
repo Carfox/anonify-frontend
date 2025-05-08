@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Project } from 'app/core/interfaces/project.interface';
 import { Button } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -34,9 +35,11 @@ import { CardModule } from 'primeng/card';
 })
 export class ProjectCardComponent {
   @Input({required: true}) item: Project;
+  private router = inject(Router);
 
 
   onMoreInfo() {
+    this.router.navigate(['/projects', this.item.id]);
     console.log('Más información sobre el elemento:', this.item);
   }
 }

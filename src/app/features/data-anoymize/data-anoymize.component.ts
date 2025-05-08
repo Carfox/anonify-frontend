@@ -3,8 +3,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
   selector: 'app-data-anoymize',
   standalone: true,
-  imports: [],
-  template: `<p>data-anoymize works!</p>`,
+  imports: [
+
+
+    // <>    // <app-data-anoymize-card></app-data-anoymize-card>
+  ],
+  template: ``,
   styleUrl: './data-anoymize.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

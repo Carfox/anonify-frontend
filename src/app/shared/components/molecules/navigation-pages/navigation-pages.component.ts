@@ -1,9 +1,7 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
-  OnInit,
 } from '@angular/core';
 import { NavigationButtonComponent } from '../../atoms/navigation-button/navigation-button.component';
 import { NavigationEnd, Router } from '@angular/router';
@@ -17,7 +15,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, NavigationButtonComponent],
   template: `
-      <shared-nav-button
+      <!-- <shared-nav-button
         *ngIf="nav.previous; else noPrevious"
         label="Regresar"
         icon="pi-arrow-left"
@@ -32,47 +30,55 @@ import { CommonModule } from '@angular/common';
         icon="pi-arrow-right"
         nav="{{ nav.next.routerLink }}"
       >
-      </shared-nav-button>
+      </shared-nav-button> -->
   `,
   styleUrl: './navigation-pages.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationPagesComponent {
-  public items = inject(NavigationService).items;
-  public nav: any | undefined;
+  ////////////////////////////////////////////////////////////////////////////////
+  //Esta seccion de codigo se ha comentado porque no se utuiliza en la aplicacion,
+  // se ha dejado para futuras referencias o para ser utilizada en el futuro.
+  // utilizabamos el servicio NavigationService para obtener los items de navegacion
+  // y el router para obtener la url activa.
+  ////////////////////////////////////////////////////////////////////////////////
 
-  constructor(private router: Router) {
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        console.log(event);
-        try {
-          this.nav = this.findRouteAndNeighbors(this.items, event.url);
-          console.log('Resultado:', this.nav);
-        } catch (error) {
-          console.error(error.message);
-        }
-      });
-  }
 
-  findRouteAndNeighbors(
-    routes: MenuItem[],
-    activeRoute: string
-  ): { previous?: MenuItem; match?: MenuItem; next?: MenuItem } {
-    // Encuentra el índice del objeto que hace match
-    const index = routes.findIndex((route) =>
-      activeRoute.includes(route.routerLink)
-    );
+  // public items = inject(NavigationService).anonNavitems;
+  // public nav: any | undefined;
 
-    if (index === -1) {
-      throw new Error(
-        'No se encontró un objeto con un routerLink que coincida.'
-      );
-    }
-    return {
-      previous: index > 0 ? routes[index - 1] : undefined, // El anterior, si existe
-      match: routes[index], // El objeto que hace match
-      next: index < routes.length - 1 ? routes[index + 1] : undefined, // El siguiente, si existe
-    };
-  }
+  // constructor(private router: Router) {
+  //   this.router.events
+  //     .pipe(filter((event) => event instanceof NavigationEnd))
+  //     .subscribe((event) => {
+  //       console.log(event);
+  //       try {
+  //         this.nav = this.findRouteAndNeighbors(this.items, event.url);
+  //         console.log('Resultado:', this.nav);
+  //       } catch (error) {
+  //         console.error(error.message);
+  //       }
+  //     });
+  // }
+
+  // findRouteAndNeighbors(
+  //   routes: MenuItem[],
+  //   activeRoute: string
+  // ): { previous?: MenuItem; match?: MenuItem; next?: MenuItem } {
+  //   // Encuentra el índice del objeto que hace match
+  //   const index = routes.findIndex((route) =>
+  //     activeRoute.includes(route.routerLink)
+  //   );
+
+  //   if (index === -1) {
+  //     throw new Error(
+  //       'No se encontró un objeto con un routerLink que coincida.'
+  //     );
+  //   }
+  //   return {
+  //     previous: index > 0 ? routes[index - 1] : undefined, // El anterior, si existe
+  //     match: routes[index], // El objeto que hace match
+  //     next: index < routes.length - 1 ? routes[index + 1] : undefined, // El siguiente, si existe
+  //   };
+  // }
 }
