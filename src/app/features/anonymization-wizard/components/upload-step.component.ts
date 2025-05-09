@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+
 import { MessageService } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { FileUpload } from 'primeng/fileupload';
-import { ProgressBar } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
-import { FileService } from 'app/core/services/file.service';
 import { TabsModule } from 'primeng/tabs';
+
+import { FileDataSharedService } from 'app/core/services/file-data-shared.service';
+import { FileService } from 'app/core/services/file.service';
 interface UploadEvent {
   originalEvent: Event;
   files: File[];
@@ -21,7 +23,6 @@ interface UploadEvent {
     FileUpload,
     ButtonModule,
     BadgeModule,
-    ProgressBar,
     ToastModule,
   ],
   providers: [MessageService],
@@ -88,50 +89,57 @@ interface UploadEvent {
 export class UploadStepComponent {
   uploadedFiles: File[] = [];
 
-  constructor(
-    private fileService: FileService,
-    private messageService: MessageService
-  ) {}
+  private fileService = inject(FileService);
+  private messageService = inject(MessageService);
 
   // TODO: Refactorizar el servicio de carga de archivos para que use el antiguo y avise el cuando no se haya subido el archivo
 
-  onUpload(event: any) {
+  // onUpload(event: any) {
+  //   for (let file of event.files) {
+  //     this.uploadedFiles.push(file);
+  //     this.fileService.postUploadFile(file).subscribe(
+  //       (response: any) => {
+  //         console.log('Upload successful', response);
+  //         localStorage.setItem('data', JSON.stringify(response.data));
+  //         this.messageService.add({
+  //           severity: 'info',
+  //           summary: 'File Uploaded',
+  //           detail: `${file.name} uploaded successfully, ${response.data.length} rows added`,
+  //         });
+  //       },
+  //       (error) => {
+  //         console.error('Upload failed', error);
+  //         this.messageService.add({
+  //           severity: 'error',
+  //           summary: 'File Upload Failed',
+  //           detail: error.message,
+  //         });
+  //       }
+  //     );
+  //   }
+  // }
+
+  onUploadNG(event: any) {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
-      this.fileService.postUploadFile(file).subscribe(
-        (response: any) => {
-          console.log('Upload successful', response);
-          localStorage.setItem('data', JSON.stringify(response.data));
-          this.messageService.add({
-            severity: 'info',
-            summary: 'File Uploaded',
-            detail: `${file.name} uploaded successfully, ${response.data.length} rows added`,
-          });
-        },
-        (error) => {
-          console.error('Upload failed', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'File Upload Failed',
-            detail: error.message,
-          });
-        }
-      );
-    }
-  }
-
-  onUploadNG(event: UploadEvent) {
-    for (let file of event.files) {
-      this.uploadedFiles.push(file);
-
     }
 
-     this.messageService.add({
-       severity: 'info',
-       summary: 'Carga de archivo',
-       detail: `${event.files[0].name} cargado correctamente`,
-     });
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Carga de archivo',
+      detail: `${event.files[0].name} cargado correctamente`,
+    });
 
+    // this.fileDataSharedService.updateSession(event.originalEvent.body.data.session_id);
+    localStorage.setItem(
+      'sessionID',
+      event.originalEvent.body.data.session_id
+    );
 
   }
+
+  isDataLoaded(): boolean {
+    return !!localStorage.getItem('sessionID'); // Verifica si hay un sessionID en el localStorage
+  }
+
 }

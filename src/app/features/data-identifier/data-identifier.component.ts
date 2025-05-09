@@ -51,11 +51,11 @@ export class DataIdentifierComponent {
     private fileService: FileService,
     private cdr: ChangeDetectorRef
   ) {
-    this.fileService.getheadersFromFile().subscribe((res: any) => {
-      console.log(res);
-      this.headers = res.data;
-      this.cdr.detectChanges();
-    });
+    // this.fileService.getheadersFromFile().subscribe((res: any) => {
+    //   console.log(res);
+    //   this.headers = res.data;
+    //   this.cdr.detectChanges();
+    // });
   }
 
   // saveIdentifier() {
