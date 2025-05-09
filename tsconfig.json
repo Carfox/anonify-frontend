@@ -29,6 +29,6 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": false //TO DO: set to true when all components are migrated to standalone components
   }
 }

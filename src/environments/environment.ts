@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://my-prod-url',
+  apiUrlAnonymize: 'http://backend:8000',
 };

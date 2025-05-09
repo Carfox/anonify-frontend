@@ -11,9 +11,12 @@ export class FileService {
   private headersCSV = environment.routes.anoninaus.headersCSV.url;
 
   constructor(private http: HttpClient) {}
+
   postUploadFile(file: File) {
     const formData = new FormData();
+
     formData.append('file', file);
+
     return this.http.post(`${this.apiUrl}${this.uploadCSV}`, formData);
   }
 
