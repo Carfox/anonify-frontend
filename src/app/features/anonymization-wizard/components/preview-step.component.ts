@@ -10,14 +10,6 @@ import { TableModule } from 'primeng/table';
   standalone: true,
   imports: [CommonModule, TableModule, Card, DividerModule],
   template: `
-    <p-divider />
-
-      <h2 class="text-surface-900 dark:text-surface-0 font-bold text-3xl mb-4">Vista previa de datos</h2>
-      <p class="text-surface-600 dark:text-surface-200 text-base leading-normal mb-8">
-        Vista previa de los datos cargados en el paso anterior.
-      </p>
-
-
     <p-table
       [value]="data"
       [paginator]="true"
