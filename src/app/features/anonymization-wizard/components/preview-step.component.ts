@@ -12,8 +12,8 @@ import { TableModule } from 'primeng/table';
   template: `
     <p-divider />
 
-      <h2 class="text-900 font-bold text-3xl mb-3">Vista previa de datos</h2>
-      <p class="text-600 text-base line-height-3 mb-5">
+      <h2 class="text-surface-900 dark:text-surface-0 font-bold text-3xl mb-4">Vista previa de datos</h2>
+      <p class="text-surface-600 dark:text-surface-200 text-base leading-normal mb-8">
         Vista previa de los datos cargados en el paso anterior.
       </p>
 
