@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FileService } from 'app/core/services/file.service';
 import { Card } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
@@ -11,10 +11,12 @@ import { TableModule } from 'primeng/table';
   imports: [CommonModule, TableModule, Card, DividerModule],
   template: `
     <p-divider />
-    <p>
-      Seleccione los respectivos tipos de identificadores a los que pertenece
-      cada atributo
-    </p>
+
+      <h2 class="text-900 font-bold text-3xl mb-3">Vista previa de datos</h2>
+      <p class="text-600 text-base line-height-3 mb-5">
+        Vista previa de los datos cargados en el paso anterior.
+      </p>
+
 
     <p-table
       [value]="data"
@@ -46,7 +48,7 @@ import { TableModule } from 'primeng/table';
   styles: ``,
 })
 export class PreviewStepComponent implements OnInit {
-  data: any[] = [];
+  data: any[] = undefined;
   cols: any[] = [];
   selectedRows: any[] = [];
 
@@ -55,9 +57,9 @@ export class PreviewStepComponent implements OnInit {
   ngOnInit(): void {
     // try {
 
-    this.data = this.fileService.loadOriginalFileData(
+    this.data = [...this.fileService.loadOriginalFileData(
       localStorage.getItem('sessionID')
-    );
+    )];
     this.generateColumns();
 
     // } catch (error) {
