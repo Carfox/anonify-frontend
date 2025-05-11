@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FileService } from 'app/core/services/file.service';
 import { Card } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
@@ -38,6 +38,8 @@ import { TableModule } from 'primeng/table';
     </p-table>
   `,
   styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class PreviewStepComponent implements OnInit {
   data: any[] = undefined;
@@ -45,18 +47,23 @@ export class PreviewStepComponent implements OnInit {
   selectedRows: any[] = [];
 
   private fileService = inject(FileService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    // try {
+    try {
+    this.fileService
+      .loadOriginalFileData(localStorage.getItem('sessionID'))
+      .subscribe((res: any) => {
+        console.log(res);
+        this.data = res.data;
+        this.cdr.markForCheck();
+        this.generateColumns();
 
-    this.data = [...this.fileService.loadOriginalFileData(
-      localStorage.getItem('sessionID')
-    )];
-    this.generateColumns();
+      });
 
-    // } catch (error) {
-    //   alert('Error loading data');
-    // }
+    } catch (error) {
+      alert('No se ha cargado el archivo correctamente, y no es posible acceder a la información');
+    }
   }
 
   generateColumns(): void {
