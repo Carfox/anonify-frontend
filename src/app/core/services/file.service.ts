@@ -20,25 +20,17 @@ export class FileService {
   private headersCSV = environment.routes.anonimaus.headersCSV.url;
 
   private originalFileData = environment.routes.anonimaus.originalFileData.url;
-  private originalHeadersFileData = environment.routes.anonimaus.originalHeadersFileData.url;
+  private originalHeadersFileData =
+    environment.routes.anonimaus.originalHeadersFileData.url;
   loadOriginalFileData(sessionID: string) {
-    this.http
-      .get(`${this.apiUrl}/${this.originalFileData}/${sessionID}`)
-      .subscribe((res: any) => {
-        this.fileData = res.data;
-      });
+    return this.http.get(`${this.apiUrl}/${this.originalFileData}/${sessionID}`)
 
-    return this.fileData;
   }
 
-  loadHeadersOriginalFileData(sessionID: string) {
-    this.http
-      .get(`${this.apiUrl}/${this.originalHeadersFileData}/${sessionID}`)
-      .subscribe((res: any) => {
-        this.fileHeadersData = res.data;
-      });
-
-    return this.fileHeadersData;
+  loadHeadersFromFileData(sessionID: string) {
+    return this.http.get<{ data: string[] }>(
+      `${this.apiUrl}/${this.originalHeadersFileData}/${sessionID}`
+    );
   }
 
   dataLoaded() {

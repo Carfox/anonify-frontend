@@ -13,8 +13,13 @@ export const environment = {
         name: 'Obtener datos originales del CSV subido',
       },
       originalHeadersFileData: {
-        url: `files/file-headers/{session_id}`,
+        url: `files/file-headers`,
         name: 'Obtener headers de CSV',
+      },
+
+      anonymize: {
+        url: 'anonimaus/anonymize',
+        name: 'Anonymize',
       },
 
       previewCSV: {
