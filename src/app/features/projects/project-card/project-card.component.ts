@@ -19,7 +19,7 @@ import { CardModule } from 'primeng/card';
 
 
       <ng-template #footer>
-        <div class="flex gap-4 mt-1">
+        <div class="flex gap-6 mt-1">
           <p-button
             label="Cargar Proyecto"
             class="w-full"

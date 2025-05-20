@@ -28,7 +28,7 @@ import { MessageService } from 'primeng/api';
     <p-toast />
     <div class="container">
       <!-- Botones -->
-      <div class="buttons flex justify-content-start gap-3 p-3">
+      <div class="buttons flex justify-start gap-4 p-4">
         <p-button (click)="showDialog()" label="Nuevo Proyecto"></p-button>
         <p-button (click)="getAllProjects()" label="All Proyecto"></p-button>
       </div>
@@ -37,7 +37,7 @@ import { MessageService } from 'primeng/api';
       <hr class="divider" />
 
       <!-- Selector de Project List -->
-      <div class="flex  mb-3">
+      <div class="flex  mb-4">
         <project-list [projects]="projects"></project-list>
       </div>
     </div>
@@ -50,10 +50,10 @@ import { MessageService } from 'primeng/api';
         <ng-template #header>
           <span class="font-bold whitespace-nowrap">Nuevo Proyecto</span>
         </ng-template>
-        <span class="text-surface-500 dark:text-surface-400 block mb-4"
+        <span class="text-surface-500 dark:text-surface-400 block mb-6"
           >Ingresa un titulo y descripción al proyecto</span
         >
-        <div class="mb-4">
+        <div class="mb-6">
           <label for="titleProject" class="block font-semibold mb-2"
             >Título</label
           >
@@ -65,7 +65,7 @@ import { MessageService } from 'primeng/api';
             autocomplete="off"
           />
         </div>
-        <div class="mb-4">
+        <div class="mb-6">
           <label for="descriptionProject" class="block font-semibold mb-2"
             >Descripción</label
           >

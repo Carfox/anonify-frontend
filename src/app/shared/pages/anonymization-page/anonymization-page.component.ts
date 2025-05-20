@@ -1,12 +1,12 @@
 import { AnonymizationWizardComponent } from './../../../features/anonymization-wizard/anonymization-wizard.component';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { HeaderComponent } from "../../components/header/header/header.component";
+import { MenuBarComponent } from "../../components/menu-bar/menu-bar.component";
 
 @Component({
   standalone: true,
-  imports: [AnonymizationWizardComponent, HeaderComponent],
+  imports: [AnonymizationWizardComponent, MenuBarComponent],
   template: `
-    <shared-header></shared-header>
+      <shared-menu-bar></shared-menu-bar>
       <app-anonymization-wizard></app-anonymization-wizard>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

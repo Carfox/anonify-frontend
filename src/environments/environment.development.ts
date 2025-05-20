@@ -3,15 +3,25 @@ export const environment = {
   apiUrl: 'http://18.116.152.131:7008',
   apiCarfox: 'http://127.0.0.1:8000',
   routes: {
-    anoninaus: {
+    anonimaus: {
       uploadCSV: {
         url: `files/upload-csv`,
         name: 'Subir CSV',
       },
       originalFileData: {
         url: `files/original-data`,
-        name: 'Subir CSV',
+        name: 'Obtener datos originales del CSV subido',
       },
+      originalHeadersFileData: {
+        url: `files/file-headers`,
+        name: 'Obtener headers de CSV',
+      },
+
+      anonymize: {
+        url: 'anonimaus/anonymize',
+        name: 'Anonymize',
+      },
+
       previewCSV: {
         url: 'files/preview',
         name: 'Vista previa',

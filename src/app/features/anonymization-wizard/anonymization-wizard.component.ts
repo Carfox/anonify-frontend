@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 import { UploadStepComponent } from "./components/upload-step.component";
 import { PreviewStepComponent } from "./components/preview-step.component";
-import { IdentifiersStepComponent } from "./components/identifiers-step.component";
+import { IdentifiersStepComponent } from "./components/identifiers-step/identifiers-step.component";
 import { AnonymizeStepComponent } from "./components/anonymize-step.component";
 import { ResultStepComponent } from "./components/result-step.component";
+import { AnonymizeService } from 'app/core/services/anonymize.service';
 
 @Component({
   selector: 'app-anonymization-wizard',
@@ -18,6 +20,7 @@ import { ResultStepComponent } from "./components/result-step.component";
     IdentifiersStepComponent,
     AnonymizeStepComponent,
     ResultStepComponent,
+    RouterLink,
   ],
   template: `
     <p-stepper [value]="1" class="basis-[50rem]" [linear]="true">
@@ -32,117 +35,198 @@ import { ResultStepComponent } from "./components/result-step.component";
       <p-step-panels>
         <p-step-panel [value]="1">
           <ng-template #content let-activateCallback="activateCallback">
-            <div class="flex flex-col h-48">
+            <div class="flex flex-col justify-between min-h-[60vh] w-full">
               <div
-                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
+                class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-border"
               >
-                <aw-upload-step></aw-upload-step>
+                <div
+                  class="text-3xl font-medium text-surface-900 dark:text-surface-0 mb-4"
+                >
+                  Carga de Datos
+                </div>
+                <div
+                  class="font-medium text-surface-500 dark:text-surface-300 mb-4"
+                >
+                  Puedes cargar un archivo CSV o Excel para iniciar el proceso
+                  de Anonimización. Asegúrate de que el archivo esté en el
+                  formato correcto y contenga los datos necesarios.
+                </div>
+                <div class="border-2 border-dashed border-surface min-h-[45vh]">
+                  <aw-upload-step></aw-upload-step>
+                </div>
               </div>
-              </div>
-              <div class="flex pt-6 justify-start">
+              <div class="flex pt-5 justify-center">
                 <p-button
-                  label="Next"
+                  label="Siguiente"
                   icon="pi pi-arrow-right"
                   iconPos="right"
                   (onClick)="activateCallback(2)"
                 />
+              </div>
             </div>
           </ng-template>
         </p-step-panel>
 
         <p-step-panel [value]="2">
           <ng-template #content let-activateCallback="activateCallback">
-            <div class="flex flex-col h-48">
+            <div class="flex flex-col justify-between min-h-[60vh] w-full">
               <div
-                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
+                class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-border"
               >
-                <aw-preview-step></aw-preview-step>
+                <div
+                  class="text-3xl font-medium text-surface-900 dark:text-surface-0 mb-4"
+                >
+                  Previsualización de Datos
+                </div>
+                <div
+                  class="font-medium text-surface-500 dark:text-surface-300 mb-4"
+                >
+                  Puedes previsualizar los datos cargados en el paso anterior.
+                  Asegúrate de que los datos sean correctos y estén en el
+                  formato adecuado antes de continuar.
+                </div>
+                <div class="border-2 border-dashed border-surface min-h-[45vh]">
+                  <aw-preview-step></aw-preview-step>
+                </div>
               </div>
-            </div>
-            <div class="flex pt-6 justify-between">
-              <p-button
-                label="Back"
-                severity="secondary"
-                icon="pi pi-arrow-left"
-                (onClick)="activateCallback(1)"
-              />
-              <p-button
-                label="Next"
-                icon="pi pi-arrow-right"
-                iconPos="right"
-                (onClick)="activateCallback(3)"
-              />
+              <div class="flex pt-5 justify-center">
+                <p-button
+                  class="mr-5"
+                  label="Anterior"
+                  severity="secondary"
+                  icon="pi pi-arrow-left"
+                  (onClick)="activateCallback(1)"
+                />
+                <p-button
+                  class="ml-5"
+                  label="Siguiente"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  (onClick)="activateCallback(3)"
+                />
+              </div>
             </div>
           </ng-template>
         </p-step-panel>
 
         <p-step-panel [value]="3">
           <ng-template #content let-activateCallback="activateCallback">
-            <div class="flex flex-col h-48">
+            <div class="flex flex-col justify-between min-h-[60vh] w-full">
               <div
-                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
+                class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-border"
               >
-                <aw-identifiers-step></aw-identifiers-step>
+                <div
+                  class="text-3xl font-medium text-surface-900 dark:text-surface-0 mb-4"
+                >
+                  Identificadores de Datos
+                </div>
+                <div
+                  class="font-medium text-surface-500 dark:text-surface-300 mb-4"
+                >
+                  Puedes seleccionar los identificadores de datos que deseas
+                  anonimizar. Asegúrate de que los identificadores seleccionados
+                  sean correctos y estén en el formato adecuado antes de
+                  continuar.
+                </div>
+                <div class="border-2 border-dashed border-surface min-h-[45vh]">
+                  <aw-identifiers-step></aw-identifiers-step>
+                </div>
               </div>
-            </div>
-            <div class="flex pt-6 justify-between">
-              <p-button
-                label="Back"
-                severity="secondary"
-                icon="pi pi-arrow-left"
-                (onClick)="activateCallback(2)"
-              />
-              <p-button
-                label="Next"
-                icon="pi pi-arrow-right"
-                iconPos="right"
-                (onClick)="activateCallback(4)"
-              />
+              <div class="flex pt-5 justify-center">
+                <p-button
+                  class="mr-5"
+                  label="Anterior"
+                  severity="secondary"
+                  icon="pi pi-arrow-left"
+                  (onClick)="activateCallback(2)"
+                />
+                <p-button
+                  class="ml-5"
+                  label="Anonimizar"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  (onClick)="activateCallback(4)"
+                  (onClick)="applyAnonymization()"
+                />
+              </div>
             </div>
           </ng-template>
         </p-step-panel>
         <p-step-panel [value]="4">
           <ng-template #content let-activateCallback="activateCallback">
-            <div class="flex flex-col h-48">
+            <div class="flex flex-col justify-between min-h-[60vh] w-full">
               <div
-                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
+                class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-border"
               >
-                <aw-anonymize-step></aw-anonymize-step>>
+                <div
+                  class="text-3xl font-medium text-surface-900 dark:text-surface-0 mb-4"
+                >
+                  Datos Anonimizados
+                </div>
+                <div
+                  class="font-medium text-surface-500 dark:text-surface-300 mb-4"
+                >
+                  Se ha realizado la anonimización de los datos seleccionados. A
+                  continuación, puedes ver los datos anonimizados. Asegúrate de
+                  que los datos sean correctos y estén en el formato adecuado
+                  antes de continuar.
+                </div>
+                <div class="border-2 border-dashed border-surface min-h-[45vh]">
+                  <aw-anonymize-step
+                    [data]="anonymizedData"
+                  ></aw-anonymize-step>
+                </div>
               </div>
-            </div>
-            <div class="flex pt-6 justify-between">
-              <p-button
-                label="Back"
-                severity="secondary"
-                icon="pi pi-arrow-left"
-                (onClick)="activateCallback(3)"
-              />
-              <p-button
-                label="Next"
-                icon="pi pi-arrow-right"
-                iconPos="right"
-                (onClick)="activateCallback(5)"
-              />
+              <div class="flex pt-5 justify-center">
+                <p-button
+                  class="mr-5"
+                  label="Anterior"
+                  severity="secondary"
+                  icon="pi pi-arrow-left"
+                  (onClick)="activateCallback(3)"
+                />
+                <p-button
+                  class="ml-5"
+                  label="Siguiente"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
+                  (onClick)="activateCallback(5)"
+                  (onClick)="applyAnonymization()"
+                />
+              </div>
             </div>
           </ng-template>
         </p-step-panel>
         <p-step-panel [value]="5">
           <ng-template #content let-activateCallback="activateCallback">
-            <div class="flex flex-col h-48">
+            <div class="flex flex-col justify-between min-h-[60vh] w-full">
               <div
-                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium"
+                class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-border"
               >
-                <aw-result-step></aw-result-step>
+                <div
+                  class="text-3xl font-medium text-surface-900 dark:text-surface-0 mb-4"
+                >
+                  Resultados de la Anonimización
+                </div>
+                <div
+                  class="font-medium text-surface-500 dark:text-surface-300 mb-4"
+                >
+                  Puedes descargar los resultados de la anonimización. Asegúrate
+                  de que los resultados sean correctos y estén en el formato
+                  adecuado antes de continuar.
+                </div>
+                <div class="border-2 border-dashed border-surface min-h-[45vh]">
+                  <aw-result-step></aw-result-step>
+                </div>
               </div>
-            </div>
-
-            <div class="flex pt-6 justify-between">
-              <p-button
-                label="Back"
-                severity="secondary"
-                icon="pi pi-arrow-left"
-                (onClick)="activateCallback(4)"
-              />
+              <div class="flex pt-5 justify-center">
+                <p-button
+                  label="Salir"
+                  severity="secondary"
+                  icon="pi pi-arrow-left"
+                  routerLink="/home"
+                />
+              </div>
             </div>
           </ng-template>
         </p-step-panel>
@@ -152,4 +236,24 @@ import { ResultStepComponent } from "./components/result-step.component";
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnonymizationWizardComponent {}
+export class AnonymizationWizardComponent {
+  private anonymizeService = inject(AnonymizeService);
+  public anonymizedData!: any[];
+  @ViewChild(IdentifiersStepComponent)
+  identifiersStepComponent!: IdentifiersStepComponent;
+
+  applyAnonymization() {
+    const data = this.identifiersStepComponent.labels;
+    this.anonymizeService
+      .applyAnonymization(localStorage.getItem('sessionID'), data)
+      .subscribe(
+        (response: any) => {
+          console.log('Anonymization response:', response);
+          this.anonymizedData = response.data;
+        },
+        (error) => {
+          console.error('Error during anonymization:', error);
+        }
+      );
+  }
+}

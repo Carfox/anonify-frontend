@@ -1,0 +1,367 @@
+<p-toast />
+<p-toolbar styleClass="mb-4 gap-2"> </p-toolbar>
+
+<p-table
+  #dt
+  [value]="labels"
+  [rows]="10"
+  [paginator]="true"
+  [globalFilterFields]="[
+    'name',
+    'country.name',
+    'representative.name',
+    'status'
+  ]"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [showCurrentPageReport]="true"
+>
+  <ng-template pTemplate="caption">
+    <div class="flex align-items-center justify-content-between">
+      <h5 class="m-0">Buscar Label</h5>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal($event.target.value, 'contains')"
+          placeholder="Search..."
+        />
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="label" style="min-width: 15rem">
+        Nombre Identificador <p-sortIcon field="name" />
+      </th>
+      <th>Tipo de Identificador</th>
+      <th>Técnica de Anonimización</th>
+      <th>Modelo de Anonimización</th>
+      <th style="min-width: 10rem">Jerarquización</th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-label let i="index">
+    <tr>
+      <td>
+        {{ label.name }}
+      </td>
+
+      <td>
+        @if (label.attributeType === undefined) {
+        <p>Aun no se ha especificado el tipo</p>
+        } @else if (label.attributeType === 'IDENTIFYING_ATTRIBUTE') {
+        <p>Identificador Directo</p>
+        } @else if (label.attributeType === 'QUASI_IDENTIFYING_ATTRIBUTE') {
+        <p>Quasi Identificador</p>
+        } @else if (label.attributeType === 'SENSITIVE_ATTRIBUTE') {
+        <p>Identificador Sensible</p>
+        } @else if (label.attributeType === 'INSENSITIVE_ATTRIBUTE') {
+        <p>Identificador No Sensible</p>
+        }
+      </td>
+      <td>
+        <p> {{ label.technique ? (label.technique | AnonymizationTechniquesPipe) : 'Aun falta por definir' }}</p>
+      </td>
+      <td>
+        <p>{{ label.privacyModel ? (label.privacyModel) : 'No Definido' }}</p>
+      </td>
+      <td>
+        @if (label.hierarchyStrategy.type === undefined) {
+            <p>Aun no se ha especificado la jerarquización</p>
+          }@else {
+            @if(label.technique === 'generalization') {
+
+              @if (label.hierarchyStrategy.type === 'class_intervals') {
+                <p>Jerarquización por intervalos de clases</p>
+              } @else if (label.hierarchyStrategy.type === 'categorical') {
+                <p>Jerarquización Categórica</p>
+              } @else if (label.hierarchyStrategy.type === 'date_range') {
+                <p>Jerarquización por rango de fechas</p>
+              }
+            }@else if (label.technique === 'suppression') {
+               <p>No Aplica</p>
+            }@else if (label.technique === 'masking') {
+              @if (label.hierarchyStrategy.type === 'textual') {
+                <p>Jerarquización Textual</p>
+              }
+            }
+          }
+
+
+      </td>
+      <td>
+        <p-button
+          icon="pi pi-pencil"
+          class="mr-2"
+          [rounded]="true"
+          [outlined]="true"
+          severity="success"
+          (onClick)="editProduct(label)"
+        />
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="flex align-items-center justify-content-between">
+      En total existen {{ labels ? labels.length : 0 }} identificadores.
+    </div>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [(visible)]="productDialog"
+  [style]="{ width: '450px' }"
+  header="Configuración del Identificador"
+  [modal]="true"
+  #div1
+>
+  <ng-template #content>
+    <div class="flex flex-col gap-6 min-h-[50vh]">
+      <div>
+        <label for="name" class="block font-bold mb-3"
+          >Nombre del Identificador</label
+        >
+        <input
+          type="text"
+          pInputText
+          [disabled]="true"
+          [(ngModel)]="label.name"
+          required
+          autofocus
+          fluid
+        />
+        <small class="text-red-500" *ngIf="submitted && !label.name"
+          >Nombre es requerido</small
+        >
+      </div>
+
+      <div>
+        <label for="identifierType" class="block font-bold mb-3"
+          >Tipo de Identificador</label
+        >
+        <p-select
+          [(ngModel)]="label.attributeType"
+          [options]="labelTypes"
+          optionLabel="label"
+          optionValue="value"
+          p-select-overlay
+          placeholder="Selecciona el Tipo"
+        />
+      </div>
+
+      <!-- IDENTIFICADOR DIRECTO -->
+      @if(label.attributeType !== undefined) { @if (label.attributeType ===
+      'IDENTIFYING_ATTRIBUTE') {
+      <div>
+        <p>
+          Los identificadores directos se eliminan directamente del proceso de
+          Anonimización
+        </p>
+        <label class="block font-bold mb-3">Técnica de Anonimización</label>
+        <div class="formgrid grid">
+          <div class="field-radiobutton col-6">
+            <p-radiobutton
+              name="pizza"
+              value="suppression"
+              [(ngModel)]="label.technique"
+              [inputId]="'suppression'"
+              [disabled]="false"
+            />
+            <label [for]="'suppression'"
+              >Eliminar Identificador (Supresión)</label
+            >
+          </div>
+        </div>
+      </div>
+      <!-- QUASI IDENTIFICADOR (INDIRECTO) -->
+      } @else if (label.attributeType === 'QUASI_IDENTIFYING_ATTRIBUTE') {
+      <div>
+        <p>
+          Los quasi-identificadores se puede aplicar técnicas de Anonimización
+        </p>
+        <label class="block font-bold mb-3">Técnica de Anonimización</label>
+        <div class="formgrid grid">
+          <div class="flex flex-col gap-4">
+            <div
+              *ngFor="let technique of anoynimizationTechniques"
+              class="field-checkbox"
+            >
+              <p-radiobutton
+                [inputId]="technique.value"
+                name="techniqueQuasiIdentifiers"
+                [value]="technique.value"
+                [(ngModel)]="label.technique"
+              />
+              <label [for]="technique.value" class="ml-2">{{
+                technique.name
+              }}</label>
+            </div>
+          </div>
+
+          @if (label.technique === 'generalization') {
+          <div class="field col">
+            <label class="block font-bold mb-3">Jerarquización de Generalización</label
+            >
+            <p>
+              La Jerarquización es una estructura de datos que permiten
+              generalizar segmentos de datos
+            </p>
+            <p-dropdown
+              [(ngModel)]="label.hierarchyStrategy.type"
+              [options]="hierarchyTypes"
+              placeholder="Selecciona técnica"
+              optionLabel="label"
+              optionValue="value"
+              [appendTo]="div1"
+              [panelStyleClass]="overlayTop"
+            ></p-dropdown>
+          </div>
+          <div>
+            <div
+              *ngIf="label.hierarchyStrategy.type === 'class_intervals'"
+              class="grid mt-3"
+            >
+              <div class="flex gap-4 mt-4">
+                <!-- Número de Clases -->
+                <div class="flex-1">
+                  <label class="block text-sm font-medium mb-1"
+                    >Número de Clases</label
+                  >
+                  <p-input-number
+                    size="small"
+                    class="w-full px-3 py-2 text-sm"
+                    [(ngModel)]="label.hierarchyStrategy.numClasses"
+                  />
+                </div>
+
+                <!-- Amplitud -->
+                <div class="flex-1">
+                  <label class="block text-sm font-medium mb-1"
+                    >Amplitud (opcional)</label
+                  >
+                  <p-input-number
+                    size="small"
+                    class="w-full px-3 py-2 text-sm"
+                    [(ngModel)]="label.hierarchyStrategy.amplitud"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Jerarquía categórica -->
+          <div *ngIf="label.hierarchyStrategy.type === 'categorical'" class="mt-3">
+            <p><strong>Ejemplo:</strong> Alto, Medio, Bajo (se agrupan por percentiles)</p>
+            <p class="text-sm">En futuras versiones podrás personalizar tus categorías.</p>
+          </div>
+
+
+          } @else if (label.technique === 'suppression') {
+          <div class="field col">
+            <label>Suprimir Identificador</label>
+            <p>
+              La Supresión es una técnica de Anonimización que elimina el
+              identificador
+            </p>
+          </div>
+          }@else if (label.technique === 'masking') {
+          <div class="field col mt-3">
+            <label class="block font-bold mb-3"
+              >Jerarquización del Enmascaramiento</label
+            >
+            <p>
+              Permite configurar reglas de ocultamiento específicas para texto.
+            </p>
+
+            <p-dropdown
+              [(ngModel)]="label.hierarchyStrategy.type"
+              [options]="maskingHierarchyTypes"
+              placeholder="Selecciona tipo de jerarquía"
+              optionLabel="label"
+              optionValue="value"
+              [appendTo]="div1"
+              [panelStyleClass]="overlayTop"
+            ></p-dropdown>
+
+            <!-- Ejemplo para jerarquía textual -->
+            <div
+              *ngIf="label.hierarchyStrategy.type === 'textual'"
+              class="mt-3"
+            >
+              <p><strong>Ejemplo:</strong> Juan → Jua* → Ju**</p>
+            </div>
+          </div>
+
+          }
+        </div>
+      </div>
+      } }
+
+      <!-- Si es quasi-identificador
+    <div *ngIf="label.type === 'quasi-identifier'" class="field">
+      <label>Técnica de Generalización</label>
+      <p-dropdown
+        [(ngModel)]="label.hierarchy_strategy.type"
+        [options]="generalizationTypes"
+        placeholder="Selecciona técnica"
+        optionLabel="label"
+      ></p-dropdown>
+    </div>
+
+    <!-- Configuración de generalización numérica
+    <div
+      *ngIf="label.type === 'quasi-identifier' && label.hierarchy_strategy.type === 'class_intervals'"
+      class="formgrid grid"
+    >
+      <div class="field col">
+        <label>Número de Clases</label>
+        <p-inputNumber [(ngModel)]="label.hierarchy_strategy.num_classes" />
+      </div>
+      <div class="field col">
+        <label>Amplitud</label>
+        <p-inputNumber [(ngModel)]="label.hierarchy_strategy.amplitud" />
+      </div>
+    </div>
+
+    <!-- Generalización automática para texto o fechas
+    <div
+      *ngIf="label.type === 'quasi-identifier' && (label.hierarchy_strategy.type === 'categorical' || label.hierarchy_strategy.type === 'date_range')"
+      class="field"
+    >
+      <small>La jerarquía se generará automáticamente.</small>
+    </div>
+
+    <!-- Modelo de privacidad (por defecto podrías ocultar si no aplica)
+    <div class="field">
+      <label>Modelo de Privacidad</label>
+      <p-dropdown
+        [(ngModel)]="label.privacy_model"
+        [options]="privacyModels"
+        placeholder="Selecciona modelo"
+        optionLabel="label"
+      ></p-dropdown>
+    <!-- </div> -->
+    </div>
+  </ng-template>
+
+  <ng-template #footer>
+    <p-button
+      label="Cancelar"
+      icon="pi pi-times"
+      [text]="true"
+      (onClick)="hideDialog()"
+    />
+    <p-button
+      label="Guardar"
+      icon="pi pi-check"
+      [text]="true"
+      (onClick)="saveLabel()"
+    />
+  </ng-template>
+</p-dialog>
+
+<!-- <p-confirmDialog [style]="{ width: '450px' }" /> -->

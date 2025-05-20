@@ -15,15 +15,17 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     providePrimeNG({
-      theme: {
-        preset: Material,
-        options: {
-          prefix: 'p',
-          darkModeSelector: 'light-mode',
-          cssLayer: false,
-        },
-      },
-    }),
+            theme: {
+                preset: Material,
+                options: {
+                    darkModeSelector: false || 'none',
+                     cssLayer: {
+                        name: 'primeng',
+                        order: 'tailwind-base, primeng, tailwind-utilities'
+                    }
+                }
+            }
+        })
   ],
 };
 

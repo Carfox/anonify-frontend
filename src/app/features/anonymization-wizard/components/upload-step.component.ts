@@ -10,6 +10,7 @@ import { TabsModule } from 'primeng/tabs';
 
 import { FileDataSharedService } from 'app/core/services/file-data-shared.service';
 import { FileService } from 'app/core/services/file.service';
+import { CardModule } from 'primeng/card';
 interface UploadEvent {
   originalEvent: Event;
   files: File[];
@@ -24,6 +25,7 @@ interface UploadEvent {
     ButtonModule,
     BadgeModule,
     ToastModule,
+    CardModule,
   ],
   providers: [MessageService],
   template: `
@@ -35,14 +37,14 @@ interface UploadEvent {
         </p-tablist>
         <p-tabpanels>
           <p-tabpanel value="0">
-            <div
-              class="flex flex-column justify-content-center align-items-center p-4"
-            >
-              <span class="flex text-muted text-center mb-3"
+            <div class="flex flex-col justify-center p-6 min-h-[10vh] ">
+              <span class="flex text-muted text-left mb-4"
                 >Selecciona un archivo y presiona en "Cargar" para
                 subirlo.</span
               >
-              <div class="card p-4 surface-card shadow-2 border-round w-full">
+              <div
+                class="card p-6 bg-surface-0 dark:bg-surface-900 shadow rounded-border w-full"
+              >
                 <p-toast />
                 <p-fileupload
                   name="file"
@@ -70,7 +72,7 @@ interface UploadEvent {
             </div>
           </p-tabpanel>
           <p-tabpanel value="1">
-            <p class="m-0">
+            <p class="m-0 min-h-[10vh]   ">
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
               quae ab illo inventore veritatis et quasi architecto beatae vitae
@@ -131,15 +133,10 @@ export class UploadStepComponent {
     });
 
     // this.fileDataSharedService.updateSession(event.originalEvent.body.data.session_id);
-    localStorage.setItem(
-      'sessionID',
-      event.originalEvent.body.data.session_id
-    );
-
+    localStorage.setItem('sessionID', event.originalEvent.body.data.session_id);
   }
 
   isDataLoaded(): boolean {
     return !!localStorage.getItem('sessionID'); // Verifica si hay un sessionID en el localStorage
   }
-
 }

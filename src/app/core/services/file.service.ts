@@ -13,29 +13,29 @@ export class FileService {
   private http = inject(HttpClient);
 
   private fileData: any = [];
+  private fileHeadersData: string[] = [];
 
   private apiUrl = environment.apiCarfox;
-  private uploadCSV = environment.routes.anoninaus.uploadCSV.url;
-  private originalFileData = environment.routes.anoninaus.originalFileData.url;
-  private headersCSV = environment.routes.anoninaus.headersCSV.url;
+  private uploadCSV = environment.routes.anonimaus.uploadCSV.url;
+  private headersCSV = environment.routes.anonimaus.headersCSV.url;
 
-
+  private originalFileData = environment.routes.anonimaus.originalFileData.url;
+  private originalHeadersFileData =
+    environment.routes.anonimaus.originalHeadersFileData.url;
   loadOriginalFileData(sessionID: string) {
-    console.log('sessionID desde el servicio', sessionID);
-    this.http
-      .get(`${this.apiUrl}/${this.originalFileData}/${sessionID}`)
-      .subscribe((res: any) => {
-        console.log('Respuesta del servicio', res);
-        this.fileData = res.data;
-        console.log('fileData desde el servicio', this.fileData);
-      });
+    return this.http.get(`${this.apiUrl}/${this.originalFileData}/${sessionID}`)
 
-    return this.fileData
   }
 
-dataLoaded() {
-  return this.fileData
-}
+  loadHeadersFromFileData(sessionID: string) {
+    return this.http.get<{ data: string[] }>(
+      `${this.apiUrl}/${this.originalHeadersFileData}/${sessionID}`
+    );
+  }
+
+  dataLoaded() {
+    return this.fileData;
+  }
 
   /**
    * @deprecated This method is deprecated and may be removed in future versions.
