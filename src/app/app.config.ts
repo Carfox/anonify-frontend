@@ -6,14 +6,13 @@ import Material from '@primeng/themes/material';
 // import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { tokenInterceptor } from './core/interceptor/token.interceptor';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([tokenInterceptor])),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {

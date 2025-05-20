@@ -1,11 +1,15 @@
 export const environment = {
   production: false,
   apiUrl: 'http://18.116.152.131:7008',
-  apiCarfox: 'http://localhost:8000/',
+  apiCarfox: 'http://127.0.0.1:8000',
   routes: {
     anoninaus: {
       uploadCSV: {
         url: `files/upload-csv`,
+        name: 'Subir CSV',
+      },
+      originalFileData: {
+        url: `files/original-data`,
         name: 'Subir CSV',
       },
       previewCSV: {
