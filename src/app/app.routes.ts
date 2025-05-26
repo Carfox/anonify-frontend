@@ -41,7 +41,7 @@ export const routes: Routes = [
 
     children: [
       { path: 'home', component: HomePageComponent },
-      { path: 'projects', component: ProjectsComponent },
+      { path: 'projects', component: ProjectPageComponent },
       { path: 'projects/:id', component: ProjectDetailPageComponent },
       { path: 'preprocess', component: PreprocessingComponent },
       { path: 'management', component:  AdministrationComponent},

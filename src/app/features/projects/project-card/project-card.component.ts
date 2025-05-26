@@ -39,7 +39,7 @@ export class ProjectCardComponent {
 
 
   onMoreInfo() {
-    this.router.navigate(['/projects', this.item.id]);
+    this.router.navigate(['anonify/projects/', this.item.id]);
     console.log('Más información sobre el elemento:', this.item);
   }
 }

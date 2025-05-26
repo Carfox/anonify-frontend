@@ -1,8 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { ProjectService } from './project.service';
 import { Button } from 'primeng/button';
 import { Project } from 'app/core/interfaces/project.interface';
-import { ProjectListComponent } from "./project-list/project-list.component";
+import { ProjectListComponent } from './project-list/project-list.component';
 import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { AvatarModule } from 'primeng/avatar';
@@ -26,7 +36,7 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
   template: `
     <p-toast />
-    <div class="container">
+    <div class="container pt-[150px]">
       <!-- Botones -->
       <div class="buttons flex justify-start gap-4 p-4">
         <p-button (click)="showDialog()" label="Nuevo Proyecto"></p-button>
@@ -37,7 +47,7 @@ import { MessageService } from 'primeng/api';
       <hr class="divider" />
 
       <!-- Selector de Project List -->
-      <div class="flex  mb-4">
+      <div class="flex mb-4">
         <project-list [projects]="projects"></project-list>
       </div>
     </div>
@@ -102,27 +112,50 @@ import { MessageService } from 'primeng/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent {
-  @Input({required: true}) projects: Project[];
-  @Input({required: true}) userID: string;
-  public title: string;
-  public description: string;
+  @Input({ required: true }) projects: Project[] = [];
+  @Input({ required: true }) userID: string = '';
+  @Output() projectAdded = new EventEmitter<void>(); // Define un evento de salida
+  public title:  string = '';
+  public description: string = '';
   constructor(
     private messageService: MessageService,
     private projectService: ProjectService
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    // 'changes' contiene un objeto con las propiedades que han cambiado.
+    // Cada propiedad en 'changes' es un objeto SimpleChange con
+    // 'currentValue', 'previousValue' y 'firstChange'.
+
+    if (changes['projects']) {
+      console.log('Projects ha cambiado:', changes['projects'].currentValue);
+      // Realiza aquí la lógica que dependa de 'projects'
+      // this.doSomethingWithProjects(changes['projects'].currentValue);
+    }
+
+    if (changes['userID']) {
+      console.log('UserID ha cambiado:', changes['userID'].currentValue);
+      // Realiza aquí la lógica que dependa de 'userID'
+      // this.doSomethingWithUserID(changes['userID'].currentValue);
+    }
+  }
+
+  ngOnInit(): void {
+    console.log('Proyectos iniciales:', this.projects);
+  }
 
   getAllProjects(): void {
     this.projectService.allprojects.subscribe((res: any) => {
       this.projects = res.projects;
       this.userID = res.id;
+      console.log('Proyectos obtenidos:', this.projects);
     });
   }
 
   onSaveNewProject() {
     console.log(this.title, this.description);
     this.projectService
-      .postNewProject(this.title, this.description, this.userID)
+      .postNewProject(this.title, this.description)
       .subscribe(
         (res: any) => {
           this.messageService.add({
@@ -133,6 +166,9 @@ export class ProjectsComponent {
           });
           this.title = '';
           this.description = '';
+
+          // *** Emite el evento al padre para que refresque la lista ***
+          this.projectAdded.emit();
         },
         (error) => {
           this.messageService.add({

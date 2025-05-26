@@ -9,7 +9,7 @@ import { ProjectCardComponent } from "../project-card/project-card.component";
   template: `
     <div class="flex flex-wrap justify-start">
       @for (project of projects; track project.id) {
-      <project-card class="m-6" [item]="project"> </project-card>
+      <project-card class="m-4" [item]="project"> </project-card>
       } @empty {
       <h5>No existen proyectos</h5>
       }
