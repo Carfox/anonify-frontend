@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +12,9 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -27,40 +30,72 @@ import { Router } from '@angular/router';
     InputGroupModule,
   ],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isSubmitting: boolean = false;
   private authService = inject(AuthService);
-  private router= inject(Router);
-  constructor(private fb: FormBuilder) {
-    this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
+  // private router= inject(Router);
+  constructor(private router: Router, private formBuilder: FormBuilder) {
+    this.loginForm = this.formBuilder.group({
+      username: [''],
+      password: [''],
     });
   }
+  ngOnInit(): void {}
 
-  onSubmit() {
+  clearForm() {
+    this.loginForm.reset();
+  }
+
+  login(event: Event): void {
+    event.preventDefault();
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
-
     this.isSubmitting = true;
 
-    // Simula un inicio de sesión
     setTimeout(() => {
       this.isSubmitting = false;
-      this.authService.postLogin(this.loginForm.value.username, this.loginForm.value.password).subscribe(
-        (res:any) => {
-        localStorage.setItem('token', res.token);
-        //TODO: Redirigir a la página de proyectos
-        this.router.navigate(['/projects']);
-      },
-        error => {
-          console.error(error);
-          alert('Error al iniciar sesión');
-    });
-      console.log('Formulario enviado', this.loginForm.value);
+
+      console.log(
+        'usuario :',
+        this.loginForm.value.username,
+        'Contrasenia :',
+        this.loginForm.value.password
+      );
+      this.authService
+        .postLogin(this.loginForm.value.username, this.loginForm.value.password)
+        .subscribe(
+          (res: any) => {
+            console.log('El valor de la respuesta es:', res);
+            localStorage.setItem('token', res.token);
+            //TODO: Redirigir a la página de proyectos
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Login Successful',
+              text: 'Welcome to the system',
+            }).finally(() => {
+              this.router.navigate(['/anonify']);
+            });
+            // this.router.navigate(['/anonify/home']);
+          },
+          (error) => {
+            console.error(error);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Login Failed',
+              text: 'Invalid credentials',
+            }).finally(() => {
+              this.clearForm();
+            });
+
+            // alert('Error al iniciar sesión');
+          }
+        );
     }, 2000);
   }
 }

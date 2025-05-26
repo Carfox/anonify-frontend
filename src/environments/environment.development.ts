@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://18.116.152.131:7008',
+  apiUrl: 'http://localhost:2003',
   apiCarfox: 'http://127.0.0.1:8000',
   routes: {
     anonimaus: {

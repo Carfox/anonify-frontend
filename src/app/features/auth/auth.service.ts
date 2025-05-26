@@ -9,7 +9,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
   private apiUrl = environment.apiUrl;
-  private login = undefined
+  private login = "/api/login";
   postLogin(username: string, password: string) {
     return this.http.post(`${this.apiUrl}${this.login}`, {username, password});
   }
