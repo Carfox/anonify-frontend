@@ -14,4 +14,16 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}${this.login}`, {username, password});
   }
 
+  validateToken(token: string) {
+    return this.http.post(`${this.apiUrl}/api/validate_token`, {
+      headers: {
+
+        Authorization: `Bearer ${token}`
+      },
+     });
+  }
+  logout() {
+    return this.http.post(`${this.apiUrl}/api/logout`, {});
+  }
+
 }

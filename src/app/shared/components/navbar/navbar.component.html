@@ -1,7 +1,7 @@
 <!-- Contenido de la barra de navegación -->
 <nav
   #navbar
-  class="fixed w-full h-[100px] bg-secondary text-white flex items-center  justify-between z-40"
+  class="fixed w-full h-[100px] bg-secondary text-white flex items-center justify-between z-40"
 >
   <div class="h-full flex justify-start items-center">
     <!-- sidebar button -->
@@ -51,37 +51,39 @@
       alt=""
       class="h-[60%]"
     /> -->
-    <span class="text-2xl font-bold text-white ml-4">
-      Anonify
-    </span>
+    <span class="text-2xl font-bold text-white ml-4"> Anonify </span>
     <!-- <i class="pi pi-flag"></i> -->
-
-    
   </div>
   <div class="flex h-full justify-end items-center">
-    
-    <a class="p-4 hover:text-gray-200" (click)="navigateTo($event, 'anonify/home')">
-        <!-- <img src="" alt=""  /> -->
-        <i class="pi pi-home"></i>
-      </a>
-    <a class="p-4 hover:text-gray-200" (click)="navigateTo($event, 'anonify/notifications')">
+    <a
+      class="p-4 hover:text-gray-200"
+      (click)="navigateTo($event, 'anonify/home')"
+    >
+      <!-- <img src="" alt=""  /> -->
+      <i class="pi pi-home"></i>
+    </a>
+    <a
+      class="p-4 hover:text-gray-200"
+      (click)="navigateTo($event, 'anonify/notifications')"
+    >
       <i class="pi pi-bell"></i>
-        <!-- <img src="../../../../assets/img/notification_icon.svg" alt=""  /> -->
+      <!-- <img src="../../../../assets/img/notification_icon.svg" alt=""  /> -->
     </a>
-    
-    <a class="p-4 flex items-center h-full hover:text-gray-200" (click)="navigateTo($event, 'anonify/userinfo')">
-        <div class="flex justify-center items-center rounded-full bg-[#374151] h-[40px] w-[40px]  overflow-hidden">
-            <!-- <img src="../../../../assets/img/user_icon.svg" alt="" class="h-[90%]" /> -->
-             <i class="pi pi-user-edit"></i>
-        </div>
-        <div class="p-4">
-            Usuario
-        </div>
 
-        
-        <!-- <img src="../../../../assets/img/user_icon.svg" alt="" /> -->
+    <a
+      class="p-4 flex items-center h-full hover:text-gray-200"
+      (click)="navigateTo($event, 'anonify/userinfo')"
+    >
+      <div
+        class="flex justify-center items-center rounded-full bg-[#374151] h-[40px] w-[40px] overflow-hidden"
+      >
+        <!-- <img src="../../../../assets/img/user_icon.svg" alt="" class="h-[90%]" /> -->
+        <i class="pi pi-user-edit"></i>
+      </div>
+      <div class="p-4">Usuario</div>
+
+      <!-- <img src="../../../../assets/img/user_icon.svg" alt="" /> -->
     </a>
-    
 
     <button></button>
   </div>
@@ -97,9 +99,7 @@
     >
       <!-- one category / navigation group -->
       <div class="px-4 pb-6">
-        <h3 class="mb-2 text-xs font-medium uppercase text-black">
-          Paginas
-        </h3>
+        <h3 class="mb-2 text-xs font-medium uppercase text-black">Paginas</h3>
         <ul class="mb-8 text-sm font-medium">
           <!-- lista de paginas  -->
           <!-- nota: hay que hace que sean dinamicas  -->
@@ -153,15 +153,15 @@
               <span class="select-none">Bases de datos</span>
             </a>
           </li>
-          
-
         </ul>
       </div>
       <!-- navigation group end-->
 
       <!-- example copies start -->
       <div class="px-4 pb-6">
-        <h3 class="mb-2 text-xs font-medium uppercase text-black">Administracion</h3>
+        <h3 class="mb-2 text-xs font-medium uppercase text-black">
+          Administracion
+        </h3>
         <ul class="mb-8 text-sm font-medium">
           <li (click)="navigateTo($event, 'anonify/users')">
             <a
@@ -172,19 +172,14 @@
               <span class="select-none">Usuarios</span>
             </a>
           </li>
-          <li
-          (click)="navigateTo($event, 'anonify/roles')"
-          >
+          <li (click)="navigateTo($event, 'anonify/roles')">
             <a
-
               [ngClass]="{ active: isActive('/anonify/roles') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
-              
             >
               <span class="select-none">Roles</span>
             </a>
           </li>
-          
         </ul>
       </div>
 
@@ -215,4 +210,3 @@
   <div class="mx-auto lg:ml-80"></div>
 </div>
 <!-- Sidebar end -->
-

@@ -1,0 +1,261 @@
+<main
+  class="w-screen pt-[150px] min-h-screen border-2 border-red-700 flex justify-center flex-col items-center"
+>
+  <!-- contenedor project detail page -->
+
+  <!-- seccion de informaicon general -->
+  <div
+    class="border-2 md:w-[80%] max-md:w-[95%] border-yellow-500 flex flex-col"
+  >
+    <div class="flex flex-col">
+      <h1 class="font-bold text-lg">Nombre:</h1>
+      <p>{{ this.projectData.title }}</p>
+      <h1 class="font-bold text-lg">Descripcion</h1>
+      <p>
+        {{ this.projectData.description }}
+      </p>
+    </div>
+  </div>
+  <!-- seccion botones -->
+  <div
+    class="border-2 md:w-[80%] max-md:w-[95%] border-yellow-500 flex flex-col"
+  >
+    <!-- informacion general Proyectos -->
+
+    <h1 class="font-bold text-lg">Acciones :</h1>
+    <!-- contenedor botones -->
+    <div class="flex flex-wrap justify-center items-center">
+      <button
+        (click)="changeUploadState()"
+        class="h-[35px] bg-secondary m-2 text-white rounded-md w-[200px]"
+      >
+        Subir Dataset
+      </button>
+      <button
+        class="h-[35px] bg-yellow-300 m-2 text-white rounded-md w-[200px]"
+      >
+        Disabled
+      </button>
+      <button class="h-[35px] bg-red-400 m-2 text-white rounded-md w-[200px]">
+        Eliminar Proyecto
+      </button>
+    </div>
+  </div>
+  <div></div>
+  <!-- contenedor de upload dialog -->
+
+  <div
+    *ngIf="upload_dialog_visible"
+    class="border-2 md:w-[80%] max-md:w-[95%] border-pink-400 flex flex-col"
+  >
+    <div class="card">
+      <p-tabs value="0">
+        <p-tablist>
+          <p-tab value="0">Cargar por CSV</p-tab>
+          <p-tab value="1">Datos Previos</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel value="0">
+            <div class="flex flex-col justify-center p-6 min-h-[10vh]">
+              <span class="flex text-muted text-left mb-4"
+                >Selecciona un archivo y presiona en "Cargar" para
+                subirlo.</span
+              >
+              <div
+                class="card p-6 bg-surface-0 dark:bg-surface-900 shadow rounded-border w-full"
+              >
+                <p-toast />
+                <p-fileupload
+                  name="file"
+                  [multiple]="false"
+                  accept=".csv, .txt"
+                  maxFileSize="50000000"
+                  mode="advanced"
+                  customUpload="true"
+                  (uploadHandler)="onUploadv2($event)"
+                  chooseLabel="Seleccionar archivo"
+                  uploadLabel="Cargar"
+                >
+                <!-- <p-fileupload
+                  name="file"
+                  url="http://localhost:2003/file/test/uploadfile/V2"
+                  (onUpload)="onUploadNG($event)"
+                  [multiple]="false"
+                  accept=".csv, .txt"
+                  maxFileSize="5000000"
+                  mode="advanced"
+                  customUpload="true"
+                  (uploadHandler)="onUploadv2($event)"
+                  chooseLabel="Seleccionar archivo"
+                  uploadLabel="Cargar"
+                > -->
+                  <ng-template #empty>
+                    <div>Drag and drop files to here to upload.</div>
+                  </ng-template>
+                  <ng-template #content>
+                    <ul *ngIf="uploadedFiles.length">
+                      <li *ngFor="let file of uploadedFiles">
+
+                        <span class="text-xs text-secondary" >
+                          Nombre: {{ file.name }}
+                        </span>
+                        <span class="text-xs text-gray-500">
+                          {{ file.type }}
+                        </span>
+                        <span class="text-xs text-blue-500">
+                          {{ file.size }} bytes
+                        </span>
+                         - 
+                      </li>
+                    </ul>
+
+                    <!-- progreso de la carga -->
+                    <div
+                      class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg"
+                    >
+                      <!-- <div
+    *ngIf="showUploadProgress"
+    class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg"
+  > -->
+                      <h3 class="text-lg font-semibold text-blue-800 mb-2">
+                        Estado de Carga: {{ uploadStatus }}
+                      </h3>
+                      <div class="w-full bg-gray-200 rounded-full h-4 relative">
+                        <div
+                          class="bg-blue-500 h-4 rounded-full transition-all duration-300 ease-out"
+                          [style.width.%]="uploadProgress"
+                        ></div>
+                        <span
+                          class="absolute right-2 top-0 text-xs font-bold text-gray-800 leading-4"
+                        >
+                          {{ uploadProgress | number : "1.0-0" }}%
+                        </span>
+                      </div>
+                      <p class="text-sm text-blue-700 mt-2">
+                        {{ uploadMessage }}
+                      </p>
+                      <button
+                        *ngIf="
+                          uploadProgress === 100 || uploadStatus === 'Error'
+                        "
+                        (click)="resetUploadProgress()"
+                        class="mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 py-1 px-3 rounded text-sm"
+                      >
+                        Cerrar
+                      </button>
+                    </div>
+                  </ng-template>
+                </p-fileupload>
+              </div>
+            </div>
+          </p-tabpanel>
+          <p-tabpanel value="1">
+            <p class="m-0 min-h-[10vh]">
+              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+              quae ab illo inventore veritatis et quasi architecto beatae vitae
+              dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
+              aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
+              eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci
+              velit, sed quia non numquam eius modi.
+            </p>
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+    </div>
+  </div>
+  <!-- #TODO -->
+  <!-- contenedor de carga de datasets test  -->
+
+  <!-- contenedor tabla de datasets -->
+  <div class="border-2 md:w-[80%] max-md:w-[95%] border-green-600">
+    tabla de datasets
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="border px-4 py-2">Nombre</th>
+          <th class="border px-4 py-2">Descripcion</th>
+          <th class="border px-4 py-2">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border px-4 py-2">Dataset 1</td>
+          <td class="border px-4 py-2">Descripcion del dataset 1</td>
+          <td class="border px-4 py-2">
+            <button class="bg-blue-500 text-white px-2 py-1 rounded">
+              Ver
+            </button>
+            <button class="bg-red-500 text-white px-2 py-1 rounded ml-2">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+        <!-- Agregar más filas según sea necesario -->
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    This is the project detail page. It will display the details of a specific
+    project.
+  </p>
+
+  <!-- dialog  -->
+  <!-- <div class="card flex justify-center">
+      <p-dialog
+        [(visible)]="visible"
+        [modal]="true"
+        [style]="{ width: '25rem' }"
+      >
+        <ng-template #header>
+          <span class="font-bold whitespace-nowrap">Nuevo Proyecto</span>
+        </ng-template>
+        <span class="text-surface-500 dark:text-surface-400 block mb-6"
+          >Carga el dataset </span
+        >
+        <div class="mb-6">
+          <label for="titleProject" class="block font-semibold mb-2"
+            >Título</label
+          >
+          <input
+            pInputText
+            id="titleProject"
+            [(ngModel)]="title"
+            class="w-full"
+            autocomplete="off"
+          />
+        </div>
+        <div class="mb-6">
+          <label for="descriptionProject" class="block font-semibold mb-2"
+            >Descripción</label
+          >
+          <textarea
+            pTextarea
+            id="descriptionProject"
+            rows="5"
+            [(ngModel)]="description"
+            cols="20"
+            style="resize: none"
+            class="w-full"
+          ></textarea>
+        </div>
+
+        <ng-template #footer>
+          <p-button
+            label="Cancel"
+            [text]="true"
+            severity="secondary"
+            (click)="visible = false"
+          />
+          <p-button
+            label="Save"
+            [outlined]="true"
+            severity="secondary"
+            (click)="visible = false"
+            (onClick)="onSaveNewProject()"
+          />
+        </ng-template>
+      </p-dialog>
+    </div> -->
+</main>

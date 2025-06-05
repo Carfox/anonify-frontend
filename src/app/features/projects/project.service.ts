@@ -16,6 +16,7 @@ export class ProjectService {
   get allprojects() {
     return this.http.get(`${this.apiURL}${this.projectsURL}`);
   }
+  // funciona
   getUserProjects() {
     const token = getToken();
 
@@ -25,7 +26,7 @@ export class ProjectService {
       },
     });
   }
-
+  // funciona
   postNewProject(title: string, description: string) {
     const token = getToken();
 
@@ -41,7 +42,18 @@ export class ProjectService {
     },
   }
   );
+
   }
+
+  getProjectById(id: string) {
+    const token = getToken();
+    return this.http.get<Project>(`${this.apiURL}/api/projects/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
   
   
   

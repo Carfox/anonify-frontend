@@ -11,18 +11,27 @@ import { ProjectDetailPageComponent } from './shared/pages/project-detail-page/p
 import { projectRoutes } from './features/projects/projects.routes';
 import { AnonymizationPageComponent } from './shared/pages/anonymization-page/anonymization-page.component';
 import { LayoutComponent } from './shared/components/layout/layout.component';
-import { ProjectsComponent } from './shared/pages/projects-page/projects.component';
+// import { ProjectsComponent } from './shared/pages/projects-page/projects.component';
 import { AdministrationComponent } from './shared/pages/administration-page/administration.component';
 import { PreprocessingComponent } from './shared/pages/preprocessing-page/preprocessing.component';
 import { UsersComponent } from './shared/pages/users-page/users.component';
 import { RolesComponent } from './shared/pages/roles-page/roles.component';
+import { getToken } from './core/interceptor/token.interceptor';
+import { AuthService } from './features/auth/auth.service';
 
-const validate = (token: string | null) => {
+// const auntService = 
+
+const validate = (token: string | null = getToken()) => {
   let flag = false;
 
+  
+  // const authService = new AuthService();
+  // AuthService.validateToken(token).subscribe({
   // esto tiene que validarse con un web token , de momento ya est la base
 
-  console.log(token);
+  
+
+  // console.log(token);
   if (flag) {
     return 'login';
   } else {

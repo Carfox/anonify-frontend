@@ -4,7 +4,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'datasets',
   standalone: true,
   imports: [],
-  template: `<p>datasets works!</p>`,
+  template: `
+  
+  
+  <p>datasets works!</p>`,
   styleUrl: './datasets.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
