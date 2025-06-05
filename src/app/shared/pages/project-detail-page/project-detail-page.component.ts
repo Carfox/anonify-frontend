@@ -31,11 +31,11 @@ import { WebSocketMessage } from 'app/core/interfaces/websocket.interface';
 import { DataUploadService } from 'app/features/data-upload/data-upload.service';
 // Asegúrate de tener estas interfaces
 
-interface ParsedColumnInfo {
-  name: string;
-  detectedType: string; // 'string', 'number', 'boolean', 'uuid', etc.
-  // Podrías añadir un 'actualTypeId' para el backend si tienes un mapeo
-}
+// interface ParsedColumnInfo {
+//   name: string;
+//   detectedType: string; // 'string', 'number', 'boolean', 'uuid', etc.
+//   // Podrías añadir un 'actualTypeId' para el backend si tienes un mapeo
+// }
 
 @Component({
   selector: 'app-project-detail-page',
@@ -66,7 +66,7 @@ export class ProjectDetailPageComponent implements OnInit {
     private dataUploadService: DataUploadService // Inyección de ActivatedRoute
   ) {}
 
-  parsedColumns: ParsedColumnInfo[] = [];
+  // parsedColumns: ParsedColumnInfo[] = [];
 
   uploadedFiles: File[] = [];
   upload_dialog_visible: boolean = false;
@@ -149,6 +149,7 @@ export class ProjectDetailPageComponent implements OnInit {
   // Tu función para conectar al WebSocket (la misma que ya tienes)
   connectToUploadProgressWebSocket(operationId: string): void {
     // ... (El código de esta función es idéntico al que te proporcioné anteriormente) ...
+
     const wsUrl = `ws://localhost:2003/api/ws/progress/${operationId}`;
     console.log('Conectando al WebSocket en:', wsUrl);
     this.showUploadProgress = true;
@@ -230,47 +231,47 @@ export class ProjectDetailPageComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  onUploadNG(event: any) {
-    const input = event.target as HTMLInputElement;
+  // onUploadNG(event: any) {
+  //   const input = event.target as HTMLInputElement;
 
-    console.log('Archivo seleccionado:', input.files);
-    if (input.files && input.files.length > 0) {
-      for (let file of event.files) {
-        this.selectedFile = input.files[0];
-        this.uploadedFiles.push(file);
-        this.parsedColumns = [];
-        this.datasetToUploadInfo.name = this.selectedFile.name.replace(
-          /\.csv$/,
-          ''
-        ); // Nombre por defecto
-        console.log(
-          ' fase 1 :Datos de archivo seleccionado:',
-          this.datasetToUploadInfo.name
-        );
-        this.analyzeCsvFile(this.selectedFile);
-        console.log(' fase 2 :Analisis del Archivo:', this.parsedColumns);
-      }
-    } else {
-      for (let file of event.files) {
-        this.selectedFile = input.files[0];
-        this.uploadedFiles.push(file);
-        this.parsedColumns = [];
-        this.datasetToUploadInfo.name = this.selectedFile.name.replace(
-          /\.csv$/,
-          ''
-        ); // Nombre por defecto
-      }
-    }
+  //   console.log('Archivo seleccionado:', input.files);
+  //   if (input.files && input.files.length > 0) {
+  //     for (let file of event.files) {
+  //       this.selectedFile = input.files[0];
+  //       this.uploadedFiles.push(file);
+  //       this.parsedColumns = [];
+  //       this.datasetToUploadInfo.name = this.selectedFile.name.replace(
+  //         /\.csv$/,
+  //         ''
+  //       ); // Nombre por defecto
+  //       console.log(
+  //         ' fase 1 :Datos de archivo seleccionado:',
+  //         this.datasetToUploadInfo.name
+  //       );
+  //       this.analyzeCsvFile(this.selectedFile);
+  //       console.log(' fase 2 :Analisis del Archivo:', this.parsedColumns);
+  //     }
+  //   } else {
+  //     for (let file of event.files) {
+  //       this.selectedFile = input.files[0];
+  //       this.uploadedFiles.push(file);
+  //       this.parsedColumns = [];
+  //       this.datasetToUploadInfo.name = this.selectedFile.name.replace(
+  //         /\.csv$/,
+  //         ''
+  //       ); // Nombre por defecto
+  //     }
+  //   }
 
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Carga de archivo',
-      detail: `${event.files[0].name} cargado correctamente`,
-    });
+  //   this.messageService.add({
+  //     severity: 'info',
+  //     summary: 'Carga de archivo',
+  //     detail: `${event.files[0].name} cargado correctamente`,
+  //   });
 
-    // this.fileDataSharedService.updateSession(event.originalEvent.body.data.session_id);
-    localStorage.setItem('sessionID', event.originalEvent.body.data.session_id);
-  }
+  //   // this.fileDataSharedService.updateSession(event.originalEvent.body.data.session_id);
+  //   localStorage.setItem('sessionID', event.originalEvent.body.data.session_id);
+  // }
 
   onUploadv2(event: any) {
     const file = event.files[0];
@@ -290,9 +291,23 @@ export class ProjectDetailPageComponent implements OnInit {
           if (operationId) {
             console.log('ID de operación recibido:', operationId);
            this.connectToUploadProgressWebSocket(operationId);
+
+           this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Archivo subido correctamente. Seguimiento de carga iniciado.',
+          });
          } else {
+          
+           this.uploadStatus = 'Error';
+          
             console.error('El backend no devolvió un ID de operación.');
            this.errorMessage = 'El backend no devolvió un ID de operación para el seguimiento.';
+           this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error en la comunicación con el servidor.',
+          });
          }
 
           
@@ -310,54 +325,7 @@ export class ProjectDetailPageComponent implements OnInit {
 
   }
 
-  private analyzeCsvFile(file: File): void {
-    const reader = new FileReader();
-
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      const content = e.target?.result as string;
-      if (content) {
-        try {
-          const lines = content.split(/\r\n|\n/);
-          if (lines.length === 0) {
-            this.errorMessage = 'El archivo CSV está vacío.';
-            return;
-          }
-
-          // Asumimos que la primera línea son los encabezados
-          const headerLine = lines[0];
-          const headers = this.parseCsvLine(headerLine); // Usa una función robusta para parsear líneas CSV
-
-          if (headers.length === 0) {
-            this.errorMessage =
-              'No se pudieron detectar columnas en el archivo CSV.';
-            return;
-          }
-
-          // Tomamos hasta las primeras N líneas para detectar tipos (ej. 100 líneas)
-          const sampleLines = lines.slice(1, Math.min(lines.length, 101)); // Saltamos el encabezado
-
-          this.parsedColumns = headers.map((header) => ({
-            name: header,
-            detectedType: 'string', // Valor por defecto
-          }));
-
-          // Detectar tipos de datos
-          this.detectColumnTypes(headers, sampleLines);
-        } catch (error) {
-          console.error('Error al procesar CSV:', error);
-          this.errorMessage =
-            'Error al procesar el archivo CSV. Asegúrate de que el formato sea válido.';
-        }
-      }
-    };
-
-    reader.onerror = () => {
-      this.errorMessage = 'No se pudo leer el archivo.';
-    };
-
-    reader.readAsText(file);
-  }
-
+  
   private parseCsvLine(line: string): string[] {
     // Una expresión regular simple para CSV, considera usar una librería para casos complejos
     // Esto es un ejemplo. Librerías como 'papaparse' son mejores para CSV real.
@@ -373,82 +341,82 @@ export class ProjectDetailPageComponent implements OnInit {
     return result;
   }
 
-  private detectColumnTypes(headers: string[], sampleLines: string[]): void {
-    if (sampleLines.length === 0) {
-      console.warn(
-        "No hay líneas de muestra para detectar tipos, todas las columnas serán 'string'."
-      );
-      return;
-    }
+  // private detectColumnTypes(headers: string[], sampleLines: string[]): void {
+  //   if (sampleLines.length === 0) {
+  //     console.warn(
+  //       "No hay líneas de muestra para detectar tipos, todas las columnas serán 'string'."
+  //     );
+  //     return;
+  //   }
 
-    const columnValues: { [key: string]: string[] } = {};
-    headers.forEach((header) => (columnValues[header] = []));
+  //   const columnValues: { [key: string]: string[] } = {};
+  //   headers.forEach((header) => (columnValues[header] = []));
 
-    sampleLines.forEach((line) => {
-      const values = this.parseCsvLine(line);
-      headers.forEach((header, index) => {
-        if (values[index] !== undefined) {
-          columnValues[header].push(values[index]);
-        }
-      });
-    });
+  //   sampleLines.forEach((line) => {
+  //     const values = this.parseCsvLine(line);
+  //     headers.forEach((header, index) => {
+  //       if (values[index] !== undefined) {
+  //         columnValues[header].push(values[index]);
+  //       }
+  //     });
+  //   });
 
-    this.parsedColumns = headers.map((header) => {
-      const values = columnValues[header];
-      const detectedType = this.inferType(values);
-      return { name: header, detectedType: detectedType };
-    });
-  }
+  //   this.parsedColumns = headers.map((header) => {
+  //     const values = columnValues[header];
+  //     const detectedType = this.inferType(values);
+  //     return { name: header, detectedType: detectedType };
+  //   });
+  // }
 
-  private inferType(values: string[]): string {
-    let allAreNumbers = true;
-    let allAreBooleans = true;
-    let allAreUUIDs = true; // Nuevo tipo
-    let hasValues = false;
+  // private inferType(values: string[]): string {
+  //   let allAreNumbers = true;
+  //   let allAreBooleans = true;
+  //   let allAreUUIDs = true; // Nuevo tipo
+  //   let hasValues = false;
 
-    for (const val of values) {
-      if (val === null || val === undefined || val.trim() === '') {
-        continue; // Ignorar valores vacíos para la inferencia
-      }
-      hasValues = true;
+  //   for (const val of values) {
+  //     if (val === null || val === undefined || val.trim() === '') {
+  //       continue; // Ignorar valores vacíos para la inferencia
+  //     }
+  //     hasValues = true;
 
-      // Intentar Number
-      if (isNaN(Number(val))) {
-        allAreNumbers = false;
-      }
+  //     // Intentar Number
+  //     if (isNaN(Number(val))) {
+  //       allAreNumbers = false;
+  //     }
 
-      // Intentar Boolean
-      const lowerVal = val.toLowerCase();
-      if (!['true', 'false', '1', '0'].includes(lowerVal)) {
-        allAreBooleans = false;
-      }
+  //     // Intentar Boolean
+  //     const lowerVal = val.toLowerCase();
+  //     if (!['true', 'false', '1', '0'].includes(lowerVal)) {
+  //       allAreBooleans = false;
+  //     }
 
-      // Intentar UUID (regex básica, puede ser más estricta si necesitas)
-      const uuidRegex =
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-      if (!uuidRegex.test(val)) {
-        allAreUUIDs = false;
-      }
+  //     // Intentar UUID (regex básica, puede ser más estricta si necesitas)
+  //     const uuidRegex =
+  //       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  //     if (!uuidRegex.test(val)) {
+  //       allAreUUIDs = false;
+  //     }
 
-      // Si ya sabemos que no es ninguno de los tipos específicos, podemos salir temprano
-      if (!allAreNumbers && !allAreBooleans && !allAreUUIDs) {
-        break;
-      }
-    }
+  //     // Si ya sabemos que no es ninguno de los tipos específicos, podemos salir temprano
+  //     if (!allAreNumbers && !allAreBooleans && !allAreUUIDs) {
+  //       break;
+  //     }
+  //   }
 
-    if (!hasValues) {
-      return 'string'; // O 'unknown' si prefieres, para columnas vacías
-    } else if (allAreNumbers) {
-      return 'number';
-    } else if (allAreBooleans) {
-      return 'boolean';
-    } else if (allAreUUIDs) {
-      // Priorizar UUID si es detectado
-      return 'uuid';
-    } else {
-      return 'string'; // Por defecto, si no es nada de lo anterior
-    }
-  }
+  //   if (!hasValues) {
+  //     return 'string'; // O 'unknown' si prefieres, para columnas vacías
+  //   } else if (allAreNumbers) {
+  //     return 'number';
+  //   } else if (allAreBooleans) {
+  //     return 'boolean';
+  //   } else if (allAreUUIDs) {
+  //     // Priorizar UUID si es detectado
+  //     return 'uuid';
+  //   } else {
+  //     return 'string'; // Por defecto, si no es nada de lo anterior
+  //   }
+  // }
 
   isDataLoaded(): boolean {
     return !!localStorage.getItem('sessionID'); // Verifica si hay un sessionID en el localStorage

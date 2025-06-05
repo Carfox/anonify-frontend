@@ -18,11 +18,14 @@ import { UsersComponent } from './shared/pages/users-page/users.component';
 import { RolesComponent } from './shared/pages/roles-page/roles.component';
 import { getToken } from './core/interceptor/token.interceptor';
 import { AuthService } from './features/auth/auth.service';
+import { UserinfoComponent } from './shared/pages/userinfo-page/userinfo.component';
+import { NotificationsComponent } from './shared/pages/notifications-page/notifications.component';
 
 // const auntService = 
 
 const validate = (token: string | null = getToken()) => {
   let flag = false;
+
 
   
   // const authService = new AuthService();
@@ -54,6 +57,8 @@ export const routes: Routes = [
       { path: 'projects/:id', component: ProjectDetailPageComponent },
       { path: 'preprocess', component: PreprocessingComponent },
       { path: 'management', component:  AdministrationComponent},
+      { path: 'user_information', component: UserinfoComponent},
+      { path: 'notifications', component: NotificationsComponent},
       { path: 'users', component:  UsersComponent},
       { path: 'roles', component:  RolesComponent},
       { path: 'a',component: AnonymizationPageComponent},
