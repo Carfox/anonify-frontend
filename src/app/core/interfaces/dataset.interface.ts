@@ -9,6 +9,8 @@ export interface Dataset {
   project_id: string;
   query_id: string; // Puedes dejarlo como opcional si no es relevante para el CSV
   columns: DatasetColumn[];
+  files: FileInterface[]; // Lista de archivos asociados al dataset
+  id: string; // UUID del dataset
 }
 
 

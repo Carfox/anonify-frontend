@@ -20,7 +20,7 @@ import { CardModule } from 'primeng/card';
 import { FileService } from 'app/core/services/file.service';
 import { ProjectService } from 'app/features/projects/project.service';
 import { routes } from 'app/app.routes';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from 'app/core/interfaces/project.interface';
 import { Dataset } from 'app/core/interfaces/dataset.interface';
 import { Subscription } from 'rxjs';
@@ -63,7 +63,9 @@ export class ProjectDetailPageComponent implements OnInit {
     private projectService: ProjectService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private dataUploadService: DataUploadService // Inyección de ActivatedRoute
+    private dataUploadService: DataUploadService, // Inyección de ActivatedRoute
+    private router: Router // Inyección de Router
+    
   ) {}
 
   // parsedColumns: ParsedColumnInfo[] = [];
@@ -91,6 +93,8 @@ export class ProjectDetailPageComponent implements OnInit {
 
   private messageService = inject(MessageService);
 
+  
+
   ngOnInit(): void {
     // Suscribirse a los parámetros de la ruta
     this.route.paramMap.subscribe((params) => {
@@ -106,6 +110,8 @@ export class ProjectDetailPageComponent implements OnInit {
         this.projectID = null;
       }
     });
+
+    
 
     // obtencion de datos del proyecto
     this.projectService.getProjectById(this.projectID).subscribe({
@@ -132,6 +138,11 @@ export class ProjectDetailPageComponent implements OnInit {
     // Aquí podrías cargar datos iniciales si es necesario
   }
 
+  navigateTo(event: Event, route: string): void {
+    event.preventDefault();
+    // console.log('El valor de route es:', route);
+    this.router.navigate([route]);
+  }
   ngOnChanges() {
     // Este método se ejecuta cuando hay cambios en las propiedades del componente
     // Puedes usarlo para manejar cambios en las propiedades que afectan la vista
@@ -230,48 +241,6 @@ export class ProjectDetailPageComponent implements OnInit {
     }
     this.cdr.detectChanges();
   }
-
-  // onUploadNG(event: any) {
-  //   const input = event.target as HTMLInputElement;
-
-  //   console.log('Archivo seleccionado:', input.files);
-  //   if (input.files && input.files.length > 0) {
-  //     for (let file of event.files) {
-  //       this.selectedFile = input.files[0];
-  //       this.uploadedFiles.push(file);
-  //       this.parsedColumns = [];
-  //       this.datasetToUploadInfo.name = this.selectedFile.name.replace(
-  //         /\.csv$/,
-  //         ''
-  //       ); // Nombre por defecto
-  //       console.log(
-  //         ' fase 1 :Datos de archivo seleccionado:',
-  //         this.datasetToUploadInfo.name
-  //       );
-  //       this.analyzeCsvFile(this.selectedFile);
-  //       console.log(' fase 2 :Analisis del Archivo:', this.parsedColumns);
-  //     }
-  //   } else {
-  //     for (let file of event.files) {
-  //       this.selectedFile = input.files[0];
-  //       this.uploadedFiles.push(file);
-  //       this.parsedColumns = [];
-  //       this.datasetToUploadInfo.name = this.selectedFile.name.replace(
-  //         /\.csv$/,
-  //         ''
-  //       ); // Nombre por defecto
-  //     }
-  //   }
-
-  //   this.messageService.add({
-  //     severity: 'info',
-  //     summary: 'Carga de archivo',
-  //     detail: `${event.files[0].name} cargado correctamente`,
-  //   });
-
-  //   // this.fileDataSharedService.updateSession(event.originalEvent.body.data.session_id);
-  //   localStorage.setItem('sessionID', event.originalEvent.body.data.session_id);
-  // }
 
   onUploadv2(event: any) {
     const file = event.files[0];
