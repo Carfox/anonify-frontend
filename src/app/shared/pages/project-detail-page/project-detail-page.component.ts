@@ -143,6 +143,12 @@ export class ProjectDetailPageComponent implements OnInit {
     // console.log('El valor de route es:', route);
     this.router.navigate([route]);
   }
+  onDatasetInfo(event: Event, dataset_id: string){
+
+    event.preventDefault();
+    console.log("este es el id del dataset:",dataset_id)
+    this.router.navigate(["anonify/projects",this.projectID,dataset_id])
+  }
   ngOnChanges() {
     // Este método se ejecuta cuando hay cambios en las propiedades del componente
     // Puedes usarlo para manejar cambios en las propiedades que afectan la vista

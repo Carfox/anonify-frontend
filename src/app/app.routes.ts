@@ -20,6 +20,7 @@ import { getToken } from './core/interceptor/token.interceptor';
 import { AuthService } from './features/auth/auth.service';
 import { UserinfoComponent } from './shared/pages/userinfo-page/userinfo.component';
 import { NotificationsComponent } from './shared/pages/notifications-page/notifications.component';
+import { DatasetDetailPageComponent } from './shared/pages/dataset-detail-page/dataset-detail-page.component';
 
 // const auntService = 
 
@@ -55,6 +56,7 @@ export const routes: Routes = [
       { path: 'home', component: HomePageComponent },
       { path: 'projects', component: ProjectPageComponent },
       { path: 'projects/:id', component: ProjectDetailPageComponent },
+      { path: 'projects/:id/:dataset', component: DatasetDetailPageComponent},
       { path: 'preprocess', component: PreprocessingComponent },
       { path: 'management', component:  AdministrationComponent},
       { path: 'user_information', component: UserinfoComponent},
