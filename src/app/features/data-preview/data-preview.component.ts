@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { DataSharingService } from 'app/shared/services/data-sharing.service';
 import { Card } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 
 @Component({
+  selector: 'data-preview-table',
   standalone: true,
   imports: [CommonModule, TableModule, Card, DividerModule],
   templateUrl: `./data-preview.component.html`,
@@ -13,21 +14,27 @@ import { DividerModule } from 'primeng/divider';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataPreviewComponent implements OnInit {
-  data: any[] = [];
+
+  @Input({required: true}) data = [];
+  @Output() projectAdded = new EventEmitter<void>();
+  // data: any[] = [];
   cols: any[] = [];
   selectedRows: any[] = [];
 
-  constructor(private dataSharingService: DataSharingService) {}
+  constructor() {}
 
   ngOnInit(): void {
-    try {
-      if (localStorage.getItem('data')) {
-        this.data = JSON.parse(localStorage.getItem('data'));
-        this.generateColumns();
-      }
-    } catch (error) {
-      alert('Error loading data');
+    console.log("Preview Inicial:", this.data)
+  }
+  ngOnChanges(changes: SimpleChanges): void{
+
+    if(changes['data']){
+
+      console.log("Los datos del preview han cambiado:", changes['projects'].currentValue)
     }
+
+
+
   }
 
   generateColumns(): void {

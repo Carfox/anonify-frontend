@@ -29,6 +29,9 @@ import { WebSocketService } from 'app/core/services/websocket.service';
 // import { WebSocketMessage } from 'app/core/interfaces/websocket.interface';
 import { WebSocketMessage } from 'app/core/interfaces/websocket.interface';
 import { DataUploadService } from 'app/features/data-upload/data-upload.service';
+import { DatasetService } from 'app/features/datasets/dataset.service';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import Swal from 'sweetalert2';
 // Asegúrate de tener estas interfaces
 
 // interface ParsedColumnInfo {
@@ -64,8 +67,8 @@ export class ProjectDetailPageComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private dataUploadService: DataUploadService, // Inyección de ActivatedRoute
-    private router: Router // Inyección de Router
-    
+    private router: Router, // Inyección de Router
+    private datasetService: DatasetService
   ) {}
 
   // parsedColumns: ParsedColumnInfo[] = [];
@@ -93,8 +96,6 @@ export class ProjectDetailPageComponent implements OnInit {
 
   private messageService = inject(MessageService);
 
-  
-
   ngOnInit(): void {
     // Suscribirse a los parámetros de la ruta
     this.route.paramMap.subscribe((params) => {
@@ -110,8 +111,6 @@ export class ProjectDetailPageComponent implements OnInit {
         this.projectID = null;
       }
     });
-
-    
 
     // obtencion de datos del proyecto
     this.projectService.getProjectById(this.projectID).subscribe({
@@ -143,11 +142,55 @@ export class ProjectDetailPageComponent implements OnInit {
     // console.log('El valor de route es:', route);
     this.router.navigate([route]);
   }
-  onDatasetInfo(event: Event, dataset_id: string){
-
+  
+  onDeleteDataset(event: Event, dataset_id: string) {
     event.preventDefault();
-    console.log("este es el id del dataset:",dataset_id)
-    this.router.navigate(["anonify/projects",this.projectID,dataset_id])
+
+    console.log('ID del dataset:', dataset_id);
+    Swal.fire({
+      title:
+        'Estas seguro que deseas eliminar toda la información del dataset?',
+      // showDenyButton: true,
+      icon: "warning",
+      confirmButtonText: 'Eliminar',
+      confirmButtonColor: "#F77070",
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar'
+
+      // denyButtonText: `Don't save`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.datasetService.deleteDataset(dataset_id).subscribe({
+          next: (res: any) => {
+            
+            console.log("Respuesta del servidor:", res);
+            
+            this.messageService.add({
+              severity:'success',
+              summary: 'Success',
+              detail: 'El dataset y todos sus datos han sido eliminados correctamente.',
+            });
+          },
+          error: (err) => {
+            console.error('error al eliminar el dataset', err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'ocurrio un error al intentar eliminar el Dataset',
+            });
+          },
+        });
+        // Swal.fire('Saved!', '', 'success');
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info');
+      }
+    });
+  }
+  onDatasetInfo(event: Event, dataset_id: string) {
+    event.preventDefault();
+    console.log('este es el id del dataset:', dataset_id);
+    this.router.navigate(['anonify/projects', this.projectID, dataset_id]);
   }
   ngOnChanges() {
     // Este método se ejecuta cuando hay cambios en las propiedades del componente
@@ -175,8 +218,9 @@ export class ProjectDetailPageComponent implements OnInit {
     this.uploadMessage = 'Esperando progreso del servidor.';
 
     if (this.websocketSubscription) {
-
-      console.log('Desconectando WebSocket anterior antes de conectar uno nuevo.');
+      console.log(
+        'Desconectando WebSocket anterior antes de conectar uno nuevo.'
+      );
       this.websocketSubscription.unsubscribe();
     }
     // Cerrar cualquier conexión WebSocket anterior antes de abrir una nueva
@@ -258,49 +302,47 @@ export class ProjectDetailPageComponent implements OnInit {
       });
       return;
     }
-    
-    this.dataUploadService.uploadData(file, this.projectID).subscribe(
-        (response: any) => {
-          const operationId = response.operation_id; // Asegúrate de que tu backend retorne un ID de operación
-          console.log('Respuesta del backend:', response);
-          if (operationId) {
-            console.log('ID de operación recibido:', operationId);
-           this.connectToUploadProgressWebSocket(operationId);
 
-           this.messageService.add({
+    this.dataUploadService
+      .uploadData(file, this.projectID)
+      .subscribe((response: any) => {
+        const operationId = response.operation_id; // Asegúrate de que tu backend retorne un ID de operación
+        console.log('Respuesta del backend:', response);
+        if (operationId) {
+          console.log('ID de operación recibido:', operationId);
+          this.connectToUploadProgressWebSocket(operationId);
+
+          this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
-            detail: 'Archivo subido correctamente. Seguimiento de carga iniciado.',
+            detail:
+              'Archivo subido correctamente. Seguimiento de carga iniciado.',
           });
-         } else {
-          
-           this.uploadStatus = 'Error';
-          
-            console.error('El backend no devolvió un ID de operación.');
-           this.errorMessage = 'El backend no devolvió un ID de operación para el seguimiento.';
-           this.messageService.add({
+        } else {
+          this.uploadStatus = 'Error';
+
+          console.error('El backend no devolvió un ID de operación.');
+          this.errorMessage =
+            'El backend no devolvió un ID de operación para el seguimiento.';
+          this.messageService.add({
             severity: 'error',
             summary: 'Error',
             detail: 'Error en la comunicación con el servidor.',
           });
-         }
-
-          
-          // if (event.type === 1) { 
-          //   const percentDone = Math.round(100 * event.loaded / event.total);
-          //   console.log(`Cargando archivo: ${percentDone}%`);
-            
-          // } else if (event.type === 4) { 
-          //   console.log('Archivo cargado con éxito:', event.body);
-          //   this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Archivo subido correctamente.'});
-            
-          // }
         }
-      );
 
+        // if (event.type === 1) {
+        //   const percentDone = Math.round(100 * event.loaded / event.total);
+        //   console.log(`Cargando archivo: ${percentDone}%`);
+
+        // } else if (event.type === 4) {
+        //   console.log('Archivo cargado con éxito:', event.body);
+        //   this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Archivo subido correctamente.'});
+
+        // }
+      });
   }
 
-  
   private parseCsvLine(line: string): string[] {
     // Una expresión regular simple para CSV, considera usar una librería para casos complejos
     // Esto es un ejemplo. Librerías como 'papaparse' son mejores para CSV real.

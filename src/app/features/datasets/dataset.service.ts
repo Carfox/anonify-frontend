@@ -16,10 +16,56 @@ export class DatasetService {
   getDataset(datasetID: string) {
     const token = getToken();
 
-    return this.http.get(`${this.apiURL}/datasets/${datasetID}`, {
+    return this.http.get(`${this.apiURL}/api/datasets/${datasetID}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+
+
   }
+  getDatasetPreview(datasetID: string, page_index: number, rows: number){
+
+
+
+    const token = getToken();
+
+    return this.http.get(`${this.apiURL}/api/datasets/${datasetID}/preview?page_index=${page_index}&&rows=${rows}`,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+
+  }
+  updateDatasetStatus(id: string, status: string){
+
+    const token = getToken();
+    return this.http.put(`${this.apiURL}/api/datasets`,{
+
+      
+      id,status
+
+
+    },{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+
+    })
+  }
+
+  deleteDataset(datasetID: string) {
+    const token = getToken();
+
+    return this.http.delete(`${this.apiURL}/api/datasets/${datasetID}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+
+  }
+
+
 }

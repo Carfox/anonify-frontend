@@ -2,7 +2,20 @@
 
 <main class="min-h-screen w-full pt-[100px]">
 
-    <p>dataset detalles funciona</p>
+    <div class="border-b border-stroke flex justify-between items-center py-6">
+      <h2 class="mb-2 text-2xl font-semibold text-dark">FLUJO DE PROCESAMIENTO DE DATOS</h2>
+      <button
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-sm bg-secondary px-5 py-[10px] text-sm font-medium text-white hover:bg-secondary/90"
+        (click)="navigateTo($event, 'anonify/projects/{this.projectID}')"
+        title="Volver a proyectos"
+        aria-label="Volver a proyectos"
+      >
+        VOLVER AL PROYECTO
+        <span class="pl-2">
+          <i class="pi pi-arrow-left"></i>
+        </span>
+      </button>
+    </div>
 
 
     <p-stepper [value]="1" class="basis-[50rem]" [linear]="true">
@@ -35,8 +48,9 @@
                   Asegúrate de que los datos sean correctos y estén en el
                   formato adecuado antes de continuar.
                 </div>
-                <div class="border-2 border-dashed border-surface min-h-[45vh]">
-                  <aw-preview-step></aw-preview-step>
+                <div class="border-2 border-dashed border-surface min-h-[45vh] max-w-[965px]">
+                  <!-- <data-preview-table [data]="preview"></data-preview-table> -->
+                  <aw-preview-step [datasetID]="this.datasetID" [projectID]="this.projectID"></aw-preview-step>
                 </div>
               </div>
               <div class="flex pt-5 justify-center">
