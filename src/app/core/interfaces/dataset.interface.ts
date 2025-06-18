@@ -8,6 +8,7 @@ export interface Dataset {
   name: string;
   status: string;
   project_id: string;
+  rows: number
   // query_id: string; // Puedes dejarlo como opcional si no es relevante para el CSV
   columns: DatasetColumn[];
   files: FileInterface[]; // Lista de archivos asociados al dataset
@@ -17,6 +18,7 @@ export interface Dataset {
 export interface DatasetUpdatestatus {
   id: string;
   status: string;
+  rows: number
 }
 
 export interface Columns {

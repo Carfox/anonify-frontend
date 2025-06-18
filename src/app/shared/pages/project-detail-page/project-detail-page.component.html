@@ -81,7 +81,7 @@
       >
         Disabled
       </button>
-      <button class="h-[35px] bg-red-400 m-2 text-white rounded-sm w-[200px]">
+      <button class="h-[35px] bg-red-400 m-2 text-white rounded-sm w-[200px]" (click)="onDeleteProject(projectData.id)">
         Eliminar Proyecto
         <i class="pi pi-trash mx-1"> </i>
       </button>
@@ -115,7 +115,7 @@
                   name="file"
                   [multiple]="false"
                   accept=".csv, .txt"
-                  maxFileSize="50000000"
+                  maxFileSize="1000000000"
                   mode="advanced"
                   customUpload="true"
                   (uploadHandler)="onUploadv2($event)"

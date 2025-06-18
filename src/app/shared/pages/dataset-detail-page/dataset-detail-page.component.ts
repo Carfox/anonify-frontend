@@ -37,6 +37,7 @@ export class DatasetDetailPageComponent implements OnInit {
     name: '',
     project_id: '',
     status: '',
+    rows: 0,
     columns: [],
     files: [],
     id: '',
@@ -91,6 +92,11 @@ export class DatasetDetailPageComponent implements OnInit {
     event.preventDefault();
     // console.log('El valor de route es:', route);
     this.router.navigate([route]);
+  }
+
+  goToProject(event: Event, projectID): void{
+    event.preventDefault();
+    this,this.router.navigate(['anonify/projects',projectID])
   }
 
   onProjectAddedHandler(): void {

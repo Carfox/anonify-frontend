@@ -30,15 +30,8 @@ import { WebSocketService } from 'app/core/services/websocket.service';
 import { WebSocketMessage } from 'app/core/interfaces/websocket.interface';
 import { DataUploadService } from 'app/features/data-upload/data-upload.service';
 import { DatasetService } from 'app/features/datasets/dataset.service';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import Swal from 'sweetalert2';
-// Asegúrate de tener estas interfaces
 
-// interface ParsedColumnInfo {
-//   name: string;
-//   detectedType: string; // 'string', 'number', 'boolean', 'uuid', etc.
-//   // Podrías añadir un 'actualTypeId' para el backend si tienes un mapeo
-// }
 
 @Component({
   selector: 'app-project-detail-page',
@@ -79,6 +72,7 @@ export class ProjectDetailPageComponent implements OnInit {
   projectData: Project = {
     id: '',
     title: '',
+    authors: [],
     description: '',
     datasets: [],
     // create
@@ -142,7 +136,7 @@ export class ProjectDetailPageComponent implements OnInit {
     // console.log('El valor de route es:', route);
     this.router.navigate([route]);
   }
-  
+
   onDeleteDataset(event: Event, dataset_id: string) {
     event.preventDefault();
 
@@ -151,11 +145,11 @@ export class ProjectDetailPageComponent implements OnInit {
       title:
         'Estas seguro que deseas eliminar toda la información del dataset?',
       // showDenyButton: true,
-      icon: "warning",
+      icon: 'warning',
       confirmButtonText: 'Eliminar',
-      confirmButtonColor: "#F77070",
+      confirmButtonColor: '#F77070',
       showCancelButton: true,
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
 
       // denyButtonText: `Don't save`,
     }).then((result) => {
@@ -163,13 +157,25 @@ export class ProjectDetailPageComponent implements OnInit {
       if (result.isConfirmed) {
         this.datasetService.deleteDataset(dataset_id).subscribe({
           next: (res: any) => {
-            
-            console.log("Respuesta del servidor:", res);
-            
-            this.messageService.add({
-              severity:'success',
-              summary: 'Success',
-              detail: 'El dataset y todos sus datos han sido eliminados correctamente.',
+            console.log('Respuesta del servidor:', res);
+
+            this.projectService.getProjectById(this.projectID).subscribe({
+              next: (res: any) => {
+                console.log('Datos del proyecto obtenidos:', res);
+                // Aquí podrías manejar los datos del proyecto, por ejemplo, asignarlos a una variable
+                this.projectData = res;
+                this.cdr.detectChanges();
+                console.log('Project Info:', this.projectData);
+                // Forzar la detección de cambios para actualizar la vista
+              },
+              error: (err) => {
+                console.error('Error al obtener los datos del proyecto:', err);
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'No se pudieron cargar los datos del proyecto.',
+                });
+              },
             });
           },
           error: (err) => {
@@ -180,6 +186,12 @@ export class ProjectDetailPageComponent implements OnInit {
               detail: 'ocurrio un error al intentar eliminar el Dataset',
             });
           },
+        });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail:
+            'El dataset y todos sus datos han sido eliminados correctamente.',
         });
         // Swal.fire('Saved!', '', 'success');
       } else if (result.isDenied) {
@@ -192,6 +204,45 @@ export class ProjectDetailPageComponent implements OnInit {
     console.log('este es el id del dataset:', dataset_id);
     this.router.navigate(['anonify/projects', this.projectID, dataset_id]);
   }
+  onDeleteProject(projectID: string) {
+      Swal.fire({
+        title:
+          'Estas seguro que deseas eliminar toda la información del Proyecto?',
+        // showDenyButton: true,
+        icon: 'warning',
+        confirmButtonText: 'Eliminar',
+        confirmButtonColor: '#F77070',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+  
+        // denyButtonText: `Don't save`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.projectService.deleteProjectById(projectID).subscribe({
+            next: (res: any) => {
+              console.log('Respuesta del servidor', res);
+              // this.getAllProjects();
+
+              this.router.navigate(['anonify/projects']);
+
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'El Proyecto se ha eliminado correctamente',
+              });
+            },
+            error: (err) => {
+              console.error('Error al eliminar el servicio', err);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo eliminar el proyecto.',
+              });
+            },
+          });
+        }
+      })
+    }
   ngOnChanges() {
     // Este método se ejecuta cuando hay cambios en las propiedades del componente
     // Puedes usarlo para manejar cambios en las propiedades que afectan la vista
@@ -342,98 +393,6 @@ export class ProjectDetailPageComponent implements OnInit {
         // }
       });
   }
-
-  private parseCsvLine(line: string): string[] {
-    // Una expresión regular simple para CSV, considera usar una librería para casos complejos
-    // Esto es un ejemplo. Librerías como 'papaparse' son mejores para CSV real.
-    const regex = /(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|([^,\"]*))(?:,|$)/g;
-    let match;
-    const result: string[] = [];
-    while ((match = regex.exec(line)) !== null) {
-      // Si el valor está entre comillas, elimina las comillas y reemplaza "" por "
-      const value =
-        match[1] !== undefined ? match[1].replace(/\"\"/g, '"') : match[2];
-      result.push(value.trim()); // trim para quitar espacios
-    }
-    return result;
-  }
-
-  // private detectColumnTypes(headers: string[], sampleLines: string[]): void {
-  //   if (sampleLines.length === 0) {
-  //     console.warn(
-  //       "No hay líneas de muestra para detectar tipos, todas las columnas serán 'string'."
-  //     );
-  //     return;
-  //   }
-
-  //   const columnValues: { [key: string]: string[] } = {};
-  //   headers.forEach((header) => (columnValues[header] = []));
-
-  //   sampleLines.forEach((line) => {
-  //     const values = this.parseCsvLine(line);
-  //     headers.forEach((header, index) => {
-  //       if (values[index] !== undefined) {
-  //         columnValues[header].push(values[index]);
-  //       }
-  //     });
-  //   });
-
-  //   this.parsedColumns = headers.map((header) => {
-  //     const values = columnValues[header];
-  //     const detectedType = this.inferType(values);
-  //     return { name: header, detectedType: detectedType };
-  //   });
-  // }
-
-  // private inferType(values: string[]): string {
-  //   let allAreNumbers = true;
-  //   let allAreBooleans = true;
-  //   let allAreUUIDs = true; // Nuevo tipo
-  //   let hasValues = false;
-
-  //   for (const val of values) {
-  //     if (val === null || val === undefined || val.trim() === '') {
-  //       continue; // Ignorar valores vacíos para la inferencia
-  //     }
-  //     hasValues = true;
-
-  //     // Intentar Number
-  //     if (isNaN(Number(val))) {
-  //       allAreNumbers = false;
-  //     }
-
-  //     // Intentar Boolean
-  //     const lowerVal = val.toLowerCase();
-  //     if (!['true', 'false', '1', '0'].includes(lowerVal)) {
-  //       allAreBooleans = false;
-  //     }
-
-  //     // Intentar UUID (regex básica, puede ser más estricta si necesitas)
-  //     const uuidRegex =
-  //       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  //     if (!uuidRegex.test(val)) {
-  //       allAreUUIDs = false;
-  //     }
-
-  //     // Si ya sabemos que no es ninguno de los tipos específicos, podemos salir temprano
-  //     if (!allAreNumbers && !allAreBooleans && !allAreUUIDs) {
-  //       break;
-  //     }
-  //   }
-
-  //   if (!hasValues) {
-  //     return 'string'; // O 'unknown' si prefieres, para columnas vacías
-  //   } else if (allAreNumbers) {
-  //     return 'number';
-  //   } else if (allAreBooleans) {
-  //     return 'boolean';
-  //   } else if (allAreUUIDs) {
-  //     // Priorizar UUID si es detectado
-  //     return 'uuid';
-  //   } else {
-  //     return 'string'; // Por defecto, si no es nada de lo anterior
-  //   }
-  // }
 
   isDataLoaded(): boolean {
     return !!localStorage.getItem('sessionID'); // Verifica si hay un sessionID en el localStorage

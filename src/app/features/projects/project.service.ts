@@ -30,19 +30,20 @@ export class ProjectService {
   postNewProject(title: string, description: string) {
     const token = getToken();
 
-    return this.http.post(`${this.apiURL}${this.userProjectsURL}`, {
-      title,
-      description,
+    return this.http.post(
+      `${this.apiURL}${this.userProjectsURL}`,
+      {
+        title,
+        description,
 
-      // author_id: "",
-    }, 
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-  );
-
+        // author_id: "",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 
   getProjectById(id: string) {
@@ -54,8 +55,12 @@ export class ProjectService {
     });
   }
 
-  
-  
-  
-  
+  deleteProjectById(id: string) {
+    const token = getToken();
+    return this.http.delete<Project>(`${this.apiURL}/api/projects/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }

@@ -104,14 +104,14 @@ import { TableModule } from 'primeng/table';
         
         <button
           class="mx-3"
-          [disabled]="this.index === this.max_rows"
+          [disabled]="this.index === this.max_pages"
           (click)="goToPage($event, this.index + 1)"
         >
           <i class="pi pi-angle-right"></i>
         </button>
         <button
           class="mx-3"
-          [disabled]="this.index === this.max_rows"
+          [disabled]="this.index === this.max_pages"
           (click)="goToPage($event, this.max_pages)"
         >
           <i class="pi pi-angle-double-right"></i>
