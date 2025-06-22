@@ -1,4 +1,4 @@
-import SimpleUserInfo from "./user.interface";
+import {SimpleUserInfo} from "./user.interface";
 
 export interface Project {
 id: string;

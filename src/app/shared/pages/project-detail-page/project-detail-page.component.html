@@ -114,13 +114,14 @@
                 <p-fileupload
                   name="file"
                   [multiple]="false"
-                  accept=".csv, .txt"
+                  accept=".csv"
                   maxFileSize="1000000000"
                   mode="advanced"
                   customUpload="true"
                   (uploadHandler)="onUploadv2($event)"
                   chooseLabel="Seleccionar archivo"
                   uploadLabel="Cargar"
+                  
                 >
                   <!-- <p-fileupload
                   name="file"
@@ -157,7 +158,7 @@
                     <!-- progreso de la carga -->
                     <div
                       class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg"
-                    >
+                    *ngIf="this.showUploadProgress === true">
                       <!-- <div
     *ngIf="showUploadProgress"
     class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg"
@@ -273,11 +274,7 @@
     </table>
   </div>
 
-  <p>
-    This is the project detail page. It will display the details of a specific
-    project.
-  </p>
-
+  
   <!-- dialog  -->
   <!-- <div class="card flex justify-center">
       <p-dialog

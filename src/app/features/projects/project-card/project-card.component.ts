@@ -22,7 +22,7 @@ import { ProjectService } from '../project.service';
           <h3>{{ item.title }}</h3>
         </ng-template>
 
-        <p>{{ item.description }}</p>
+        <p class="line-clamp-6 h-[126px]">{{ item.description }}</p>
 
         <ng-template #footer>
           <div class="flex gap-6 mt-1">

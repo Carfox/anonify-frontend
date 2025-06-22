@@ -1,1 +1,181 @@
-<p>users works!</p>
+<section class="border-4 border-blue-700 w-screen min-h-screen">
+  <div
+    class="mx-auto px-4 sm:container pt-[120px] flex justify-center items-start"
+  >
+    <div
+      class="items-start justify-between border-b border-stroke md:flex dark:border-dark-3"
+    >
+      <div class="mb-6 w-full">
+        <!-- <h2 class="mb-2 text-2xl font-semibold text-dark">Notificaciones</h2> -->
+        <div class="border-b border-stroke">
+          <h2 class="mb-2 text-2xl font-semibold text-dark">
+            Informacion del usuario
+          </h2>
+        </div>
+
+        <p class="text-sm font-medium text-body-color py-2">
+          Aqui ver tu informacion de usuario y modificarla si es necesario.
+          Puedes cambiar tu nombre, correo electrónico y contraseña. Asegúrate
+          de que la información sea correcta y actualizada.
+        </p>
+        <div class="mb-6">
+          <button
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-sm bg-secondary px-5 py-[10px] text-sm font-medium text-white hover:bg-secondary/90"
+          >
+            VOLVER A CARGAR
+            <span class="pl-2">
+              <i class="pi pi-refresh"></i>
+            </span>
+          </button>
+        </div>
+        <!-- information container -->
+        <!-- contenedor de acciones -->
+        <div
+          class="w-full h-[100px] border-2 border-black flex flex-wrap justify-center items-center"
+        >
+          <!-- crear usuario -->
+          <button class="bg-blue-400 p-2 text-primary rounded-md m-2" (click)="showDialog()">
+            <i class="pi pi-user-plus"></i>
+            Nuevo Usuario
+          </button>
+          <button class="bg-slate-400 p-2 text-primary rounded-md m-2">
+            <i class="pi pi-file-import"></i>
+            Importar
+          </button>
+        </div>
+
+        <div class="border-2 w-full border-green-600">
+          <!-- tabla de datasets -->
+          <table class="w-full overflow-x-scroll">
+            <thead class="bg-gray-200">
+              <tr>
+                <th class="border px-4 py-2">Acciones</th>
+                <th class="border px-4 py-2">ID</th>
+                <th class="border px-4 py-2">Nombre</th>
+                <th class="border px-4 py-2">Nacionalidad</th>
+                <th class="border px-4 py-2">Correo</th>
+                <th class="border px-4 py-2">Nombre Usuario</th>
+                <th class="border px-4 py-2">Rol</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of this.users; track user) {
+              <tr class="hover:bg-gray-100">
+                <td class="border px-4 py-2 text-center flex">
+                  <button
+                    class="rounded-md bg-blue-500 h-[40px] aspect-square text-white m-2"
+                    (click)="updateUser(user.id)"
+                  >
+                    <i class="pi pi-pen-to-square"></i>
+                  </button>
+                  <button
+                    class="rounded-md bg-red-400 h-[40px] aspect-square text-white m-2"
+                    (click)="deleteUser(user.id)"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </td>
+                <td class="border px-4 py-2 text-center">{{user.id}}</td>
+                <td class="border px-4 py-2 text-center">{{user.name}}</td>
+                <td class="border px-4 py-2 text-center">{{user.nationality}}</td>
+                <td class="border px-4 py-2 text-center">{{user.mail}}</td>
+                <td class="border px-4 py-2 text-center">{{user.username}}</td>
+                <td class="border px-4 py-2 text-center">{{user.username}}</td>
+              </tr>
+              } @empty {
+            <tr>
+              <td colspan="3" class="border px-4 py-2 text-center">
+                No hay usuarios disponibles.
+              </td>
+            </tr>
+            }
+              <!-- Agregar más filas según sea necesario -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card flex justify-center">
+    <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '30rem' }">
+      <ng-template #header>
+        <span class="font-bold whitespace-nowrap">Nuevo Usuario</span>
+      </ng-template>
+      <span class="text-surface-500 dark:text-surface-400 block mb-6"
+        >Ingrese los datos del usuario</span
+      >
+      <div class="mb-6">
+        <label for="titleProject" class="block font-semibold mb-2"
+          >Nombre</label
+        >
+        <input
+          pInputText
+          id="fullName"
+          [(ngModel)]="this.userToCreate.name"
+          class="w-full"
+          autocomplete="off"
+        />
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Nacionalidad</label
+        >
+        <input
+          pInputText
+          id="nationality"
+          [(ngModel)]="this.userToCreate.nationality"
+          class="w-full"
+          autocomplete="off"
+        />
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Correo Electronico</label
+        >
+        <!-- TODO -->
+        <!-- <input
+          type="email"
+          
+          name="mail"
+          [(ngModel)]="this.userToCreate.mail"
+          [ng-maxlength="16"]
+        /> -->
+        <input
+          pInputText
+          id="mail"
+          [(ngModel)]="this.userToCreate.mail"
+          class="w-full"
+          autocomplete="off"
+        />
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Nombre de usuario</label
+        >
+        <input
+          pInputText
+          id="username"
+          [(ngModel)]="this.userToCreate.username"
+          class="w-full"
+          autocomplete="off"
+        />
+      </div>
+      
+
+      <ng-template #footer>
+        <p-button
+          label="Cancel"
+          [text]="true"
+          severity="secondary"
+          (click)="visible = false"
+        />
+        <p-button
+          label="Save"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="createUser()"
+        />
+      </ng-template>
+    </p-dialog>
+  </div>
+</section>

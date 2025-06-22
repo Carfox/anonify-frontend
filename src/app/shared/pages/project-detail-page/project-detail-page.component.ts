@@ -32,7 +32,7 @@ import { DataUploadService } from 'app/features/data-upload/data-upload.service'
 import { DatasetService } from 'app/features/datasets/dataset.service';
 import Swal from 'sweetalert2';
 
-
+import { environment } from 'environments/environment.development';
 @Component({
   selector: 'app-project-detail-page',
   standalone: true,
@@ -125,10 +125,6 @@ export class ProjectDetailPageComponent implements OnInit {
         });
       },
     });
-
-    // this.cdr.detectChanges();
-
-    // Aquí podrías cargar datos iniciales si es necesario
   }
 
   navigateTo(event: Event, route: string): void {
@@ -261,7 +257,9 @@ export class ProjectDetailPageComponent implements OnInit {
   connectToUploadProgressWebSocket(operationId: string): void {
     // ... (El código de esta función es idéntico al que te proporcioné anteriormente) ...
 
-    const wsUrl = `ws://localhost:2003/api/ws/progress/${operationId}`;
+    this.showUploadProgress = true
+
+    const wsUrl = `${environment.webSocketUrl}${operationId}`;
     console.log('Conectando al WebSocket en:', wsUrl);
     this.showUploadProgress = true;
     this.uploadProgress = 0;
@@ -342,6 +340,11 @@ export class ProjectDetailPageComponent implements OnInit {
     }
     this.cdr.detectChanges();
   }
+
+  closeUploadDialog(){
+    this.upload_dialog_visible = false
+  }
+
 
   onUploadv2(event: any) {
     const file = event.files[0];
