@@ -10,22 +10,62 @@ import { ProjectPageComponent } from './shared/pages/project-page/project-page.c
 import { ProjectDetailPageComponent } from './shared/pages/project-detail-page/project-detail-page.component';
 import { projectRoutes } from './features/projects/projects.routes';
 import { AnonymizationPageComponent } from './shared/pages/anonymization-page/anonymization-page.component';
+import { LayoutComponent } from './shared/components/layout/layout.component';
+// import { ProjectsComponent } from './shared/pages/projects-page/projects.component';
+import { AdministrationComponent } from './shared/pages/administration-page/administration.component';
+import { PreprocessingComponent } from './shared/pages/preprocessing-page/preprocessing.component';
+import { UsersComponent } from './shared/pages/users-page/users.component';
+import { RolesComponent } from './shared/pages/roles-page/roles.component';
+import { getToken } from './core/interceptor/token.interceptor';
+import { AuthService } from './features/auth/auth.service';
+import { UserinfoComponent } from './shared/pages/userinfo-page/userinfo.component';
+import { NotificationsComponent } from './shared/pages/notifications-page/notifications.component';
+import { DatasetDetailPageComponent } from './shared/pages/dataset-detail-page/dataset-detail-page.component';
+
+// const auntService = 
+
+const validate = (token: string | null = getToken()) => {
+  let flag = false;
+
+
+  
+  // const authService = new AuthService();
+  // AuthService.validateToken(token).subscribe({
+  // esto tiene que validarse con un web token , de momento ya est la base
+
+  
+
+  // console.log(token);
+  if (flag) {
+    return 'login';
+  } else {
+    return 'home';
+  }
+};
+
+
 
 export const routes: Routes = [
-  { path: 'home', component: HomePageComponent, pathMatch: 'full' },
-  // { path: 'auth', component: LoginComponent, pathMatch: 'full' },
-  // {
-  //   path: 'projects',
-  //   component: ProjectPageComponent,
-  // },
-  // {
-  //   path: 'projects/:id',
-  //   component: ProjectDetailPageComponent,
-  //   children: projectRoutes,
-  // },
+  
+{ path: 'login', component: LoginComponent },
   {
-    path: 'a',
-    component: AnonymizationPageComponent,
+    path: 'anonify',
+    component: LayoutComponent,
+
+    children: [
+      { path: 'home', component: HomePageComponent },
+      { path: 'projects', component: ProjectPageComponent },
+      { path: 'projects/:id', component: ProjectDetailPageComponent },
+      { path: 'projects/:id/:dataset', component: DatasetDetailPageComponent},
+      { path: 'preprocess', component: PreprocessingComponent },
+      { path: 'management', component:  AdministrationComponent},
+      { path: 'user_information', component: UserinfoComponent},
+      { path: 'notifications', component: NotificationsComponent},
+      { path: 'users', component:  UsersComponent},
+      { path: 'roles', component:  RolesComponent},
+      { path: 'a',component: AnonymizationPageComponent},
+      { path: '**', redirectTo: 'home' },
+    ],
   },
-  { path: '**', redirectTo: 'home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
 ];

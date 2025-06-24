@@ -5,9 +5,10 @@ import { MenuBarComponent } from "../../components/menu-bar/menu-bar.component";
 @Component({
   standalone: true,
   imports: [AnonymizationWizardComponent, MenuBarComponent],
-  template: `
-      <shared-menu-bar></shared-menu-bar>
-      <app-anonymization-wizard></app-anonymization-wizard>
+  template: `<div class="p-[100px]">
+  <app-anonymization-wizard></app-anonymization-wizard>
+  </div>
+      
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from 'environments/environment.development';
+import { getToken } from '../interceptor/token.interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,8 @@ export class FileService {
   dataLoaded() {
     return this.fileData;
   }
+
+
 
   /**
    * @deprecated This method is deprecated and may be removed in future versions.

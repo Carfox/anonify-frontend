@@ -1,0 +1,212 @@
+<!-- Contenido de la barra de navegación -->
+<nav
+  #navbar
+  class="fixed w-full h-[100px] bg-secondary text-white flex items-center justify-between z-40"
+>
+  <div class="h-full flex justify-start items-center">
+    <!-- sidebar button -->
+    <button
+      #btnSidebarToggler
+      id="btnSidebarToggler"
+      type="button"
+      class="p-4 text-2xl text-white hover:text-gray-200"
+      (click)="toggleSidebar($event)"
+    >
+      <svg
+        #navClosed
+        id="navClosed"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="h-8 w-8"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+        />
+      </svg>
+      <svg
+        #navOpen
+        id="navOpen"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="hidden h-8 w-8"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+    <!-- logo -->
+    <!-- <img
+      src="../../../../../public/favicon.ico"
+      alt=""
+      class="h-[60%]"
+    /> -->
+    <span class="text-2xl font-bold text-white ml-4"> Anonify </span>
+    <!-- <i class="pi pi-flag"></i> -->
+  </div>
+  <div class="flex h-full justify-end items-center">
+    <a
+      class="p-4 hover:text-gray-200"
+      (click)="navigateTo($event, 'anonify/home')"
+    >
+      <!-- <img src="" alt=""  /> -->
+      <i class="pi pi-home"></i>
+    </a>
+    <a
+      class="p-4 hover:text-gray-200"
+      (click)="navigateTo($event, 'anonify/notifications')"
+    >
+      <i class="pi pi-bell"></i>
+      <!-- <img src="../../../../assets/img/notification_icon.svg" alt=""  /> -->
+    </a>
+
+    <a
+      class="p-4 flex items-center h-full hover:text-gray-200"
+      (click)="navigateTo($event, 'anonify/user_information')"
+    >
+      <div
+        class="flex justify-center items-center rounded-full bg-[#374151] h-[40px] w-[40px] overflow-hidden"
+      >
+        <!-- <img src="../../../../assets/img/user_icon.svg" alt="" class="h-[90%]" /> -->
+        <i class="pi pi-user-edit"></i>
+      </div>
+      <div class="p-4">Usuario</div>
+
+      <!-- <img src="../../../../assets/img/user_icon.svg" alt="" /> -->
+    </a>
+
+    <button></button>
+  </div>
+</nav>
+<!-- sidebar -->
+<!-- Sidebar start-->
+<div id="containerSidebar" class="z-40">
+  <div class="navbar-menu relative z-40">
+    <nav
+      #sidebar
+      id="sidebar"
+      class="fixed left-0 top-[100px] min-h-screen flex w-3/4 -translate-x-full flex-col overflow-y-auto bg-[#39BEA0] pt-6 pb-8 sm:max-w-xs lg:w-80"
+    >
+      <!-- one category / navigation group -->
+      <div class="px-4 pb-6">
+        <h3 class="mb-2 text-xs font-medium uppercase text-black">Paginas</h3>
+        <ul class="mb-8 text-sm font-medium">
+          <!-- lista de paginas  -->
+          <!-- nota: hay que hace que sean dinamicas  -->
+          <!-- por la clase active se colorea el boton de la barra de navegacion -->
+
+          <li (click)="navigateTo($event, 'anonify/home')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/home') }"
+              class="active flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Inicio</span>
+            </a>
+          </li>
+          <li (click)="navigateTo($event, 'anonify/projects')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/projects') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Proyectos</span>
+            </a>
+          </li>
+          <li (click)="navigateTo($event, 'anonify/preprecess')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/preprocess') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Preprocesamiento</span>
+            </a>
+          </li>
+          <li (click)="navigateTo($event, 'anonify/a')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/a') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Anonimizacion</span>
+            </a>
+          </li>
+          <!-- <li (click)="navigateTo($event, 'anonify/certificates')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/certificates') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Certificados</span>
+            </a>
+          </li> -->
+          <li (click)="navigateTo($event, 'anonify/management')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/management') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Bases de datos</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- navigation group end-->
+
+      <!-- example copies start -->
+      <div class="px-4 pb-6">
+        <h3 class="mb-2 text-xs font-medium uppercase text-black">
+          Administracion
+        </h3>
+        <ul class="mb-8 text-sm font-medium">
+          <li (click)="navigateTo($event, 'anonify/users')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/users') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+              href="#tc"
+            >
+              <span class="select-none">Usuarios</span>
+            </a>
+          </li>
+          <li (click)="navigateTo($event, 'anonify/roles')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/roles') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Roles</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="px-4 pb-6">
+        <h3 class="mb-2 text-xs font-medium uppercase text-gray-500">Others</h3>
+        <ul class="mb-8 text-sm font-medium">
+          <li>
+            <a
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+              href="#ex1"
+            >
+              <span class="select-none">...</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+              href="#ex2"
+            >
+              <span class="select-none">...</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <!-- example copies end -->
+    </nav>
+  </div>
+  <div class="mx-auto lg:ml-80"></div>
+</div>
+<!-- Sidebar end -->
