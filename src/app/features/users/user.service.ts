@@ -23,7 +23,7 @@ export class UserService {
   createUser(UserInfo: CreateUser){
 
     const token = getToken();
-    return this.http.post(`${this.apiURL}`,UserInfo
+    return this.http.post(`${this.apiURL}/api/administration/authors`,UserInfo
     ,{
         headers: {
           Authorization: `Bearer ${token}`,

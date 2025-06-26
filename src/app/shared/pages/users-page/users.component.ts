@@ -15,16 +15,14 @@ import { InputTextModule } from 'primeng/inputtext';
 
 import { RolesService } from 'app/features/roles/roles.service';
 
-import countryFlagEmoji from "country-flag-emoji";
+import countryFlagEmoji from 'country-flag-emoji';
 import { CountryItem } from 'app/core/interfaces/country.interface';
-
-
 
 @Component({
   selector: 'app-users',
   standalone: true,
   imports: [Button, Dialog, InputTextModule, FormsModule, CommonModule],
-  providers: [MessageService, UserService],
+  providers: [MessageService],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
 })
@@ -35,10 +33,10 @@ export class UsersComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private roleService: RolesService,
-    // private messageService: MessageService
+    private messageService: MessageService
   ) {}
   // countries: = (data as any).default as CountryItem[];
-  private messageService = inject(MessageService);
+  // private messageService = inject(MessageService);
   users: UserPublicInformation[] = [];
   userToCreate: CreateUser = {
     name: '',
@@ -53,21 +51,20 @@ export class UsersComponent implements OnInit {
     id: '',
     name: '',
     description: '',
-    permissions: []
-  }
-  countries:CountryItem = countryFlagEmoji.list
+    permissions: [],
+  };
+  countries: CountryItem = countryFlagEmoji.list;
 
   visible: boolean = false;
 
-ngOnInit(): void {
+  ngOnInit(): void {
     // obtencion de lista de usuarios
     this.userService.getAllUsers().subscribe({
       next: (res: any) => {
         console.log('Datos del usuario Obtenidos');
         this.users = res;
         this.cdr.detectChanges();
-        console.log('Users Info', this.users);
-
+        // console.log('Users Info', this.users);
       },
       error: (err) => {
         console.error('Error al intentar obtener los datos de usuarios:', err);
@@ -80,29 +77,22 @@ ngOnInit(): void {
     });
     // obtiene la lista de roles
     this.roleService.getAllRoles().subscribe({
-      next: (res: any)=>{
-        this.roles = res
+      next: (res: any) => {
+        this.roles = res;
         this.cdr.detectChanges();
-        console.log('Roles Info', this.roles);
+        // console.log('Roles Info', this.roles);
 
-
-        console.log('Countries:',this.countries);
+        // console.log('Countries:',this.countries);
       },
-      error: (err) =>{
-
+      error: (err) => {
         console.error('Error al intentar obtener los datos de roles:', err);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'No se pudieron cargar los datos de roles',
         });
-
-
-      }
-      
-
-    })
-    
+      },
+    });
   }
 
   //TODO
@@ -115,11 +105,33 @@ ngOnInit(): void {
   }
   // TODO
   createUser(event: Event): void {
-
     event.preventDefault();
     console.log('Informaicion guardada', this.userToCreate);
 
-    this.visible =false
+    this.userService.createUser(this.userToCreate).subscribe({
+      next: (res: any) => {
+        if (!res.id) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: res.detail,
+          });
+        }
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Usuario creado Correctamente',
+        });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'no se pudieron cargar los roles',
+        });
+      },
+    });
+    this.visible = false;
 
     this.messageService.add({
       severity: 'success',

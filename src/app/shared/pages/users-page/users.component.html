@@ -1,19 +1,19 @@
 <section class="border-4 border-blue-700 w-screen min-h-screen">
   <div
-    class="mx-auto px-4 sm:container pt-[120px] flex justify-center items-start"
+    class="px-4 pt-[120px] flex justify-center items-start"
   >
     <div
-      class="items-start justify-between border-b border-stroke md:flex dark:border-dark-3"
+      class="items-start justify-between border-b flex border-[2px] border-yellow-500"
     >
-      <div class="mb-6 w-full">
+      <div class="mb-6 max-sm:w-[400px] sm:w-[600px] md:w-[800px] lg:w-[1000px]">
         <!-- <h2 class="mb-2 text-2xl font-semibold text-dark">Notificaciones</h2> -->
-        <div class="border-b border-stroke">
+        <div class="border-b">
           <h2 class="mb-2 text-2xl font-semibold text-dark">
             Informacion del usuario
           </h2>
         </div>
 
-        <p class="text-sm font-medium text-body-color py-2">
+        <p class="text-sm font-medium py-2">
           Aqui ver tu informacion de usuario y modificarla si es necesario.
           Puedes cambiar tu nombre, correo electrónico y contraseña. Asegúrate
           de que la información sea correcta y actualizada.
@@ -46,25 +46,59 @@
             Importar
           </button>
         </div>
+        <!-- barra de busqueda -->
+        <div class="pb-4 bg-white">
+          <label for="table-search" class="sr-only">Buscar: </label>
+          <div class="relative mt-1">
+            <div
+              class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
+            >
+              <svg
+                class="w-4 h-4 text-gray-500"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                />
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="table-search"
+              class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Buscar Usuarios"
+            />
+          </div>
+        </div>
 
-        <div class="border-2 w-full border-green-600">
-          <!-- tabla de datasets -->
-          <table class="w-full overflow-x-scroll">
-            <thead class="bg-gray-200">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <!-- tabla de usuarios -->
+          <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
               <tr>
-                <th class="border px-4 py-2">Acciones</th>
-                <th class="border px-4 py-2">ID</th>
-                <th class="border px-4 py-2">Nombre</th>
-                <th class="border px-4 py-2">Nacionalidad</th>
-                <th class="border px-4 py-2">Correo</th>
-                <th class="border px-4 py-2">Nombre Usuario</th>
-                <th class="border px-4 py-2">Rol</th>
+                <th scope="col" class="px-6 py-3">Acciones</th>
+                <th scope="col" class="px-6 py-3">ID</th>
+                <th scope="col" class="px-6 py-3">Nombre</th>
+                <th scope="col" class="px-6 py-3">Nacionalidad</th>
+                <th scope="col" class="px-6 py-3">Correo</th>
+                <th scope="col" class="px-6 py-3">Nombre Usuario</th>
+                <th scope="col" class="px-6 py-3">Rol</th>
               </tr>
             </thead>
             <tbody>
               @for (user of this.users; track user) {
-              <tr class="hover:bg-gray-100">
-                <td class="border px-4 py-2 text-center flex">
+              <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
+                <th
+                  scope="row"
+                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
                   <button
                     class="rounded-md bg-blue-500 h-[40px] aspect-square text-white m-2"
                     (click)="updateUser(user.id)"
@@ -77,20 +111,21 @@
                   >
                     <i class="pi pi-trash"></i>
                   </button>
+                </th>
+                <td class="px-6 py-4">{{ user.id }}</td>
+                <td class="px-6 py-4">{{ user.name }}</td>
+                <td class="px-6 py-4">{{ user.nationality }}</td>
+                <td class="px-6 py-4">
+                  {{ user.mail }}
                 </td>
-                <td class="border px-4 py-2 text-center">{{ user.id }}</td>
-                <td class="border px-4 py-2 text-center">{{ user.name }}</td>
-                <td class="border px-4 py-2 text-center">
-                  {{ user.nationality }}
-                </td>
-                <td class="border px-4 py-2 text-center">{{ user.mail }}</td>
-                <td class="border px-4 py-2 text-center">
+                <td class="px-6 py-4">
                   {{ user.username }}
                 </td>
-                <td class="border px-4 py-2 text-center">
-                  {{ user.username }}
+                <td class="px-6 py-4">
+                  {{ user.role.name || "Sin rol" }}
                 </td>
               </tr>
+
               } @empty {
               <tr>
                 <td colspan="3" class="border px-4 py-2 text-center">
@@ -98,7 +133,6 @@
                 </td>
               </tr>
               }
-              <!-- Agregar más filas según sea necesario -->
             </tbody>
           </table>
         </div>
@@ -107,138 +141,134 @@
   </div>
   <div class="card flex justify-center">
     <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '30rem' }">
-      
-        <ng-template #header>
-          <span class="font-bold whitespace-nowrap">Nuevo Usuario</span>
-          
-        </ng-template>
-        <span class="text-surface-500 dark:text-surface-400 block mb-6"
-            >Ingrese los datos del usuario</span
-          >
-        <div class="mb-6">
+      <ng-template #header>
+        <span class="font-bold whitespace-nowrap">Nuevo Usuario</span>
+      </ng-template>
+      <span class="text-surface-500 dark:text-surface-400 block mb-6"
+        >Ingrese los datos del usuario</span
+      >
+      <div class="mb-6">
+        <label for="titleProject" class="block font-semibold mb-2"
+          >Nombre</label
+        >
+        <input
+          pInputText
+          id="fullName"
+          [(ngModel)]="this.userToCreate.name"
+          class="w-full"
+          autocomplete="off"
+          required
+        />
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Nacionalidad</label
+        >
+        <select
+          [(ngModel)]="this.userToCreate.nationality"
+          class="w-full h-[45px] rounded-md bg-primary border-[#94A3B8] border-[1px]"
+          required
+        >
+          <option *ngFor="let c of countries" [value]="c.name">
+            {{ c.emoji }} {{ c.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Rol</label
+        >
+        <select
+          [(ngModel)]="this.userToCreate.role_id"
+          class="w-full h-[45px] rounded-md bg-primary border-[#94A3B8] border-[1px]"
+          required
+        >
+          <option *ngFor="let r of roles" [value]="r.id">
+            {{ r.name }}
 
-          <label for="titleProject" class="block font-semibold mb-2"
-            >Nombre</label
-          >
-          <input
-            pInputText
-            id="fullName"
-            [(ngModel)]="this.userToCreate.name"
-            class="w-full"
-            autocomplete="off"
-            required
-          />
-        </div>
-        <div class="mb-6">
-          <label for="descriptionProject" class="block font-semibold mb-2"
-            >Nacionalidad</label
-          >
-          <select
-            [(ngModel)]="this.userToCreate.nationality"
-            class="w-full h-[45px] rounded-md bg-primary border-[#94A3B8] border-[1px]"
-            required
-          >
-            <option *ngFor="let c of countries" [value]="c.name">
-              {{ c.emoji }} {{ c.name }}
-            </option>
-          </select>
-        </div>
-        <div class="mb-6">
-          <label for="descriptionProject" class="block font-semibold mb-2"
-            >Rol</label
-          >
-          <select
-            [(ngModel)]="this.userToCreate.role_id"
-            class="w-full h-[45px] rounded-md bg-primary border-[#94A3B8] border-[1px]"
-            required
-          >
-            <option *ngFor="let r of roles" [value]="r.id">
-              {{ r.name }}
-
-              <a href="" class="text-gray-500">-{{ r.description }}</a>
-            </option>
-          </select>
-        </div>
-        <div class="mb-6">
-          <label for="descriptionProject" class="block font-semibold mb-2"
-            >Correo Electronico</label
-          >
-          <!-- TODO -->
-          <!-- <input
+            <a href="" class="text-gray-500">-{{ r.description }}</a>
+          </option>
+        </select>
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Correo Electronico</label
+        >
+        <!-- TODO -->
+        <!-- <input
           type="email"
           
           name="mail"
           [(ngModel)]="this.userToCreate.mail"
           [ng-maxlength="16"]
         /> -->
-          <input
-            pInputText
-            id="mail"
-            [(ngModel)]="this.userToCreate.mail"
-            class="w-full"
-            autocomplete="off"
-            type="email"
-            required
-          />
-        </div>
-        <div class="mb-6">
-          <label for="descriptionProject" class="block font-semibold mb-2"
-            >Numero de Telefono:</label
-          >
-          <input
-            pInputText
-            type="number"
-            [(ngModel)]="this.userToCreate.cell_phone"
-            class="w-full"
-            autocomplete="off"
-            required
-          />
-        </div>
-        <div class="mb-6">
-          <label for="descriptionProject" class="block font-semibold mb-2"
-            >Nombre de usuario</label
-          >
-          <input
-            pInputText
-            id="username"
-            [(ngModel)]="this.userToCreate.username"
-            class="w-full"
-            autocomplete="off"
-            required
-          />
-        </div>
-        <div class="mb-6">
-          <label for="descriptionProject" class="block font-semibold mb-2"
-            >Contraseña</label
-          >
-          <input
-            pInputText
-            id="password"
-            [(ngModel)]="this.userToCreate.password"
-            class="w-full"
-            autocomplete="off"
-            type="password"
-            required
-          />
-        </div>
+        <input
+          pInputText
+          id="mail"
+          [(ngModel)]="this.userToCreate.mail"
+          class="w-full"
+          autocomplete="off"
+          type="email"
+          required
+        />
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Numero de Telefono:</label
+        >
+        <input
+          pInputText
+          type="text"
+          [(ngModel)]="this.userToCreate.cell_phone"
+          class="w-full"
+          autocomplete="off"
+          required
+        />
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Nombre de usuario</label
+        >
+        <input
+          pInputText
+          id="username"
+          [(ngModel)]="this.userToCreate.username"
+          class="w-full"
+          autocomplete="off"
+          required
+        />
+      </div>
+      <div class="mb-6">
+        <label for="descriptionProject" class="block font-semibold mb-2"
+          >Contraseña</label
+        >
+        <input
+          pInputText
+          id="password"
+          [(ngModel)]="this.userToCreate.password"
+          class="w-full"
+          autocomplete="off"
+          type="password"
+          required
+        />
+      </div>
 
-        <ng-template #footer>
-          <p-button
-            label="Cancel"
-            [text]="true"
-            severity="secondary"
-            (click)="visible = false"
-          />
-          <p-button
+      <ng-template #footer>
+        <p-button
+          label="Cancel"
+          [text]="true"
+          severity="secondary"
+          (click)="visible = false"
+        />
+        <p-button
           label="Save"
           [outlined]="true"
           severity="secondary"
           (onClick)="createUser($event)"
           type
         />
-          <!-- <button type="submit">Guardar</button> -->
-        </ng-template>
-      
+        <!-- <button type="submit">Guardar</button> -->
+      </ng-template>
     </p-dialog>
   </div>
 </section>
