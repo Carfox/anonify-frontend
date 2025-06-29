@@ -34,10 +34,16 @@ export class DatasetDetailPageComponent implements OnInit {
   projectID: string = '';
   datasetID: string = '';
   datasetInfo: Dataset = {
+
     name: '',
     project_id: '',
     status: '',
     rows: 0,
+    entity: {
+      id: '',
+      name: ''
+    },
+    entity_id: '',
     columns: [],
     files: [],
     id: '',

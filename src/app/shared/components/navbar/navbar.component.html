@@ -180,6 +180,14 @@
               <span class="select-none">Roles</span>
             </a>
           </li>
+          <li (click)="navigateTo($event, 'anonify/roles')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/entities') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Entidades</span>
+            </a>
+          </li>
         </ul>
       </div>
 

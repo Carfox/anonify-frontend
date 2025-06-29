@@ -1,3 +1,5 @@
+import { Entity } from "./entity.interface";
+
 interface DatasetColumn {
   name: string;
   column_type_id: string; // Esto lo asignarás en el backend o con IDs fijos en frontend
@@ -9,6 +11,8 @@ export interface Dataset {
   status: string;
   project_id: string;
   rows: number
+  entity?: Entity
+  entity_id?: string
   // query_id: string; // Puedes dejarlo como opcional si no es relevante para el CSV
   columns: DatasetColumn[];
   files: FileInterface[]; // Lista de archivos asociados al dataset
