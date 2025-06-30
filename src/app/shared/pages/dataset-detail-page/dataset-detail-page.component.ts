@@ -8,6 +8,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Dataset } from 'app/core/interfaces/dataset.interface';
 import { PreviewStepComponent } from 'app/features/anonymization-wizard/components/preview-step.component';
+import { PreprocessingStepComponent } from 'app/features/anonymization-wizard/components/preprocessing-step/preprocessing-step.component';
 import { DatasetService } from 'app/features/datasets/dataset.service';
 import { ProjectService } from 'app/features/projects/project.service';
 import { MessageService } from 'primeng/api';
@@ -17,7 +18,7 @@ import { StepperModule } from 'primeng/stepper';
 @Component({
   selector: 'app-dataset-detail-page',
   standalone: true,
-  imports: [StepperModule, ButtonModule, PreviewStepComponent, RouterLink],
+  imports: [StepperModule, ButtonModule, PreviewStepComponent, PreprocessingStepComponent, RouterLink],
   providers: [MessageService, ProjectService],
   templateUrl: './dataset-detail-page.component.html',
   // template: `<p>dataset-detail-page works!</p>`,
