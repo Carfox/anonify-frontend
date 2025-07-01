@@ -1,26 +1,27 @@
 <section class="border-4 border-blue-700 w-screen min-h-screen">
-  <div
-    class="px-4 pt-[120px] flex justify-center items-start"
-  >
+  <div class="px-4 pt-[120px] flex justify-center items-start">
     <div
       class="items-start justify-between border-b flex border-[2px] border-yellow-500"
     >
-      <div class="mb-6 max-sm:w-[400px] sm:w-[600px] md:w-[800px] lg:w-[1000px]">
+      <div
+        class="mb-6 max-sm:w-[400px] sm:w-[600px] md:w-[800px] lg:w-[1000px]"
+      >
         <!-- <h2 class="mb-2 text-2xl font-semibold text-dark">Notificaciones</h2> -->
         <div class="border-b">
           <h2 class="mb-2 text-2xl font-semibold text-dark">
-            Informacion del usuario
+            Informacion de Entidades
           </h2>
         </div>
 
         <p class="text-sm font-medium py-2">
-          Aqui ver tu informacion de usuario y modificarla si es necesario.
-          Puedes cambiar tu nombre, correo electrónico y contraseña. Asegúrate
-          de que la información sea correcta y actualizada.
+          Aqui puedes vizualizar la informacion de las entidades de origen
+          registradas, todos los datasets deben tener una entidad de origen
+          registrada
         </p>
         <div class="mb-6">
           <button
             class="inline-flex items-center justify-center whitespace-nowrap rounded-sm bg-secondary px-5 py-[10px] text-sm font-medium text-white hover:bg-secondary/90"
+            (click)="reloadData($event)"
           >
             VOLVER A CARGAR
             <span class="pl-2">
@@ -38,13 +39,15 @@
             class="bg-blue-400 p-2 text-primary rounded-md m-2"
             (click)="showDialog()"
           >
-            <i class="pi pi-user-plus"></i>
-            Nuevo Usuario
+            <i class="pi pi-id-card"></i>
+            Nueva entidad
           </button>
-          <button class="bg-slate-400 p-2 text-primary rounded-md m-2">
+
+          <!-- boton de importacion -->
+          <!-- <button class="bg-slate-400 p-2 text-primary rounded-md m-2">
             <i class="pi pi-file-import"></i>
             Importar
-          </button>
+          </button> -->
         </div>
         <!-- barra de busqueda -->
         <div class="pb-4 bg-white">
@@ -73,15 +76,93 @@
               type="text"
               id="table-search"
               class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Buscar Usuarios"
+              placeholder="Buscar Entidades"
             />
           </div>
         </div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <!-- tabla de usuarios -->
+          <table class="w-full text-sm text-left rtl:text-right text-gray-700">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3">Acciones</th>
+                <th scope="col" class="px-6 py-3">ID</th>
+                <th scope="col" class="px-6 py-3">Nombre</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (entity of this.entities; track entity) {
+              <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
+                <th
+                  scope="row"
+                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  <button
+                    class="rounded-md bg-blue-500 h-[40px] aspect-square text-white m-2"
+                    (click)="updateUser(user.id)"
+                  >
+                    <i class="pi pi-pen-to-square"></i>
+                  </button>
+                  <button
+                    class="rounded-md bg-red-400 h-[40px] aspect-square text-white m-2"
+                    (click)="deleteUser(user.id)"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </th>
+                <td class="px-6 py-4">{{ entity.id }}</td>
+                <td class="px-6 py-4">{{ entity.name }}</td>
+              </tr>
 
-    
+              } @empty {
+              <tr>
+                <td colspan="3" class="border px-4 py-2 text-center">
+                  No hay entidades disponibles.
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
+  <div class="card flex justify-center">
+    <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '30rem' }">
+      <ng-template #header>
+        <span class="font-bold whitespace-nowrap">Nuevo Usuario</span>
+      </ng-template>
+      <span class="text-surface-500 dark:text-surface-400 block mb-6"
+        >Ingrese el nombre de la Entidad</span
+      >
+      <div class="mb-6">
+        <label for="fullname" class="block font-semibold mb-2">Nombre</label>
+        <input
+          pInputText
+          id="fullName"
+          [(ngModel)]="this.entityToCreate.name"
+          class="w-full"
+          autocomplete="off"
+          required
+        />
+      </div>
 
+      <ng-template #footer>
+        <p-button
+          label="Cancelar"
+          [text]="true"
+          severity="secondary"
+          (click)="visible = false"
+        />
+        <p-button
+          label="Guardar"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="createEntity($event)"
+          type
+        />
+        <!-- <button type="submit">Guardar</button> -->
+      </ng-template>
+    </p-dialog>
+  </div>
 </section>
-

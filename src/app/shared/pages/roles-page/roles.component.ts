@@ -81,7 +81,11 @@ export class RolesComponent implements OnInit {
   return role_permisions.some(p => p.id === permission_id) ?? false;
 }
   
-  
+reloadData(event: Event) {
+
+    event.preventDefault();
+    window.location.reload();
+  }
 
 
 }

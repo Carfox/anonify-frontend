@@ -14,6 +14,8 @@ import { ProjectService } from 'app/features/projects/project.service';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { StepperModule } from 'primeng/stepper';
+import { Entity } from 'app/core/interfaces/entity.interface';
+import { EntityService } from 'app/features/entity/entity.service';
 
 @Component({
   selector: 'app-dataset-detail-page',
@@ -28,6 +30,7 @@ import { StepperModule } from 'primeng/stepper';
 export class DatasetDetailPageComponent implements OnInit {
   constructor(
     private datasetService: DatasetService,
+    private entityService: EntityService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
@@ -49,6 +52,8 @@ export class DatasetDetailPageComponent implements OnInit {
     files: [],
     id: '',
   };
+
+  entities: Entity[] = []
   private index: number = 1;
   private rows: number = 10;
   private preview: [];
@@ -90,7 +95,26 @@ export class DatasetDetailPageComponent implements OnInit {
           });
         },
       });
+      this.entityService.getAllEntities().subscribe({
+
+        next:(res: any)=>{
+
+          this.entities =  res;
+
+          console.log("las entidades son: ", this.entities)
+          this.cdr.detectChanges();
+        },
+        error: (err)=>{
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `No se pudo cargar la informacion del dataset, ${err}`
+          })
+        }
+      })
     });
+    
   }
 
 

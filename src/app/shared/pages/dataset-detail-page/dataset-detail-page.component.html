@@ -16,7 +16,7 @@
     </button>
   </div>
 
-  <p-stepper [value]="1" class="basis-[50rem]" [linear]="true">
+  <p-stepper [value]="2" class="basis-[50rem]" [linear]="true">
     <p-step-list>
       <p-step [value]="1">Previsualización</p-step>
       <p-step [value]="2">Preprocesamiento</p-step>
@@ -92,7 +92,11 @@
                 anonimizacion de datos
               </div>
               <div class="border-2 border-dashed border-surface min-h-[45vh]">
-                <aw-preprocessing-step></aw-preprocessing-step>
+                <aw-preprocessing-step
+                [datasetID] = "this.datasetID"
+                [projectID] = "this.projectID"
+                [entities] = "this.entities"
+                ></aw-preprocessing-step>
               </div>
             </div>
             <div class="flex pt-5 justify-center">

@@ -117,17 +117,20 @@ export class UsersComponent implements OnInit {
             detail: res.detail,
           });
         }
+
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
           detail: 'Usuario creado Correctamente',
+
+          // window.location.reload();
         });
       },
       error: (err) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'no se pudieron cargar los roles',
+          detail: 'no se pudieron cargar los roles ',
         });
       },
     });
@@ -138,6 +141,10 @@ export class UsersComponent implements OnInit {
       summary: 'Success',
       detail: 'Se guardo el usuario correctamente.',
     });
+  }
+  reloadData(event: Event) {
+    event.preventDefault();
+    window.location.reload();
   }
   showDialog() {
     this.visible = true;
