@@ -120,8 +120,7 @@
           <div class="p-5 border border-t-0 border-gray-200 text-black">
             <div class="flex w-full flex-col">
               <label for="cleanmode-radio-1" class="py-2"
-                >El dataset seleccionado necesita un trabajo de
-                preprocesamiento?</label
+                >Que desea hacer con los datos incompletos</label
               >
 
               <div class="flex items-center">
@@ -189,6 +188,7 @@
               </div>
             </div>
           </div>
+          <!-- fin contenedor opciones avanzadas -->
         </div>
       </div>
     </div>
@@ -207,5 +207,42 @@
       </i>
 
     </button> -->
+
+    <!-- salida de resultado de preprocesamiento -->
+
+    <!-- progreso de la carga -->
+    <div
+      class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg w-full"
+      *ngIf="this.showProgress === true"
+    >
+      <!-- <div
+    *ngIf="showUploadProgress"
+    class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg"
+  > -->
+      <h3 class="text-lg font-semibold text-blue-800 mb-2">
+        Estado de Preprocesamiento: {{ preprocessingStatus }}
+      </h3>
+      <div class="w-full bg-gray-200 rounded-full h-4 relative">
+        <div
+          class="bg-blue-500 h-4 rounded-full transition-all duration-300 ease-out"
+          [style.width.%]="preprocessingProgress"
+        ></div>
+        <span
+          class="absolute right-2 top-0 text-xs font-bold text-gray-800 leading-4"
+        >
+          {{ preprocessingProgress | number : "1.0-0" }}%
+        </span>
+      </div>
+      <textarea class="text-sm text-blue-700 mt-2 w-full h-[100px]" disabled>
+        {{ outMessage }}
+      </textarea>
+      <button
+        *ngIf="uploadProgress === 100 || uploadStatus === 'Error'"
+        (click)="resetUploadProgress()"
+        class="mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 py-1 px-3 rounded text-sm"
+      >
+        Cerrar
+      </button>
+    </div>
   </form>
 </div>

@@ -122,8 +122,6 @@ export class UsersComponent implements OnInit {
           severity: 'success',
           summary: 'Success',
           detail: 'Usuario creado Correctamente',
-
-          // window.location.reload();
         });
       },
       error: (err) => {
