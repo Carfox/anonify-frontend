@@ -9,7 +9,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { AuthService } from 'app/features/auth/auth.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -42,7 +43,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
   private sidebarVisible = false;
 
-  constructor(private renderer: Renderer2, private router: Router) {}
+  constructor(private renderer: Renderer2, private router: Router,private authService: AuthService) {}
 
   ngOnInit(): void {}
 
@@ -95,5 +96,29 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     // console.log('El valor de this.router.url es:', this.router.url);
     // console.log('El valor de this.router.url === route es:', this.router.url === route);
     return this.router.url === route;
+  }
+  onLogout(event: Event){
+    event.preventDefault();
+    Swal.fire({
+            title:
+              'Estas seguro que deseas cerrar sesión?',
+            // showDenyButton: true,
+            icon: 'question',
+            confirmButtonText: 'Confirmar',
+            confirmButtonColor: '#3BBFA1',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            cancelButtonColor: '#F87171'
+      
+            // denyButtonText: `Don't save`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              
+              this.authService.logout();
+              setTimeout(()=>{this.router.navigate(['/login'])},500)
+
+            }
+
+          })
   }
 }

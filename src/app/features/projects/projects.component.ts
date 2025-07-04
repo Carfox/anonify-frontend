@@ -55,7 +55,7 @@ import { TabsModule } from 'primeng/tabs';
         <div class="flex mb-4 w-full">
           <p-tabs value="0" class="w-full">
             <p-tablist class="w-full">
-              <p-tab value="0">Mis Proyects</p-tab>
+              <p-tab value="0">Mis Proyectos</p-tab>
               <p-tab value="1">Compartidos</p-tab>
             </p-tablist>
 

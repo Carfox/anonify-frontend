@@ -1,10 +1,8 @@
 import { RoleInterface } from "./role.interface"
 
 export interface SimpleUserInfo{
-
     id:string
     name: string
-    
 }
 
 

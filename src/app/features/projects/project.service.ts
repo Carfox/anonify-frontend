@@ -14,7 +14,10 @@ export class ProjectService {
   private newProject = undefined;
   private userProjectsURL = '/api/user/projects';
   get allprojects() {
-    return this.http.get(`${this.apiURL}${this.projectsURL}`);
+    const token = getToken();
+    return this.http.get(`${this.apiURL}${this.projectsURL}`,{headers: {
+        Authorization: `Bearer ${token}`,
+      }})
   }
   // funciona
   getUserProjects() {

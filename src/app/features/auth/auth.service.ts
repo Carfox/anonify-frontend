@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { getToken, removeToken } from 'app/core/interceptor/token.interceptor';
 import { environment } from 'environments/environment.development';
 
 @Injectable({
@@ -23,7 +24,14 @@ export class AuthService {
      });
   }
   logout() {
-    return this.http.post(`${this.apiUrl}/api/logout`, {});
+    const token = getToken();
+    if (!token) {
+      return;
+    }
+    removeToken();
+    return;
+
+    // return this.http.post(`${this.apiUrl}/api/logout`, {});
   }
 
 }

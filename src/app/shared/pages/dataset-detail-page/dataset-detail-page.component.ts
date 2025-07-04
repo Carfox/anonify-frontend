@@ -8,16 +8,19 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Dataset } from 'app/core/interfaces/dataset.interface';
 import { PreviewStepComponent } from 'app/features/anonymization-wizard/components/preview-step.component';
+import { PreprocessingStepComponent } from 'app/features/anonymization-wizard/components/preprocessing-step/preprocessing-step.component';
 import { DatasetService } from 'app/features/datasets/dataset.service';
 import { ProjectService } from 'app/features/projects/project.service';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { StepperModule } from 'primeng/stepper';
+import { Entity } from 'app/core/interfaces/entity.interface';
+import { EntityService } from 'app/features/entity/entity.service';
 
 @Component({
   selector: 'app-dataset-detail-page',
   standalone: true,
-  imports: [StepperModule, ButtonModule, PreviewStepComponent, RouterLink],
+  imports: [StepperModule, ButtonModule, PreviewStepComponent, PreprocessingStepComponent, RouterLink],
   providers: [MessageService, ProjectService],
   templateUrl: './dataset-detail-page.component.html',
   // template: `<p>dataset-detail-page works!</p>`,
@@ -27,6 +30,7 @@ import { StepperModule } from 'primeng/stepper';
 export class DatasetDetailPageComponent implements OnInit {
   constructor(
     private datasetService: DatasetService,
+    private entityService: EntityService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
@@ -34,14 +38,22 @@ export class DatasetDetailPageComponent implements OnInit {
   projectID: string = '';
   datasetID: string = '';
   datasetInfo: Dataset = {
+
     name: '',
     project_id: '',
     status: '',
     rows: 0,
+    entity: {
+      id: '',
+      name: ''
+    },
+    entity_id: '',
     columns: [],
     files: [],
     id: '',
   };
+
+  entities: Entity[] = []
   private index: number = 1;
   private rows: number = 10;
   private preview: [];
@@ -83,7 +95,26 @@ export class DatasetDetailPageComponent implements OnInit {
           });
         },
       });
+      this.entityService.getAllEntities().subscribe({
+
+        next:(res: any)=>{
+
+          this.entities =  res;
+
+          console.log("las entidades son: ", this.entities)
+          this.cdr.detectChanges();
+        },
+        error: (err)=>{
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `No se pudo cargar la informacion del dataset, ${err}`
+          })
+        }
+      })
     });
+    
   }
 
 

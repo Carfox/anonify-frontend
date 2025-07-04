@@ -85,7 +85,7 @@
       <!-- <img src="../../../../assets/img/user_icon.svg" alt="" /> -->
     </a>
 
-    <button></button>
+    <button (click)="onLogout($event)" class="p-2 bg-red-400 mx-2 rounded-md hover:bg-red-300 duration-300 "> Cerrar Sesión</button>
   </div>
 </nav>
 <!-- sidebar -->
@@ -121,7 +121,7 @@
               <span class="select-none">Proyectos</span>
             </a>
           </li>
-          <li (click)="navigateTo($event, 'anonify/preprecess')">
+          <li (click)="navigateTo($event, 'anonify/preprocess')">
             <a
               [ngClass]="{ active: isActive('/anonify/preprocess') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
@@ -178,6 +178,14 @@
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
             >
               <span class="select-none">Roles</span>
+            </a>
+          </li>
+          <li (click)="navigateTo($event, 'anonify/entities')">
+            <a
+              [ngClass]="{ active: isActive('/anonify/entities') }"
+              class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
+            >
+              <span class="select-none">Entidades</span>
             </a>
           </li>
         </ul>

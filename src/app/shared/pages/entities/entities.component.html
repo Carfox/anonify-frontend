@@ -1,22 +1,22 @@
 <section class="border-4 border-blue-700 w-screen min-h-screen">
-  <div
-    class="px-4 pt-[120px] flex justify-center items-start"
-  >
+  <div class="px-4 pt-[120px] flex justify-center items-start">
     <div
       class="items-start justify-between border-b flex border-[2px] border-yellow-500"
     >
-      <div class="mb-6 max-sm:w-[400px] sm:w-[600px] md:w-[800px] lg:w-[1000px]">
+      <div
+        class="mb-6 max-sm:w-[400px] sm:w-[600px] md:w-[800px] lg:w-[1000px]"
+      >
         <!-- <h2 class="mb-2 text-2xl font-semibold text-dark">Notificaciones</h2> -->
         <div class="border-b">
           <h2 class="mb-2 text-2xl font-semibold text-dark">
-            Informacion del usuario
+            Informacion de Entidades
           </h2>
         </div>
 
         <p class="text-sm font-medium py-2">
-          Aqui ver tu informacion de usuario y modificarla si es necesario.
-          Puedes cambiar tu nombre, correo electrónico y contraseña. Asegúrate
-          de que la información sea correcta y actualizada.
+          Aqui puedes vizualizar la informacion de las entidades de origen
+          registradas, todos los datasets deben tener una entidad de origen
+          registrada
         </p>
         <div class="mb-6">
           <button
@@ -39,13 +39,15 @@
             class="bg-blue-400 p-2 text-primary rounded-md m-2"
             (click)="showDialog()"
           >
-            <i class="pi pi-user-plus"></i>
-            Nuevo Usuario
+            <i class="pi pi-id-card"></i>
+            Nueva entidad
           </button>
-          <button class="bg-slate-400 p-2 text-primary rounded-md m-2">
+
+          <!-- boton de importacion -->
+          <!-- <button class="bg-slate-400 p-2 text-primary rounded-md m-2">
             <i class="pi pi-file-import"></i>
             Importar
-          </button>
+          </button> -->
         </div>
         <!-- barra de busqueda -->
         <div class="pb-4 bg-white">
@@ -74,11 +76,10 @@
               type="text"
               id="table-search"
               class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Buscar Usuarios"
+              placeholder="Buscar Entidades"
             />
           </div>
         </div>
-
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
           <!-- tabla de usuarios -->
           <table class="w-full text-sm text-left rtl:text-right text-gray-700">
@@ -87,14 +88,10 @@
                 <th scope="col" class="px-6 py-3">Acciones</th>
                 <th scope="col" class="px-6 py-3">ID</th>
                 <th scope="col" class="px-6 py-3">Nombre</th>
-                <th scope="col" class="px-6 py-3">Nacionalidad</th>
-                <th scope="col" class="px-6 py-3">Correo</th>
-                <th scope="col" class="px-6 py-3">Nombre Usuario</th>
-                <th scope="col" class="px-6 py-3">Rol</th>
               </tr>
             </thead>
             <tbody>
-              @for (user of this.users; track user) {
+              @for (entity of this.entities; track entity) {
               <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                 <th
                   scope="row"
@@ -113,24 +110,14 @@
                     <i class="pi pi-trash"></i>
                   </button>
                 </th>
-                <td class="px-6 py-4">{{ user.id }}</td>
-                <td class="px-6 py-4">{{ user.name }}</td>
-                <td class="px-6 py-4">{{ user.nationality }}</td>
-                <td class="px-6 py-4">
-                  {{ user.mail }}
-                </td>
-                <td class="px-6 py-4">
-                  {{ user.username }}
-                </td>
-                <td class="px-6 py-4">
-                  {{ user.role.name || "Sin rol" }}
-                </td>
+                <td class="px-6 py-4">{{ entity.id }}</td>
+                <td class="px-6 py-4">{{ entity.name }}</td>
               </tr>
 
               } @empty {
               <tr>
                 <td colspan="3" class="border px-4 py-2 text-center">
-                  No hay usuarios disponibles.
+                  No hay entidades disponibles.
                 </td>
               </tr>
               }
@@ -146,126 +133,32 @@
         <span class="font-bold whitespace-nowrap">Nuevo Usuario</span>
       </ng-template>
       <span class="text-surface-500 dark:text-surface-400 block mb-6"
-        >Ingrese los datos del usuario</span
+        >Ingrese el nombre de la Entidad</span
       >
       <div class="mb-6">
-        <label for="titleProject" class="block font-semibold mb-2"
-          >Nombre</label
-        >
+        <label for="fullname" class="block font-semibold mb-2">Nombre</label>
         <input
           pInputText
           id="fullName"
-          [(ngModel)]="this.userToCreate.name"
+          [(ngModel)]="this.entityToCreate.name"
           class="w-full"
           autocomplete="off"
-          required
-        />
-      </div>
-      <div class="mb-6">
-        <label for="descriptionProject" class="block font-semibold mb-2"
-          >Nacionalidad</label
-        >
-        <select
-          [(ngModel)]="this.userToCreate.nationality"
-          class="w-full h-[45px] rounded-md bg-primary border-[#94A3B8] border-[1px]"
-          required
-        >
-          <option *ngFor="let c of countries" [value]="c.name">
-            {{ c.emoji }} {{ c.name }}
-          </option>
-        </select>
-      </div>
-      <div class="mb-6">
-        <label for="descriptionProject" class="block font-semibold mb-2"
-          >Rol</label
-        >
-        <select
-          [(ngModel)]="this.userToCreate.role_id"
-          class="w-full h-[45px] rounded-md bg-primary border-[#94A3B8] border-[1px]"
-          required
-        >
-          <option *ngFor="let r of roles" [value]="r.id">
-            {{ r.name }}
-
-            <a href="" class="text-gray-500">-{{ r.description }}</a>
-          </option>
-        </select>
-      </div>
-      <div class="mb-6">
-        <label for="descriptionProject" class="block font-semibold mb-2"
-          >Correo Electronico</label
-        >
-        <!-- TODO -->
-        <!-- <input
-          type="email"
-          
-          name="mail"
-          [(ngModel)]="this.userToCreate.mail"
-          [ng-maxlength="16"]
-        /> -->
-        <input
-          pInputText
-          id="mail"
-          [(ngModel)]="this.userToCreate.mail"
-          class="w-full"
-          autocomplete="off"
-          type="email"
-          required
-        />
-      </div>
-      <div class="mb-6">
-        <label for="descriptionProject" class="block font-semibold mb-2"
-          >Numero de Telefono:</label
-        >
-        <input
-          pInputText
-          type="text"
-          [(ngModel)]="this.userToCreate.cell_phone"
-          class="w-full"
-          autocomplete="off"
-          required
-        />
-      </div>
-      <div class="mb-6">
-        <label for="descriptionProject" class="block font-semibold mb-2"
-          >Nombre de usuario</label
-        >
-        <input
-          pInputText
-          id="username"
-          [(ngModel)]="this.userToCreate.username"
-          class="w-full"
-          autocomplete="off"
-          required
-        />
-      </div>
-      <div class="mb-6">
-        <label for="descriptionProject" class="block font-semibold mb-2"
-          >Contraseña</label
-        >
-        <input
-          pInputText
-          id="password"
-          [(ngModel)]="this.userToCreate.password"
-          class="w-full"
-          autocomplete="off"
-          type="password"
           required
         />
       </div>
 
       <ng-template #footer>
         <p-button
-          label="Cancel"
+          label="Cancelar"
           [text]="true"
           severity="secondary"
           (click)="visible = false"
         />
         <p-button
-          label="Save"
+          label="Guardar"
           [outlined]="true"
           severity="secondary"
-          (onClick)="createUser($event)"
+          (onClick)="createEntity($event)"
           type
         />
         <!-- <button type="submit">Guardar</button> -->

@@ -21,6 +21,7 @@ import { AuthService } from './features/auth/auth.service';
 import { UserinfoComponent } from './shared/pages/userinfo-page/userinfo.component';
 import { NotificationsComponent } from './shared/pages/notifications-page/notifications.component';
 import { DatasetDetailPageComponent } from './shared/pages/dataset-detail-page/dataset-detail-page.component';
+import { EntitiesComponent } from './shared/pages/entities/entities.component';
 
 // const auntService = 
 
@@ -63,6 +64,7 @@ export const routes: Routes = [
       { path: 'notifications', component: NotificationsComponent},
       { path: 'users', component:  UsersComponent},
       { path: 'roles', component:  RolesComponent},
+      { path: 'entities', component: EntitiesComponent},
       { path: 'a',component: AnonymizationPageComponent},
       { path: '**', redirectTo: 'home' },
     ],
