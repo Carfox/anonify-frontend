@@ -1,23 +1,39 @@
-import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ProjectsComponent } from "../../../features/projects/projects.component";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { ProjectsComponent } from '../../../features/projects/projects.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ProjectService } from 'app/features/projects/project.service';
 import { Project } from 'app/core/interfaces/project.interface';
-import { HeaderComponent } from "../../components/header/header/header.component";
+import { HeaderComponent } from '../../components/header/header/header.component';
 import { CommonModule } from '@angular/common';
+import {
+  UserMinInformation,
+  UserPublicInformation,
+} from 'app/core/interfaces/user.interface';
+import { UserService } from 'app/features/users/user.service';
 
 @Component({
-
   standalone: true,
   imports: [ProjectsComponent, BreadcrumbModule, CommonModule],
   template: `
-
-  <ng-container class="flex flex-col" *ngIf="!loading">
-  
-    <projects-template [projects]="projects" [userID]="userID" (projectAdded)="onProjectAddedHandler()" />
-  </ng-container>
-  <ng-container *ngIf="projects.length === 0" class="w-full min-h-screen" >
-  <div class="mt-[100px] w-screen flex justify-center items-center h-[calc(100vh-100px)]" *ngIf="loading">
+    <ng-container class="flex flex-col" *ngIf="!loading">
+      <projects-template
+        [projects]="projects"
+        [sharedProjects]="sharedProjects"
+        [usersList]="usersList"
+        [userID]="userID"
+        (projectAdded)="onProjectAddedHandler()"
+      />
+    </ng-container>
+    <ng-container *ngIf="projects.length === 0" class="w-full min-h-screen">
+      <div
+        class="mt-[100px] w-screen flex justify-center items-center h-[calc(100vh-100px)]"
+        *ngIf="loading"
+      >
         <div role="status">
           <svg
             aria-hidden="true"
@@ -38,56 +54,69 @@ import { CommonModule } from '@angular/common';
           <span class="sr-only">Loading...</span>
         </div>
       </div>
-  </ng-container>
-  
+    </ng-container>
   `,
   providers: [ProjectService],
   styleUrl: './project-page.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectPageComponent implements OnInit {
-  constructor(private projectService: ProjectService, private cdr: ChangeDetectorRef) {}
-  public projects: Project[] = [
-  
-    // Example projects, these will be replaced by the actual data from the service
-    // { id: '1', title: '--', description: '--' },
-    // { id: '2', title: 'Project Two', description: 'Description of Project Two' },
-  ];
-  public loading: boolean = false
-  public userID:string = "";
+  constructor(
+    private projectService: ProjectService,
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
+  ) {}
+  public projects: Project[] = [];
+  public loading: boolean = false;
+  public userID: string = '';
+  public sharedProjects: Project[] = [];
+  public usersList: UserMinInformation[];
   ngOnInit(): void {
-    this.loading = true
+    this.loading = true;
     this.projectService.getUserProjects().subscribe((res: any) => {
-      console.log("esta es la respuesta sdel server:",res);
-      console.log("este es el id del usuario:",res.id);
-      console.log("estos son los proyectos del usuario:",res.projects);
+      console.log('esta es la respuesta sdel server:', res);
+      console.log('este es el id del usuario:', res.id);
+      console.log('estos son los proyectos del usuario:', res.projects);
       // await(1000)
       this.projects = res.projects;
+      this.sharedProjects = res.shared;
       this.userID = res.id;
       this.loading = false;
+
       // this.getChargedProjects();
+      console.log('Datos TEST:', res);
       this.cdr.detectChanges();
     });
 
-    
-    
+    this.userService.getMinUsersInfo().subscribe((res: any) => {
+      this.usersList = res;
 
+      console.log('Lista de usuarios', this.usersList);
+      this.cdr.detectChanges();
+    });
   }
 
-  loadUserProjects(): void { // Crea una función dedicada para cargar/recargar
+  loadUserProjects(): void {
+    // Crea una función dedicada para cargar/recargar
     this.projectService.getUserProjects().subscribe((res: any) => {
       this.projects = res.projects;
       this.userID = res.id;
+      this.sharedProjects = res.shared;
       console.log('Proyectos cargados en Padre:', this.projects);
       this.cdr.detectChanges(); // Forzar la detección de cambios para actualizar la vista
-      console.log('Proyectos cargados en Padre (después de actualizar):', this.projects);
+      console.log(
+        'Proyectos cargados en Padre (después de actualizar):',
+        this.projects
+      );
     });
   }
   onProjectAddedHandler(): void {
-    console.log('Evento projectAdded recibido del hijo. Recargando proyectos...');
+    console.log(
+      'Evento projectAdded recibido del hijo. Recargando proyectos...'
+    );
     this.loadUserProjects(); // Llama a la función para recargar la lista
   }
-  
+
   // getChargedProjects() {
   //   console.log('Proyectos cargados:', this.projects);
   // }

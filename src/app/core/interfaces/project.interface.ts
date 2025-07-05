@@ -8,4 +8,11 @@ datasets: any[]; // Cambiado a 'any[]' para mayor flexibilidad
 authors: SimpleUserInfo[]
 }
 
+export interface ShareProject{
+
+    projectID: string;
+    authors: string[];
+
+}
+
 

@@ -49,7 +49,8 @@ export class RolesComponent implements OnInit {
 
           severity: 'error',
           summary: 'Error',
-          detail: 'no se pudieron cargar los roles'
+          detail: `no se pudieron cargar los roles \nDetalle ${err}`,
+          life: 3000,
         })
       }
     })
@@ -67,7 +68,8 @@ export class RolesComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'No se pudieron cargar los datos de permisos',
+          detail: `No se pudieron cargar los datos de permisos Detalle:${err}`,
+          life: 3000,
         });
       }
 

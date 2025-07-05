@@ -19,15 +19,33 @@ export class UserService {
       },
     });
   }
-  
-  createUser(UserInfo: CreateUser){
 
+  createUser(UserInfo: CreateUser) {
     const token = getToken();
-    return this.http.post(`${this.apiURL}/api/administration/authors`,UserInfo
-    ,{
+    return this.http.post(
+      `${this.apiURL}/api/administration/authors`,
+      UserInfo,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+      }
+    );
+  }
+  getMinUsersInfo() {
+    const token = getToken();
+    return this.http.get(`${this.apiURL}/api/public/share/authors`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+  getUserInfo(){
+    const token = getToken();
+    return this.http.get(`${this.apiURL}/api/public/author`,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
   }
 }

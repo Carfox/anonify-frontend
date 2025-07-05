@@ -72,6 +72,7 @@ export class UsersComponent implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'No se pudieron cargar los datos del usuario.',
+          life: 3000,
         });
       },
     });
@@ -90,6 +91,7 @@ export class UsersComponent implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'No se pudieron cargar los datos de roles',
+          life: 3000,
         });
       },
     });
@@ -115,6 +117,7 @@ export class UsersComponent implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: res.detail,
+            life: 3000,
           });
         }
 
@@ -122,6 +125,7 @@ export class UsersComponent implements OnInit {
           severity: 'success',
           summary: 'Success',
           detail: 'Usuario creado Correctamente',
+          life: 3000,
         });
       },
       error: (err) => {
@@ -129,6 +133,7 @@ export class UsersComponent implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'no se pudieron cargar los roles ',
+          life: 3000,
         });
       },
     });
@@ -138,6 +143,7 @@ export class UsersComponent implements OnInit {
       severity: 'success',
       summary: 'Success',
       detail: 'Se guardo el usuario correctamente.',
+      life: 3000,
     });
   }
   reloadData(event: Event) {

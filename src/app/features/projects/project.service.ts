@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getToken } from 'app/core/interceptor/token.interceptor';
-import { Project } from 'app/core/interfaces/project.interface';
+import { Project, ShareProject } from 'app/core/interfaces/project.interface';
 import { environment } from 'environments/environment.development';
 
 @Injectable({
@@ -15,9 +15,11 @@ export class ProjectService {
   private userProjectsURL = '/api/user/projects';
   get allprojects() {
     const token = getToken();
-    return this.http.get(`${this.apiURL}${this.projectsURL}`,{headers: {
+    return this.http.get(`${this.apiURL}${this.projectsURL}`, {
+      headers: {
         Authorization: `Bearer ${token}`,
-      }})
+      },
+    });
   }
   // funciona
   getUserProjects() {
@@ -61,6 +63,14 @@ export class ProjectService {
   deleteProjectById(id: string) {
     const token = getToken();
     return this.http.delete<Project>(`${this.apiURL}/api/projects/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+  shareProject(shareInfo: ShareProject) {
+    const token = getToken();
+    return this.http.post(`${this.apiURL}/api/user/projects/share`, shareInfo, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -92,6 +92,7 @@ export class DatasetDetailPageComponent implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'No se pudo cargar la informacion del dataset',
+            life: 3000
           });
         },
       });
@@ -109,7 +110,8 @@ export class DatasetDetailPageComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: `No se pudo cargar la informacion del dataset, ${err}`
+            detail: `No se pudo cargar la informacion del dataset, ${err}`,
+            life: 3000
           })
         }
       })

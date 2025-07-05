@@ -1,4 +1,4 @@
-import { RoleInterface } from "./role.interface"
+import { RoleInterface, RoleMinInformation } from "./role.interface"
 
 export interface SimpleUserInfo{
     id:string
@@ -23,6 +23,24 @@ export interface UserPublicInformation{
     mail: string,
     username: string,
     cell_phone: string,
-    role: RoleInterface[]
+    role: RoleInterface
 
+}
+export interface UserPublic{
+    id: string,
+    name: string,
+    nationality: string,
+    mail: string,
+    username: string,
+    cell_phone: string,
+    role: RoleMinInformation
+
+}
+
+
+export interface UserMinInformation{
+    id: string,
+    name: string,
+    username: string,
+    role: RoleMinInformation
 }

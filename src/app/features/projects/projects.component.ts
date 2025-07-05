@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ProjectService } from './project.service';
 import { Button } from 'primeng/button';
-import { Project } from 'app/core/interfaces/project.interface';
+import { Project, ShareProject } from 'app/core/interfaces/project.interface';
 import { ProjectListComponent } from './project-list/project-list.component';
 import { Dialog } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -20,6 +20,9 @@ import { MessageService } from 'primeng/api';
 import { DatasetService } from '../datasets/dataset.service';
 import { StepperModule } from 'primeng/stepper';
 import { TabsModule } from 'primeng/tabs';
+import { concat } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { UserMinInformation } from 'app/core/interfaces/user.interface';
 
 @Component({
   selector: 'projects-template',
@@ -35,6 +38,7 @@ import { TabsModule } from 'primeng/tabs';
     ToastModule,
     StepperModule,
     TabsModule,
+    CommonModule,
   ],
   providers: [MessageService],
   template: `
@@ -44,7 +48,10 @@ import { TabsModule } from 'primeng/tabs';
         <!-- Botones -->
         <div class="buttons flex justify-start gap-4 p-4">
           <p-button (click)="showDialog()" label="Nuevo Proyecto"></p-button>
-          <p-button (click)="getAllProjects()" label="All Proyecto"></p-button>
+          <p-button
+            (click)="showShareDialog()"
+            label="Compartir Proyecto"
+          ></p-button>
         </div>
 
         <!-- División -->
@@ -56,7 +63,7 @@ import { TabsModule } from 'primeng/tabs';
           <p-tabs value="0" class="w-full">
             <p-tablist class="w-full">
               <p-tab value="0">Mis Proyectos</p-tab>
-              <p-tab value="1">Compartidos</p-tab>
+              <p-tab value="1">Compartidos Conmigo</p-tab>
             </p-tablist>
 
             <p-tabpanels class="w-full">
@@ -64,7 +71,7 @@ import { TabsModule } from 'primeng/tabs';
                 <project-list [projects]="projects"></project-list>
               </p-tabpanel>
               <p-tabpanel value="1">
-                <p>Agregar proyectos compartidos</p>
+                <project-list [projects]="sharedProjects"></project-list>
               </p-tabpanel>
             </p-tabpanels>
           </p-tabs>
@@ -126,6 +133,94 @@ import { TabsModule } from 'primeng/tabs';
             />
           </ng-template>
         </p-dialog>
+        <p-dialog
+          [(visible)]="share"
+          [modal]="true"
+          [style]="{ width: '30rem' }"
+        >
+          <ng-template #header>
+            <span class="font-bold whitespace-nowrap">Compartir Proyecto</span>
+          </ng-template>
+          <span class="text-surface-500 dark:text-surface-400 block mb-6"
+            >Seleccione e Proyecto y los usuarios a compartir</span
+          >
+          <div class="mb-6">
+            <label class="block font-semibold mb-2">Proyecto</label>
+            <select
+              [(ngModel)]="this.shareInfo.projectID"
+              name="selected-project"
+              class="border-[1px] border-gray-400 bg-primary p-2 my-2 rounded-md w-full"
+            >
+              <option *ngFor="let project of allProjects" [value]="project.id">
+                {{ project.title }}
+              </option>
+            </select>
+
+            <label class="block font-semibold mb-2">usuarios</label>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <!-- tabla de usuarios -->
+              <table
+                class="w-full text-sm text-left rtl:text-right text-gray-700"
+              >
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Agregar</th>
+                    <th scope="col" class="px-6 py-3">Numbre</th>
+                    <th scope="col" class="px-6 py-3">Nombre de usuario</th>
+                    <th scope="col" class="px-6 py-3">Rol</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (user of this.usersList; track user) {
+                  <tr
+                    class="bg-white border-b border-gray-200 hover:bg-gray-50"
+                  >
+                    <td
+                      class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="shareInfo.authors.includes(user.id)"
+                        (change)="
+                          toggleAuthorSelection(user.id, $event.target.checked)
+                        "
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500"
+                      />
+                    </td>
+                    <td class="px-6 py-4">{{ user.name }}</td>
+                    <td class="px-6 py-4">{{ user.username }}</td>
+                    <td class="px-6 py-4">{{ user.role.name }}</td>
+                  </tr>
+
+                  } @empty {
+                  <tr>
+                    <td colspan="3" class="border px-4 py-2 text-center">
+                      No hay usuarios disponibles
+                    </td>
+                  </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="mb-6"></div>
+
+          <ng-template #footer>
+            <p-button
+              label="Cancel"
+              [text]="true"
+              severity="secondary"
+              (click)="visible = false"
+            />
+            <p-button
+              label="Save"
+              [outlined]="true"
+              severity="secondary"
+              (click)="visible = false"
+              (onClick)="onShareProject()"
+            />
+          </ng-template>
+        </p-dialog>
       </div>
     </div>
   `,
@@ -135,9 +230,19 @@ import { TabsModule } from 'primeng/tabs';
 export class ProjectsComponent {
   @Input({ required: true }) projects: Project[] = [];
   @Input({ required: true }) userID: string = '';
+  @Input({ required: true }) sharedProjects: Project[] = [];
+  @Input({ required: true }) usersList: UserMinInformation[] = [];
+
   @Output() projectAdded = new EventEmitter<void>(); // Define un evento de salida
   public title: string = '';
   public description: string = '';
+  public allProjects: Project[] = this.projects.concat(this.sharedProjects);
+  shareInfo: ShareProject = {
+    projectID: '',
+    authors: [],
+  };
+  visible: boolean = false;
+  share: boolean = false;
   constructor(
     private messageService: MessageService,
     private projectService: ProjectService
@@ -154,8 +259,11 @@ export class ProjectsComponent {
       // this.doSomethingWithProjects(changes['projects'].currentValue);
     }
 
-    if (changes['userID']) {
-      console.log('UserID ha cambiado:', changes['userID'].currentValue);
+    if (changes['allProjects']) {
+      console.log(
+        'AllProjects ha cambiado:',
+        changes['allProjects'].currentValue
+      );
       // Realiza aquí la lógica que dependa de 'userID'
       // this.doSomethingWithUserID(changes['userID'].currentValue);
     }
@@ -168,12 +276,15 @@ export class ProjectsComponent {
   getAllProjects(): void {
     this.projectService.allprojects.subscribe((res: any) => {
       this.projects = res.projects;
+      this.sharedProjects = res.shared;
       this.userID = res.id;
+      this.allProjects = this.projects.concat(this.sharedProjects);
       console.log('Proyectos obtenidos:', this.projects);
+      console.log('Proyectos compartidos:', this.sharedProjects);
+      console.log('Proyectos totales:', this.allProjects);
     });
   }
 
-  
   onSaveNewProject() {
     console.log(this.title, this.description);
     this.projectService.postNewProject(this.title, this.description).subscribe(
@@ -199,10 +310,62 @@ export class ProjectsComponent {
       }
     );
   }
+  onShareProject() {
+    console.info('informacion a enviar al compartir', this.shareInfo);
 
-  visible: boolean = false;
+    if (
+      this.shareInfo.projectID != '' &&
+      this.shareInfo.authors.length > 0
+    ) {
+      this.projectService.shareProject(this.shareInfo).subscribe({
+        next: (res: any) => {
+          console.log('Respuesta de compartir', res);
 
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Proyecto compartido correctamente',
+            detail: `El proyecto se ha compartido a los usuarios seleccionados`,
+            life: 3000,
+          });
+          this.share = false;
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Alerta',
+            detail: `Error:${err}`,
+            life: 3000,
+          });
+        },
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Alerta',
+        detail: `No ha llenado los campos correctamente`,
+        life: 3000,
+      });
+    }
+
+    this.projectService.shareProject(this.shareInfo);
+  }
+  toggleAuthorSelection(userId: string, checked: boolean): void {
+    if (checked) {
+      if (!this.shareInfo.authors.includes(userId)) {
+        this.shareInfo.authors.push(userId);
+      }
+    } else {
+      this.shareInfo.authors = this.shareInfo.authors.filter(
+        (id) => id !== userId
+      );
+    }
+  }
   showDialog() {
     this.visible = true;
+  }
+  showShareDialog() {
+    this.allProjects = this.projects.concat(this.sharedProjects);
+
+    this.share = true;
   }
 }
