@@ -33,6 +33,7 @@ import { DatasetService } from 'app/features/datasets/dataset.service';
 import Swal from 'sweetalert2';
 
 import { environment } from 'environments/environment.development';
+import { AuthService } from 'app/features/auth/auth.service';
 @Component({
   selector: 'app-project-detail-page',
   standalone: true,
@@ -61,7 +62,8 @@ export class ProjectDetailPageComponent implements OnInit {
     private route: ActivatedRoute,
     private dataUploadService: DataUploadService, // Inyección de ActivatedRoute
     private router: Router, // Inyección de Router
-    private datasetService: DatasetService
+    private datasetService: DatasetService,
+    protected authService: AuthService
   ) {}
 
   // parsedColumns: ParsedColumnInfo[] = [];
@@ -89,6 +91,7 @@ export class ProjectDetailPageComponent implements OnInit {
   private websocketSubscription: Subscription | null = null;
 
   private messageService = inject(MessageService);
+  
 
   ngOnInit(): void {
     // Suscribirse a los parámetros de la ruta

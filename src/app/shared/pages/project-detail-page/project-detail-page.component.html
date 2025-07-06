@@ -59,6 +59,7 @@
   <!-- seccion botones -->
   <div
     class="border-2 md:w-[80%] max-md:w-[95%] border-yellow-500 flex flex-col"
+    *ngIf="authService.hasPermission('upload_data') || authService.hasPermission('edit_project') || authService.hasPermission('delete_project')"
   >
     <!-- informacion general Proyectos -->
 
@@ -72,16 +73,18 @@
       <button
         (click)="changeUploadState()"
         class="h-[35px] bg-secondary m-2 text-white rounded-sm w-[200px]"
+        *ngIf="authService.hasPermission('upload_data')"
       >
         Subir Dataset
         <i class="pi pi-plus mx-1"></i>
       </button>
       <button
         class="h-[35px] bg-yellow-300 m-2 text-white rounded-sm w-[200px]"
+        *ngIf="authService.hasPermission('edit_project')"
       >
         Disabled
       </button>
-      <button class="h-[35px] bg-red-400 m-2 text-white rounded-sm w-[200px]" (click)="onDeleteProject(projectData.id)">
+      <button class="h-[35px] bg-red-400 m-2 text-white rounded-sm w-[200px]" (click)="onDeleteProject(projectData.id)" *ngIf="authService.hasPermission('delete_project')">
         Eliminar Proyecto
         <i class="pi pi-trash mx-1"> </i>
       </button>
@@ -91,8 +94,8 @@
   <!-- contenedor de upload dialog -->
 
   <div
-    *ngIf="upload_dialog_visible"
     class="border-2 md:w-[80%] max-md:w-[95%] border-pink-400 flex flex-col"
+    *ngIf="upload_dialog_visible && authService.hasPermission('upload_data')"
   >
     <div class="card">
       <p-tabs value="0">
@@ -252,11 +255,11 @@
             }
           </td>
           <td class="border px-4 py-2 flex justify-center items-center">
-            <button class="bg-blue-500 text-white px-2 py-1 rounded" (click)="onDatasetInfo($event,dataset.id)" >
+            <button class="bg-blue-500 text-white px-2 py-1 rounded" (click)="onDatasetInfo($event,dataset.id)" *ngIf="authService.hasPermission('view_dataset')" >
               <i class="pi pi-eye mr-2"> </i>
               Ver Detalles
             </button>
-            <button class="bg-red-500 text-white px-2 py-1 rounded ml-2" (click)="onDeleteDataset($event, dataset.id)">
+            <button class="bg-red-500 text-white px-2 py-1 rounded ml-2" (click)="onDeleteDataset($event, dataset.id) " *ngIf="authService.hasPermission('delete_dataset')">
               <i class="pi pi-trash mr-2"></i>
               Eliminar
             </button>

@@ -16,11 +16,13 @@ import { ButtonModule } from 'primeng/button';
 import { StepperModule } from 'primeng/stepper';
 import { Entity } from 'app/core/interfaces/entity.interface';
 import { EntityService } from 'app/features/entity/entity.service';
+import { AuthService } from 'app/features/auth/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dataset-detail-page',
   standalone: true,
-  imports: [StepperModule, ButtonModule, PreviewStepComponent, PreprocessingStepComponent, RouterLink],
+  imports: [StepperModule, ButtonModule, PreviewStepComponent, PreprocessingStepComponent, RouterLink, CommonModule],
   providers: [MessageService, ProjectService],
   templateUrl: './dataset-detail-page.component.html',
   // template: `<p>dataset-detail-page works!</p>`,
@@ -33,7 +35,8 @@ export class DatasetDetailPageComponent implements OnInit {
     private entityService: EntityService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    protected authService: AuthService
   ) {}
   projectID: string = '';
   datasetID: string = '';

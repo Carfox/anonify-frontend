@@ -113,30 +113,30 @@
               <span class="select-none">Inicio</span>
             </a>
           </li>
-          <li (click)="navigateTo($event, 'anonify/projects')">
+          <li (click)="navigateTo($event, 'anonify/projects') " *ngIf="authService.hasPermission('view_project')">
             <a
               [ngClass]="{ active: isActive('/anonify/projects') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
             >
-              <span class="select-none">Proyectos</span>
+              <span class="select-none" >Proyectos</span>
             </a>
           </li>
-          <li (click)="navigateTo($event, 'anonify/preprocess')">
+          <!-- <li (click)="navigateTo($event, 'anonify/preprocess')">
             <a
               [ngClass]="{ active: isActive('/anonify/preprocess') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
             >
               <span class="select-none">Preprocesamiento</span>
             </a>
-          </li>
-          <li (click)="navigateTo($event, 'anonify/a')">
+          </li> -->
+          <!-- <li (click)="navigateTo($event, 'anonify/a')">
             <a
               [ngClass]="{ active: isActive('/anonify/a') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
             >
               <span class="select-none">Anonimizacion</span>
             </a>
-          </li>
+          </li> -->
           <!-- <li (click)="navigateTo($event, 'anonify/certificates')">
             <a
               [ngClass]="{ active: isActive('/anonify/certificates') }"
@@ -145,14 +145,14 @@
               <span class="select-none">Certificados</span>
             </a>
           </li> -->
-          <li (click)="navigateTo($event, 'anonify/management')">
+          <!-- <li (click)="navigateTo($event, 'anonify/management')">
             <a
               [ngClass]="{ active: isActive('/anonify/management') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
             >
               <span class="select-none">Bases de datos</span>
             </a>
-          </li>
+          </li> -->
         </ul>
       </div>
       <!-- navigation group end-->
@@ -163,16 +163,16 @@
           Administracion
         </h3>
         <ul class="mb-8 text-sm font-medium">
-          <li (click)="navigateTo($event, 'anonify/users')">
+          <li (click)="navigateTo($event, 'anonify/users')" *ngIf="authService.hasPermission('view_user')">
             <a
               [ngClass]="{ active: isActive('/anonify/users') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
               href="#tc"
             >
-              <span class="select-none">Usuarios</span>
+              <span class="select-none" >Usuarios</span>
             </a>
           </li>
-          <li (click)="navigateTo($event, 'anonify/roles')">
+          <li (click)="navigateTo($event, 'anonify/roles')" *ngIf="authService.hasPermission('view_role')">
             <a
               [ngClass]="{ active: isActive('/anonify/roles') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
@@ -180,7 +180,7 @@
               <span class="select-none">Roles</span>
             </a>
           </li>
-          <li (click)="navigateTo($event, 'anonify/entities')">
+          <li (click)="navigateTo($event, 'anonify/entities')" *ngIf="authService.hasPermission('view_entity')">
             <a
               [ngClass]="{ active: isActive('/anonify/entities') }"
               class="flex items-center rounded py-3 pl-3 pr-4 text-gray-50 hover:bg-gray-600"
@@ -191,7 +191,7 @@
         </ul>
       </div>
 
-      <div class="px-4 pb-6">
+      <!-- <div class="px-4 pb-6">
         <h3 class="mb-2 text-xs font-medium uppercase text-gray-500">Others</h3>
         <ul class="mb-8 text-sm font-medium">
           <li>
@@ -211,7 +211,7 @@
             </a>
           </li>
         </ul>
-      </div>
+      </div> -->
       <!-- example copies end -->
     </nav>
   </div>

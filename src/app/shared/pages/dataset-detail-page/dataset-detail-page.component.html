@@ -47,10 +47,24 @@
                 class="border-2 border-dashed border-surface min-h-[45vh] max-w-[965px]"
               >
                 <!-- <data-preview-table [data]="preview"></data-preview-table> -->
-                <aw-preview-step
-                  [datasetID]="this.datasetID"
-                  [projectID]="this.projectID"
-                ></aw-preview-step>
+                <ng-container
+                  *ngIf="
+                    authService.hasPermission('view_data');
+                    else previewDeniedAdvice
+                  "
+                >
+                  <aw-preview-step
+                    [datasetID]="this.datasetID"
+                    [projectID]="this.projectID"
+                  ></aw-preview-step>
+                </ng-container>
+
+                <ng-template
+                  #previewDeniedAdvice
+                  class="w-full h-full flex justify-center items-center"
+                >
+                  <p>No tiene permisos para la visualizacion del proyecto</p>
+                </ng-template>
               </div>
             </div>
             <div class="flex pt-5 justify-center">
@@ -92,12 +106,29 @@
                 anonimizacion de datos
               </div>
               <div class="border-2 border-dashed border-surface min-h-[45vh]">
-                <aw-preprocessing-step
-                [datasetID] = "this.datasetID"
-                [projectID] = "this.projectID"
-                [dataset] = "this.datasetInfo"
-                [entities] = "this.entities"
-                ></aw-preprocessing-step>
+                <ng-container
+                  *ngIf="
+                    authService.hasPermission('preprocess_dataset');
+                    else preprocessDeniedAdvice
+                  "
+                >
+                  <aw-preprocessing-step
+                    [datasetID]="this.datasetID"
+                    [projectID]="this.projectID"
+                    [dataset]="this.datasetInfo"
+                    [entities]="this.entities"
+                  ></aw-preprocessing-step>
+                </ng-container>
+
+                <ng-template
+                  #preprocessDeniedAdvice
+                  class="w-full h-full flex justify-center items-center"
+                >
+                  <p>
+                    No tiene permisos para realizar el preprocesamiento del
+                    Dataset
+                  </p>
+                </ng-template>
               </div>
             </div>
             <div class="flex pt-5 justify-center">
@@ -140,7 +171,25 @@
                 antes de continuar.
               </div>
               <div class="border-2 border-dashed border-surface min-h-[45vh]">
-                <aw-anonymize-step [data]="anonymizedData"></aw-anonymize-step>
+                <ng-container
+                  *ngIf="
+                    authService.hasPermission('anonymize_dataset');
+                    else anonimazeDeniedAdvice
+                  "
+                >
+                  <aw-anonymize-step
+                    [data]="anonymizedData"
+                  ></aw-anonymize-step>
+                </ng-container>
+
+                <ng-template
+                  #anonimazeDeniedAdvice
+                  class="w-full h-full flex justify-center items-center"
+                >
+                  <p>
+                    No tiene permisos para realizar la anonimizacion del Dataset
+                  </p>
+                </ng-template>
               </div>
             </div>
             <div class="flex pt-5 justify-center">
@@ -182,7 +231,23 @@
                 adecuado antes de continuar.
               </div>
               <div class="border-2 border-dashed border-surface min-h-[45vh]">
-                <aw-result-step></aw-result-step>
+                <ng-container
+                  *ngIf="
+                    authService.hasPermission('download_data');
+                    else resultDeniedAdvice
+                  "
+                >
+                  <aw-result-step></aw-result-step>
+                </ng-container>
+
+                <ng-template
+                  #resultDeniedAdvice
+                  class="w-full h-full flex justify-center items-center"
+                >
+                  <p>
+                    No tiene permisos para descargar los resultados del proceso
+                  </p>
+                </ng-template>
               </div>
             </div>
             <div class="flex pt-5 justify-center">
