@@ -43,7 +43,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
   private sidebarVisible = false;
 
-  constructor(private renderer: Renderer2, private router: Router,private authService: AuthService) {}
+  constructor(private renderer: Renderer2, private router: Router,protected authService: AuthService) {}
 
   ngOnInit(): void {}
 

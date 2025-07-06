@@ -42,7 +42,8 @@ export class EntitiesComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'No se pudo cargar la informacion del dataset',
+          detail: `No se pudo cargar la informacion del dataset \nDetalle:${err}`,
+          life: 3000,
         });
       },
     });
@@ -67,12 +68,14 @@ export class EntitiesComponent implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: res.detail,
+            life: 3000,
           });
         }
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
           detail: 'Usuario creado Correctamente',
+          life: 3000,
         });
       },
       error: (err) => {
@@ -81,6 +84,7 @@ export class EntitiesComponent implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'no se pudieron cargar los roles',
+          life: 3000,
         });
       },
     });
@@ -89,6 +93,7 @@ export class EntitiesComponent implements OnInit {
       severity: 'success',
       summary: 'Success',
       detail: 'Se guardo el usuario correctamente.',
+      life: 3000,
     });
   }
 

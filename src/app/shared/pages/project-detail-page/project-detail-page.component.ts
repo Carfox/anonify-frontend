@@ -33,6 +33,7 @@ import { DatasetService } from 'app/features/datasets/dataset.service';
 import Swal from 'sweetalert2';
 
 import { environment } from 'environments/environment.development';
+import { AuthService } from 'app/features/auth/auth.service';
 @Component({
   selector: 'app-project-detail-page',
   standalone: true,
@@ -61,7 +62,8 @@ export class ProjectDetailPageComponent implements OnInit {
     private route: ActivatedRoute,
     private dataUploadService: DataUploadService, // Inyección de ActivatedRoute
     private router: Router, // Inyección de Router
-    private datasetService: DatasetService
+    private datasetService: DatasetService,
+    protected authService: AuthService
   ) {}
 
   // parsedColumns: ParsedColumnInfo[] = [];
@@ -89,6 +91,7 @@ export class ProjectDetailPageComponent implements OnInit {
   private websocketSubscription: Subscription | null = null;
 
   private messageService = inject(MessageService);
+  
 
   ngOnInit(): void {
     // Suscribirse a los parámetros de la ruta
@@ -121,7 +124,8 @@ export class ProjectDetailPageComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'No se pudieron cargar los datos del proyecto.',
+          detail: `No se pudieron cargar los datos del proyecto. ${err}`,
+          life: 3000,
         });
       },
     });
@@ -169,7 +173,8 @@ export class ProjectDetailPageComponent implements OnInit {
                 this.messageService.add({
                   severity: 'error',
                   summary: 'Error',
-                  detail: 'No se pudieron cargar los datos del proyecto.',
+                  detail: `No se pudieron cargar los datos del proyecto.${err}`,
+                  life: 3000,
                 });
               },
             });
@@ -179,7 +184,8 @@ export class ProjectDetailPageComponent implements OnInit {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'ocurrio un error al intentar eliminar el Dataset',
+              detail:  `ocurrio un error al intentar eliminar el  ${err}`,
+              life: 3000,
             });
           },
         });
@@ -188,6 +194,7 @@ export class ProjectDetailPageComponent implements OnInit {
           summary: 'Success',
           detail:
             'El dataset y todos sus datos han sido eliminados correctamente.',
+          life: 3000,
         });
         // Swal.fire('Saved!', '', 'success');
       } else if (result.isDenied) {
@@ -225,6 +232,7 @@ export class ProjectDetailPageComponent implements OnInit {
                 severity: 'success',
                 summary: 'Success',
                 detail: 'El Proyecto se ha eliminado correctamente',
+                life: 3000,
               });
             },
             error: (err) => {
@@ -233,6 +241,7 @@ export class ProjectDetailPageComponent implements OnInit {
                 severity: 'error',
                 summary: 'Error',
                 detail: 'No se pudo eliminar el proyecto.',
+                life: 3000,
               });
             },
           });
@@ -353,6 +362,7 @@ export class ProjectDetailPageComponent implements OnInit {
         severity: 'error',
         summary: 'Error',
         detail: 'No se seleccionó ningún archivo.',
+        life: 3000,
       });
       return;
     }
@@ -371,6 +381,7 @@ export class ProjectDetailPageComponent implements OnInit {
             summary: 'Éxito',
             detail:
               'Archivo subido correctamente. Seguimiento de carga iniciado.',
+            life: 3000,
           });
         } else {
           this.uploadStatus = 'Error';
@@ -382,6 +393,7 @@ export class ProjectDetailPageComponent implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'Error en la comunicación con el servidor.',
+            life: 3000,
           });
         }
 

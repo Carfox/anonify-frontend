@@ -164,6 +164,7 @@ export class PreprocessingStepComponent {
             summary: 'Éxito',
             detail:
               'Archivo subido correctamente. Seguimiento de carga iniciado.',
+            life: 3000,
           });
         }
         else{
@@ -176,6 +177,7 @@ export class PreprocessingStepComponent {
             severity: 'error',
             summary: 'Error',
             detail: 'Error en la comunicación con el servidor.',
+            life: 3000,
           });
         }
       });
@@ -184,6 +186,7 @@ export class PreprocessingStepComponent {
       severity: 'success',
       summary: 'success',
       detail: 'se ha iniciado el proceso de preprocesamiento en el servidor',
+      life: 3000,
     });
   }
   showAdvancedOptions(event: Event) {

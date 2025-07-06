@@ -8,3 +8,8 @@ export interface RoleInterface{
     permissions: PermissionInterface[]
     
 }
+
+export interface RoleMinInformation{
+    id: string
+    name: string
+}

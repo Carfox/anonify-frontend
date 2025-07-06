@@ -190,7 +190,8 @@ export class PreviewStepComponent implements OnInit {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'No se pudieron cargar los datos del proyecto.',
+              detail: `No se pudieron cargar los datos del proyecto.${err}`,
+              life: 3000,
             });
           },
         });
@@ -230,6 +231,7 @@ export class PreviewStepComponent implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'No se pudieron cargar los datos del proyecto.',
+            life: 3000,
           });
         },
       });
@@ -269,6 +271,7 @@ export class PreviewStepComponent implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'No se pudieron cargar los datos del proyecto.',
+            life: 3000,
           });
         },
       });

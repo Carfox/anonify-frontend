@@ -20,6 +20,7 @@
         </p>
         <div class="mb-6">
           <button
+            (click)="onReload($event)"
             class="inline-flex items-center justify-center whitespace-nowrap rounded-sm bg-secondary px-5 py-[10px] text-sm font-medium text-white hover:bg-secondary/90"
           >
             VOLVER A CARGAR
@@ -33,45 +34,61 @@
         <div>
           <div class="px-4 sm:px-0">
             <h3 class="text-base/7 font-semibold text-gray-900">
-              Applicant Information
+              Información de Usuario
             </h3>
             <p class="mt-1 max-w-2xl text-sm/6 text-gray-500">
-              Personal details and application.
+              Detalles personales y roles del usuario
             </p>
           </div>
           <div class="mt-6 border-t border-gray-100">
             <dl class="divide-y divide-gray-100">
               <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm/6 font-medium text-gray-900">Full name</dt>
+                <dt class="text-sm/6 font-medium text-gray-900">Nombre Completo</dt>
                 <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  Margot Foster
+                  {{this.userInfo.name}}
                 </dd>
               </div>
               <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium text-gray-900">
-                  Application for
+                  Nacionalidad
                 </dt>
                 <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  Backend Developer
+                  {{this.userInfo.nationality}}
                 </dd>
               </div>
               <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium text-gray-900">
-                  Email address
+                  Direccion de correo electronico
                 </dt>
                 <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  margotfoster
+                  {{this.userInfo.mail}}
                 </dd>
               </div>
               <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium text-gray-900">
-                  Salary expectation
+                  Nombre de usuario
                 </dt>
                 <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  $120,000
+                  {{this.userInfo.username}}
                 </dd>
               </div>
               <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm/6 font-medium text-gray-900">
+                  Numero de telefono:
+                </dt>
+                <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {{this.userInfo.cell_phone}}
+                </dd>
+              </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm/6 font-medium text-gray-900">
+                  Rol:
+                </dt>
+                <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {{this.userInfo.role.name || "SIN ROL"}}
+                </dd>
+              </div>
+              <!-- <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm/6 font-medium text-gray-900">About</dt>
                 <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
                   Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
@@ -80,7 +97,7 @@
                   officia proident. Irure nostrud pariatur mollit ad adipisicing
                   reprehenderit deserunt qui eu.
                 </dd>
-              </div>
+              </div> -->
             </dl>
           </div>
         </div>
