@@ -39,7 +39,6 @@
       </th>
       <th>Tipo de Identificador</th>
       <th>Técnica de Anonimización</th>
-      <th>Modelo de Anonimización</th>
       <th style="min-width: 10rem">Jerarquización</th>
       <th></th>
     </tr>
@@ -66,9 +65,9 @@
       <td>
         <p> {{ label.technique ? (label.technique | AnonymizationTechniquesPipe) : 'Aun falta por definir' }}</p>
       </td>
-      <td>
+      <!-- <td>
         <p>{{ label.privacyModel ? (label.privacyModel) : 'No Definido' }}</p>
-      </td>
+      </td> -->
       <td>
         @if (label.hierarchyStrategy.type === undefined) {
             <p>Aun no se ha especificado la jerarquización</p>
@@ -109,7 +108,69 @@
     <div class="flex align-items-center justify-content-between">
       En total existen {{ labels ? labels.length : 0 }} identificadores.
     </div>
+    <div class="mt-6 p-6 rounded-lg shadow-md border border-gray-200 bg-white">
+      <h4 class="text-xl font-bold mb-4 text-gray-800">Modelo de Privacidad</h4>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Tipo de Modelo -->
+        <div class="flex flex-col">
+          <label for="privacyModel" class="mb-2 font-semibold text-gray-700">
+            Tipo de Modelo
+          </label>
+          <p-dropdown
+            inputId="privacyModel"
+            [(ngModel)]="selectedPrivacyModel"
+            [options]="[
+              { label: 'K-Anonymity', value: 'K_ANONYMITY' },
+              { label: 'K y L Diversity', value: 'K_AND_L_DIVERSITY' }
+            ]"
+            placeholder="Selecciona un modelo"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+          />
+        </div>
+
+        <!-- Valor K -->
+        <div class="flex flex-col">
+          <label for="kValue" class="mb-2 font-semibold text-gray-700">Valor de K</label>
+          <p-inputNumber
+            inputId="kValue"
+            [(ngModel)]="privacyK"
+            [min]="1"
+            class="w-full"
+            placeholder="Ej. 2"
+          />
+        </div>
+
+        <!-- Valor L -->
+        <div class="flex flex-col" *ngIf="selectedPrivacyModel === 'K_AND_L_DIVERSITY'">
+          <label for="lValue" class="mb-2 font-semibold text-gray-700">Valor de L</label>
+          <p-inputNumber
+            inputId="lValue"
+            [(ngModel)]="privacyL"
+            [min]="1"
+            class="w-full"
+            placeholder="Ej. 1"
+          />
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <div class="mt-6 flex justify-end">
+        <p-button
+          label="Ejecutar Anonimización"
+          icon="pi pi-lock"
+          class="px-5 py-2 text-white"
+          [style]="{ backgroundColor: '#2563eb', border: 'none' }"
+          (onClick)="submitAnonymization()"
+        />
+      </div>
+    </div>
+
+
   </ng-template>
+
 </p-table>
 
 <p-dialog
@@ -125,15 +186,25 @@
         <label for="name" class="block font-bold mb-3"
           >Nombre del Identificador</label
         >
-        <input
-          type="text"
-          pInputText
-          [disabled]="true"
-          [(ngModel)]="label.name"
-          required
-          autofocus
-          fluid
-        />
+        <div>
+          <label for="labelName" class="block font-bold mb-3">
+            Nombre del Identificador
+          </label>
+          <input
+            id="labelName"
+            type="text"
+            pInputText
+            [disabled]="true"
+            [(ngModel)]="label.name"
+            required
+            placeholder="Ej: cedula, nombre, etc."
+            title="Nombre del campo o columna del dataset"
+          />
+          <small class="text-red-500" *ngIf="submitted && !label.name">
+            Nombre es requerido
+          </small>
+        </div>
+
         <small class="text-red-500" *ngIf="submitted && !label.name"
           >Nombre es requerido</small
         >

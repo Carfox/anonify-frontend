@@ -18,11 +18,17 @@ import { Entity } from 'app/core/interfaces/entity.interface';
 import { EntityService } from 'app/features/entity/entity.service';
 import { AuthService } from 'app/features/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { ResultStepComponent } from 'app/features/anonymization-wizard/components/result-step.component';
+import { AnonymizeStepComponent } from 'app/features/anonymization-wizard/components/anonymize-step.component';
+import { IdentifiersStepComponent } from 'app/features/anonymization-wizard/components/identifiers-step/identifiers-step.component';
 
 @Component({
   selector: 'app-dataset-detail-page',
   standalone: true,
-  imports: [StepperModule, ButtonModule, PreviewStepComponent, PreprocessingStepComponent, RouterLink, CommonModule],
+  imports: [StepperModule, ButtonModule, PreviewStepComponent, PreprocessingStepComponent, RouterLink, CommonModule,  IdentifiersStepComponent,
+      AnonymizeStepComponent,
+      ResultStepComponent,
+      RouterLink,],
   providers: [MessageService, ProjectService],
   templateUrl: './dataset-detail-page.component.html',
   // template: `<p>dataset-detail-page works!</p>`,
@@ -119,7 +125,7 @@ export class DatasetDetailPageComponent implements OnInit {
         }
       })
     });
-    
+
   }
 
 
