@@ -10,11 +10,10 @@ export interface Dataset {
   name: string;
   status: string;
   project_id: string;
-  rows: number
   entity?: Entity
   entity_id?: string
   // query_id: string; // Puedes dejarlo como opcional si no es relevante para el CSV
-  columns: Columns[];
+  // columns: Columns[];
   files: FileInterface[]; // Lista de archivos asociados al dataset
   id: string; // UUID del dataset
 }
@@ -46,6 +45,7 @@ interface FileInterface {
   size: number;
   is_public: boolean; // Ruta del archivo en el servidor
   id: string; // UUID
-  // columns: Columns[];
+  rows: number
+  columns: Columns[];
   dataset_id: string; // ID del dataset al que pertenece
 }

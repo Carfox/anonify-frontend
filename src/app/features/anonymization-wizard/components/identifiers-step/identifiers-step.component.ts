@@ -21,6 +21,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Input,
   OnChanges,
   OnInit,
   SimpleChanges,
@@ -29,6 +30,13 @@ import { FileService } from 'app/core/services/file.service';
 import { Attribute, HierarchyStrategy } from 'app/core/interfaces/anonymization.interface';
 import { SelectModule } from 'primeng/select';
 import { AnonymizationTechniquesPipe } from 'app/core/pipes/anonymization-techniques.pipe';
+import { DatasetService } from 'app/features/datasets/dataset.service';
+interface DatasetPreviewResponse {
+  preview: any[];
+  index: number;
+  total_pages: number;
+  total_rows: number;
+}
 
 @Component({
   selector: 'aw-identifiers-step',
@@ -65,8 +73,13 @@ import { AnonymizationTechniquesPipe } from 'app/core/pipes/anonymization-techni
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IdentifiersStepComponent implements OnInit, OnChanges {
+  @Input({ required: true }) datasetID = '';
 
-  private sessionID: string | null = localStorage.getItem('sessionID');
+  public selectedPrivacyModel: 'K_ANONYMITY' | 'K_AND_L_DIVERSITY' =
+    'K_ANONYMITY';
+  public privacyK: number = 2;
+  public privacyL: number = 1;
+
   public productDialog: boolean = false;
 
   public labels!: Attribute[];
@@ -106,30 +119,31 @@ export class IdentifiersStepComponent implements OnInit, OnChanges {
   privacyModels = ['k-anonymity', 'l-diversity'];
 
   constructor(
-    private fileService: FileService,
+    private datasetService: DatasetService, // 👈 nuevo
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef
   ) {}
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.label.attributeType === 'IDENTIFYING_ATTRIBUTE') {
-      this.label.technique = 'suppression';
-    }
-  }
 
   ngOnInit() {
-    if (!this.sessionID) {
-      alert('Error loading data');
+    if (!this.datasetID) {
+      console.error('datasetID no proporcionado');
       return;
     }
 
-    this.fileService.loadHeadersFromFileData(this.sessionID).subscribe({
-      next: (res) => {
-        const attributes: Attribute[] = res.data.map((label) => ({
-          name: label,
-          technique: undefined, // default
-          privacyModel: undefined, // default
-          attributeType: undefined, // default
+    // 🔁 Reemplaza el llamado anterior por este
+    this.datasetService.getDatasetPreview(this.datasetID,"preprocessed", 1, 5).subscribe({
+      next: (res: DatasetPreviewResponse) => {
+        const preview = res.preview;
+        if (!preview || preview.length === 0) return;
+
+        const headers = Object.keys(preview[0]).map((key) => key.trim());
+
+        const attributes: Attribute[] = headers.map((header) => ({
+          name: header,
+          technique: undefined,
+          privacyModel: undefined,
+          attributeType: undefined,
           parameters: {},
           hierarchyStrategy: {
             type: undefined,
@@ -137,13 +151,28 @@ export class IdentifiersStepComponent implements OnInit, OnChanges {
             amplitud: -1,
           },
         }));
+
         this.labels = attributes;
-        this.cdr.markForCheck();
+        // esto de abajolo puse yo Carlos por si necesitas quitarlo
+        this.cdr.detectChanges();
+        // this.cdr.markForCheck();
+        ;
       },
       error: (err) => {
-        console.error('Error al cargar cabeceras:', err);
+        console.error('Error al cargar headers desde preview:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo obtener los encabezados del dataset.',
+          life: 3000,
+        });
       },
     });
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.label.attributeType === 'IDENTIFYING_ATTRIBUTE') {
+      this.label.technique = 'suppression';
+    }
   }
 
   editProduct(product: any) {
@@ -167,7 +196,7 @@ export class IdentifiersStepComponent implements OnInit, OnChanges {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
-          detail: 'Product Updated',
+          detail: 'Identificador Actualizado',
           life: 3000,
         });
       } else {
@@ -175,7 +204,7 @@ export class IdentifiersStepComponent implements OnInit, OnChanges {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
-          detail: 'Product Created',
+          detail: 'Identificador Creado',
           life: 3000,
         });
       }
@@ -196,6 +225,65 @@ export class IdentifiersStepComponent implements OnInit, OnChanges {
     }
 
     return index;
+  }
+
+  submitAnonymization() {
+    if (!this.labels || this.labels.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Advertencia',
+        detail: 'No hay atributos configurados.',
+      });
+      return;
+    }
+
+    const payload = {
+      filePath: `uploads/${this.datasetID}.csv`, // O ajusta como corresponda
+      attributes: this.labels.map((label) => {
+        const attr: any = {
+          name: label.name,
+          attributeType: label.attributeType,
+        };
+
+        if (label.hierarchyStrategy?.type) {
+          attr.hierarchyStrategy = {
+            type: label.hierarchyStrategy.type,
+            numClasses: label.hierarchyStrategy.numClasses,
+            amplitud: label.hierarchyStrategy.amplitud,
+          };
+        }
+
+        return attr;
+      }),
+      privacyModel: {
+        type: this.selectedPrivacyModel,
+        parameters:
+          this.selectedPrivacyModel === 'K_ANONYMITY'
+            ? { k: this.privacyK }
+            : { k: this.privacyK, l: this.privacyL },
+      },
+    };
+
+    console.log('Payload para enviar:', payload);
+
+    // Aquí llamas al backend
+    // this.datasetService.anonymizeDataset(payload).subscribe({
+    //   next: (res) => {
+    //     this.messageService.add({
+    //       severity: 'success',
+    //       summary: 'Anonimización exitosa',
+    //       detail: 'Los datos han sido anonimizados correctamente.',
+    //     });
+    //   },
+    //   error: (err) => {
+    //     console.error('Error al anonimizar:', err);
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'Error',
+    //       detail: 'No se pudo anonimizar el dataset.',
+    //     });
+    //   },
+    // });
   }
 
   setModelPrivacy(value: string) {

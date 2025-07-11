@@ -2,9 +2,9 @@ import { webSocket } from "rxjs/webSocket";
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:2003',
-  apiCarfox: 'http://127.0.0.1:8000',
-  webSocketUrl: 'ws://localhost:2003/api/ws/progress/',
+  apiUrl: 'http://localhost:8000',
+  apiCarfox: 'http://127.0.0.1:8080',
+  webSocketUrl: 'ws://localhost:8000/api/ws/progress/',
   routes: {
     anonimaus: {
       uploadCSV: {
