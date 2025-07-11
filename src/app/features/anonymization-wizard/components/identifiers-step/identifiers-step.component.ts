@@ -132,7 +132,7 @@ export class IdentifiersStepComponent implements OnInit, OnChanges {
     }
 
     // 🔁 Reemplaza el llamado anterior por este
-    this.datasetService.getDatasetPreview(this.datasetID, 1, 5).subscribe({
+    this.datasetService.getDatasetPreview(this.datasetID,"preprocessed", 1, 5).subscribe({
       next: (res: DatasetPreviewResponse) => {
         const preview = res.preview;
         if (!preview || preview.length === 0) return;
@@ -153,7 +153,10 @@ export class IdentifiersStepComponent implements OnInit, OnChanges {
         }));
 
         this.labels = attributes;
-        this.cdr.markForCheck();
+        // esto de abajolo puse yo Carlos por si necesitas quitarlo
+        this.cdr.detectChanges();
+        // this.cdr.markForCheck();
+        ;
       },
       error: (err) => {
         console.error('Error al cargar headers desde preview:', err);

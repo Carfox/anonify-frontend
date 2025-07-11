@@ -21,11 +21,12 @@ import { CommonModule } from '@angular/common';
 import { ResultStepComponent } from 'app/features/anonymization-wizard/components/result-step.component';
 import { AnonymizeStepComponent } from 'app/features/anonymization-wizard/components/anonymize-step.component';
 import { IdentifiersStepComponent } from 'app/features/anonymization-wizard/components/identifiers-step/identifiers-step.component';
+import { PreprocessViewStepComponent } from 'app/features/anonymization-wizard/components/preprocess-view-step';
 
 @Component({
   selector: 'app-dataset-detail-page',
   standalone: true,
-  imports: [StepperModule, ButtonModule, PreviewStepComponent, PreprocessingStepComponent, RouterLink, CommonModule,  IdentifiersStepComponent,
+  imports: [StepperModule, ButtonModule, PreviewStepComponent, PreprocessViewStepComponent,PreprocessingStepComponent, RouterLink, CommonModule,  IdentifiersStepComponent,
       AnonymizeStepComponent,
       ResultStepComponent,
       RouterLink,],
@@ -51,13 +52,13 @@ export class DatasetDetailPageComponent implements OnInit {
     name: '',
     project_id: '',
     status: '',
-    rows: 0,
+    // rows: 0,
     entity: {
       id: '',
       name: ''
     },
     entity_id: '',
-    columns: [],
+    // columns: [],
     files: [],
     id: '',
   };
@@ -66,6 +67,8 @@ export class DatasetDetailPageComponent implements OnInit {
   private index: number = 1;
   private rows: number = 10;
   private preview: [];
+  private preview_preprosess: [];
+
   private messageService = inject(MessageService);
   private loading = false;
 
@@ -145,4 +148,18 @@ export class DatasetDetailPageComponent implements OnInit {
     console.log('Evento projectAdded recibido del hijo. Recargando proyectos...');
     // this.loadUserProjects(); // Llama a la función para recargar la lista
   }
+
+  setDataFlowPage(): number{
+
+    const test_value = this.datasetInfo.status
+
+    if(test_value == "uploaded")return 1
+    if(test_value== "edited")return 2
+    if(test_value == "preprocessed" || test_value == "no_preprocessed")return 3
+    if(test_value == "anonimized")return 5
+
+    return 1
+
+  }
+  
 }

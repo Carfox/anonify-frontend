@@ -19,7 +19,7 @@ import { DividerModule } from 'primeng/divider';
 import { TableModule } from 'primeng/table';
 
 @Component({
-  selector: 'aw-preview-step',
+  selector: 'aw-preprocess-view-step',
   standalone: true,
   imports: [CommonModule, TableModule, Card, DividerModule],
   providers: [MessageService],
@@ -130,7 +130,7 @@ import { TableModule } from 'primeng/table';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreviewStepComponent implements OnInit {
+export class PreprocessViewStepComponent implements OnInit {
   // @Input({required: true}) data = [];
   @Input({ required: true }) datasetID = '';
   @Input({ required: true }) projectID = '';
@@ -172,7 +172,7 @@ export class PreviewStepComponent implements OnInit {
       }
 
       this.datasetService
-        .getDatasetPreview(this.datasetID,"uploaded", this.index, this.rows)
+        .getDatasetPreview(this.datasetID,"preprocessed", this.index, this.rows)
         .subscribe({
           next: (res: any) => {
             console.log('Respuesta de PREVIEW:', res);
@@ -212,7 +212,7 @@ export class PreviewStepComponent implements OnInit {
     if (this.datasetID == '' || this.projectID == '') return;
 
     this.datasetService
-      .getDatasetPreview(this.datasetID,"uploaded", next_page, this.rows)
+      .getDatasetPreview(this.datasetID,"preprocessed", next_page, this.rows)
       .subscribe({
         next: (res: any) => {
           console.log('Respuesta de PREVIEW:', res);
@@ -251,7 +251,7 @@ export class PreviewStepComponent implements OnInit {
     if (this.datasetID == '' || this.projectID == '') return;
 
     this.datasetService
-      .getDatasetPreview(this.datasetID,"uploaded", 1, this.rows)
+      .getDatasetPreview(this.datasetID,"preprocessed", 1, this.rows)
       .subscribe({
         next: (res: any) => {
           console.log('Respuesta de PREVIEW:', res);

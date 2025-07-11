@@ -24,13 +24,13 @@ export class DatasetService {
 
 
   }
-  getDatasetPreview(datasetID: string, page_index: number, rows: number){
+  getDatasetPreview(datasetID: string,file_detail: string, page_index: number, rows: number){
 
 
 
     const token = getToken();
 
-    return this.http.get(`${this.apiURL}/api/datasets/${datasetID}/preview?page_index=${page_index}&&rows=${rows}`,{
+    return this.http.get(`${this.apiURL}/api/datasets/${datasetID}/preview?page_index=${page_index}&&rows=${rows}&&file_detail=${file_detail}`,{
       headers: {
         Authorization: `Bearer ${token}`,
       },

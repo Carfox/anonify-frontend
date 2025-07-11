@@ -143,8 +143,8 @@ export class PreprocessingStepComponent {
         need_preprocess: this.needPreprocessing,
         need_imputation: true,
         cleaning_method: 'imputation',
-        columns: this.dataset.columns,
-        rows: this.dataset.rows,
+        columns: this.dataset.files[0].columns,
+        rows: this.dataset.files[0].rows,
       },
     };
 
