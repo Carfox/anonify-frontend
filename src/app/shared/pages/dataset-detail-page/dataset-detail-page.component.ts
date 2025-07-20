@@ -79,7 +79,7 @@ export class DatasetDetailPageComponent implements OnInit {
       const projectIDfromUrl = params.get('id');
       const datasetIDfromUrl = params.get('dataset');
       if (!projectIDfromUrl || !datasetIDfromUrl)
-        this.router.navigate(['/anonify/home']);
+        this.router.navigate(['/a/home']);
 
       console.log(
         'El ID de proyecto es:',
@@ -141,7 +141,7 @@ export class DatasetDetailPageComponent implements OnInit {
 
   goToProject(event: Event, projectID): void{
     event.preventDefault();
-    this,this.router.navigate(['anonify/projects',projectID])
+    this,this.router.navigate(['a/projects',projectID])
   }
 
   onProjectAddedHandler(): void {
@@ -161,5 +161,5 @@ export class DatasetDetailPageComponent implements OnInit {
     return 1
 
   }
-  
+
 }

@@ -26,7 +26,7 @@ import { ProjectService } from '../project.service';
 
         <ng-template #footer>
           <div class="flex gap-6 mt-1">
-            
+
             <button class="rounded-md bg-secondary w-4/5 h-[40px]  text-white" (click)="onMoreInfo()">
             <i class="pi pi-eye"></i>
             Info Proyecto
@@ -35,11 +35,11 @@ import { ProjectService } from '../project.service';
             <button class="rounded-md bg-red-400  h-[40px] aspect-square text-white" (click)="deleteProject(item.id)">
             <i class="pi pi-trash"></i>
             </button>
-            
+
           </div>
         </ng-template>
       </p-card>
-      
+
   `,
   styleUrl: './project-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,7 +54,7 @@ export class ProjectCardComponent {
   ){}
 
   onMoreInfo() {
-    this.router.navigate(['anonify/projects/', this.item.id]);
+    this.router.navigate(['a/projects/', this.item.id]);
     console.log('Más información sobre el elemento:', this.item);
   }
 

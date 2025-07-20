@@ -1,2 +1,11 @@
-<app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<div class="flex min-h-screen">
+  <!-- Sidebar fijo -->
+  <aside class="w-64 bg-white border-r border-gray-200">
+    <app-navbar></app-navbar>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="flex-1 bg-[#fefcf7] p-6">
+    <router-outlet></router-outlet>
+  </main>
+</div>

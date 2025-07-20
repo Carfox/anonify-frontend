@@ -42,11 +42,12 @@ import { UserMinInformation } from 'app/core/interfaces/user.interface';
   ],
   providers: [MessageService],
   template: `
-    <p-toast />
-    <div class="w-screen flex items-center justify-center">
-      <div class="container pt-[150px] max-md:w-[95%] md:w-[80%]">
+    <p-toast></p-toast>
+
+    <div class="w-full min-h-screen bg-[#fefcf7] pt-8 pl-8 pr-4">
+      <div class="max-w-screen-xl">
         <!-- Botones -->
-        <div class="buttons flex justify-start gap-4 p-4">
+        <div class="flex justify-start gap-4 mb-4">
           <p-button (click)="showDialog()" label="Nuevo Proyecto"></p-button>
           <p-button
             (click)="showShareDialog()"
@@ -55,173 +56,164 @@ import { UserMinInformation } from 'app/core/interfaces/user.interface';
         </div>
 
         <!-- División -->
-        <hr class="divider" />
+        <hr class="border-t border-gray-300 mb-6" />
 
-        <!-- Selector de Project List -->
+        <!-- Tabs -->
+        <p-tabs value="0" class="w-full">
+          <p-tablist class="w-full">
+            <p-tab value="0">Mis Proyectos</p-tab>
+            <p-tab value="1">Compartidos Conmigo</p-tab>
+          </p-tablist>
 
-        <div class="flex mb-4 w-full">
-          <p-tabs value="0" class="w-full">
-            <p-tablist class="w-full">
-              <p-tab value="0">Mis Proyectos</p-tab>
-              <p-tab value="1">Compartidos Conmigo</p-tab>
-            </p-tablist>
+          <p-tabpanels class="w-full">
+            <p-tabpanel value="0">
+              <project-list [projects]="projects"></project-list>
+            </p-tabpanel>
+            <p-tabpanel value="1">
+              <project-list [projects]="sharedProjects"></project-list>
+            </p-tabpanel>
+          </p-tabpanels>
+        </p-tabs>
+      </div>
 
-            <p-tabpanels class="w-full">
-              <p-tabpanel value="0">
-                <project-list [projects]="projects"></project-list>
-              </p-tabpanel>
-              <p-tabpanel value="1">
-                <project-list [projects]="sharedProjects"></project-list>
-              </p-tabpanel>
-            </p-tabpanels>
-          </p-tabs>
+      <!-- Diálogo Nuevo Proyecto -->
+      <p-dialog
+        [(visible)]="visible"
+        [modal]="true"
+        [style]="{ width: '25rem' }"
+      >
+        <ng-template #header>
+          <span class="font-bold whitespace-nowrap">Nuevo Proyecto</span>
+        </ng-template>
+
+        <span class="text-gray-500 block mb-6"
+          >Ingresa un título y descripción al proyecto</span
+        >
+
+        <div class="mb-6">
+          <label for="titleProject" class="block font-semibold mb-2"
+            >Título</label
+          >
+          <input
+            pInputText
+            id="titleProject"
+            [(ngModel)]="title"
+            class="w-full"
+            autocomplete="off"
+          />
         </div>
-      </div>
-      <div class="card flex justify-center">
-        <p-dialog
-          [(visible)]="visible"
-          [modal]="true"
-          [style]="{ width: '25rem' }"
-        >
-          <ng-template #header>
-            <span class="font-bold whitespace-nowrap">Nuevo Proyecto</span>
-          </ng-template>
-          <span class="text-surface-500 dark:text-surface-400 block mb-6"
-            >Ingresa un titulo y descripción al proyecto</span
+
+        <div class="mb-6">
+          <label for="descriptionProject" class="block font-semibold mb-2"
+            >Descripción</label
           >
-          <div class="mb-6">
-            <label for="titleProject" class="block font-semibold mb-2"
-              >Título</label
-            >
-            <input
-              pInputText
-              id="titleProject"
-              [(ngModel)]="title"
-              class="w-full"
-              autocomplete="off"
-            />
-          </div>
-          <div class="mb-6">
-            <label for="descriptionProject" class="block font-semibold mb-2"
-              >Descripción</label
-            >
-            <textarea
-              pTextarea
-              id="descriptionProject"
-              placeholder="Maximo 1000 caracteres."
-              rows="5"
-              [(ngModel)]="description"
-              cols="20"
-              style="resize: none"
-              class="w-full"
-            ></textarea>
-          </div>
+          <textarea
+            pTextarea
+            id="descriptionProject"
+            placeholder="Máximo 1000 caracteres."
+            rows="5"
+            [(ngModel)]="description"
+            class="w-full"
+            style="resize: none"
+          ></textarea>
+        </div>
 
-          <ng-template #footer>
-            <p-button
-              label="Cancel"
-              [text]="true"
-              severity="secondary"
-              (click)="visible = false"
-            />
-            <p-button
-              label="Save"
-              [outlined]="true"
-              severity="secondary"
-              (click)="visible = false"
-              (onClick)="onSaveNewProject()"
-            />
-          </ng-template>
-        </p-dialog>
-        <p-dialog
-          [(visible)]="share"
-          [modal]="true"
-          [style]="{ width: '30rem' }"
+        <ng-template #footer>
+          <p-button
+            label="Cancelar"
+            [text]="true"
+            severity="secondary"
+            (click)="visible = false"
+          />
+          <p-button
+            label="Guardar"
+            [outlined]="true"
+            severity="secondary"
+            (click)="visible = false"
+            (onClick)="onSaveNewProject()"
+          />
+        </ng-template>
+      </p-dialog>
+
+      <!-- Diálogo Compartir Proyecto -->
+      <p-dialog [(visible)]="share" [modal]="true" [style]="{ width: '30rem' }">
+        <ng-template #header>
+          <span class="font-bold whitespace-nowrap">Compartir Proyecto</span>
+        </ng-template>
+
+        <span class="text-gray-500 block mb-6"
+          >Seleccione el proyecto y los usuarios a compartir</span
         >
-          <ng-template #header>
-            <span class="font-bold whitespace-nowrap">Compartir Proyecto</span>
-          </ng-template>
-          <span class="text-surface-500 dark:text-surface-400 block mb-6"
-            >Seleccione e Proyecto y los usuarios a compartir</span
+
+        <div class="mb-6">
+          <label class="block font-semibold mb-2">Proyecto</label>
+          <select
+            [(ngModel)]="shareInfo.projectID"
+            class="border border-gray-300 rounded-md p-2 w-full"
           >
-          <div class="mb-6">
-            <label class="block font-semibold mb-2">Proyecto</label>
-            <select
-              [(ngModel)]="this.shareInfo.projectID"
-              name="selected-project"
-              class="border-[1px] border-gray-400 bg-primary p-2 my-2 rounded-md w-full"
-            >
-              <option *ngFor="let project of allProjects" [value]="project.id">
-                {{ project.title }}
-              </option>
-            </select>
+            <option *ngFor="let project of allProjects" [value]="project.id">
+              {{ project.title }}
+            </option>
+          </select>
+        </div>
 
-            <label class="block font-semibold mb-2">usuarios</label>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <!-- tabla de usuarios -->
-              <table
-                class="w-full text-sm text-left rtl:text-right text-gray-700"
-              >
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                  <tr>
-                    <th scope="col" class="px-6 py-3">Agregar</th>
-                    <th scope="col" class="px-6 py-3">Numbre</th>
-                    <th scope="col" class="px-6 py-3">Nombre de usuario</th>
-                    <th scope="col" class="px-6 py-3">Rol</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (user of this.usersList; track user) {
-                  <tr
-                    class="bg-white border-b border-gray-200 hover:bg-gray-50"
-                  >
-                    <td
-                      class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      <input
-                        type="checkbox"
-                        [checked]="shareInfo.authors.includes(user.id)"
-                        (change)="
-                          toggleAuthorSelection(user.id, $event.target.checked)
-                        "
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500"
-                      />
-                    </td>
-                    <td class="px-6 py-4">{{ user.name }}</td>
-                    <td class="px-6 py-4">{{ user.username }}</td>
-                    <td class="px-6 py-4">{{ user.role.name }}</td>
-                  </tr>
-
-                  } @empty {
-                  <tr>
-                    <td colspan="3" class="border px-4 py-2 text-center">
-                      No hay usuarios disponibles
-                    </td>
-                  </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
+        <div class="mb-6">
+          <label class="block font-semibold mb-2">Usuarios</label>
+          <div class="relative overflow-x-auto shadow-md rounded-lg">
+            <table class="w-full text-sm text-left text-gray-700">
+              <thead class="text-xs uppercase bg-gray-100 text-gray-700">
+                <tr>
+                  <th class="px-6 py-3">Agregar</th>
+                  <th class="px-6 py-3">Nombre</th>
+                  <th class="px-6 py-3">Usuario</th>
+                  <th class="px-6 py-3">Rol</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (user of usersList; track user) {
+                <tr class="bg-white border-b hover:bg-gray-50">
+                  <td class="px-6 py-4">
+                    <input
+                      type="checkbox"
+                      [checked]="shareInfo.authors.includes(user.id)"
+                      (change)="
+                        toggleAuthorSelection(user.id, $event.target.checked)
+                      "
+                      class="w-4 h-4 text-blue-600 border-gray-300 rounded"
+                    />
+                  </td>
+                  <td class="px-6 py-4">{{ user.name }}</td>
+                  <td class="px-6 py-4">{{ user.username }}</td>
+                  <td class="px-6 py-4">{{ user.role.name }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="4" class="text-center px-4 py-4 text-gray-500">
+                    No hay usuarios disponibles
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
           </div>
-          <div class="mb-6"></div>
+        </div>
 
-          <ng-template #footer>
-            <p-button
-              label="Cancel"
-              [text]="true"
-              severity="secondary"
-              (click)="visible = false"
-            />
-            <p-button
-              label="Save"
-              [outlined]="true"
-              severity="secondary"
-              (click)="visible = false"
-              (onClick)="onShareProject()"
-            />
-          </ng-template>
-        </p-dialog>
-      </div>
+        <ng-template #footer>
+          <p-button
+            label="Cancelar"
+            [text]="true"
+            severity="secondary"
+            (click)="share = false"
+          />
+          <p-button
+            label="Compartir"
+            [outlined]="true"
+            severity="secondary"
+            (click)="share = false"
+            (onClick)="onShareProject()"
+          />
+        </ng-template>
+      </p-dialog>
     </div>
   `,
   styleUrl: './projects.component.css',
@@ -313,10 +305,7 @@ export class ProjectsComponent {
   onShareProject() {
     console.info('informacion a enviar al compartir', this.shareInfo);
 
-    if (
-      this.shareInfo.projectID != '' &&
-      this.shareInfo.authors.length > 0
-    ) {
+    if (this.shareInfo.projectID != '' && this.shareInfo.authors.length > 0) {
       this.projectService.shareProject(this.shareInfo).subscribe({
         next: (res: any) => {
           console.log('Respuesta de compartir', res);

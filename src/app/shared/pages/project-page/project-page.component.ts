@@ -15,10 +15,15 @@ import {
   UserPublicInformation,
 } from 'app/core/interfaces/user.interface';
 import { UserService } from 'app/features/users/user.service';
-
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
   standalone: true,
-  imports: [ProjectsComponent, BreadcrumbModule, CommonModule],
+  imports: [
+    ProjectsComponent,
+    BreadcrumbModule,
+    CommonModule,
+  ProgressSpinnerModule,
+  ],
   template: `
     <ng-container class="flex flex-col" *ngIf="!loading">
       <projects-template
