@@ -16,6 +16,7 @@ import { DatasetDetailPageComponent } from './shared/pages/dataset-detail-page/d
 import { EntitiesComponent } from './shared/pages/entities/entities.component';
 import { isLoggedInGuard } from './features/auth/guards/is-logged-in.guard';
 import { permissionGuard } from './features/auth/guards/permission.guard';
+import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
 
 const validate = (token: string | null = getToken()) => {
   let flag = false;
@@ -28,6 +29,11 @@ const validate = (token: string | null = getToken()) => {
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  {
+  path: 'acceso-denegado',
+  component: AccessDeniedComponent,
+}
+,
   {
     path: 'a',
     component: LayoutComponent,
@@ -75,7 +81,6 @@ export const routes: Routes = [
         canActivate: [permissionGuard],
         data: { permissions: ['view_entity'] },
       },
-      { path: 'a', component: AnonymizationPageComponent },
       { path: '**', redirectTo: 'home' },
     ],
   },

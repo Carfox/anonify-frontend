@@ -99,53 +99,55 @@
       <form class="grid gap-4">
         <div>
           <label class="font-medium">Nombre</label>
-          <p-input pInputText [(ngModel)]="userToCreate.name" class="w-full" required />
+          <input pInputText [(ngModel)]="userToCreate.name" name="name" class="w-full" required />
         </div>
 
         <div>
           <label class="font-medium">Nacionalidad</label>
-          <p-select
+          <select
             [(ngModel)]="userToCreate.nationality"
             class="w-full h-[40px] rounded-md border border-gray-300"
             required
+            name="nationality"
           >
             <option *ngFor="let c of countries" [value]="c.name">
               {{ c.emoji }} {{ c.name }}
             </option>
-          </p-select>
+          </select>
         </div>
 
         <div>
           <label class="font-medium">Rol</label>
-          <p-select
+          <select
             [(ngModel)]="userToCreate.role_id"
             class="w-full h-[40px] rounded-md border border-gray-300"
             required
+            name="role"
           >
-            <option *ngFor="let r of roles" [value]="r.id">
+            <option *ngFor="let r of roles" [value]="r.id" >
               {{ r.name }} — {{ r.description }}
             </option>
-          </p-select>
+          </select>
         </div>
 
         <div>
           <label class="font-medium">Correo electrónico</label>
-          <p-input pInputText [(ngModel)]="userToCreate.mail" type="email" class="w-full" required />
+          <input pInputText [(ngModel)]="userToCreate.mail" type="email" name="email" class="w-full" required />
         </div>
 
         <div>
           <label class="font-medium">Teléfono</label>
-          <p-input pInputText [(ngModel)]="userToCreate.cell_phone" type="text" class="w-full" required />
+          <input pInputText [(ngModel)]="userToCreate.cell_phone" name="cell_phone" type="text" class="w-full" required />
         </div>
 
         <div>
           <label class="font-medium">Nombre de usuario</label>
-          <p-input pInputText [(ngModel)]="userToCreate.username" class="w-full" required />
+          <input pInputText [(ngModel)]="userToCreate.username" name="username" class="w-full" required />
         </div>
 
         <div>
           <label class="font-medium">Contraseña</label>
-          <p-input pInputText [(ngModel)]="userToCreate.password" type="password" class="w-full" required />
+          <input pInputText [(ngModel)]="userToCreate.password" name="password" type="password" class="w-full" required />
         </div>
       </form>
 

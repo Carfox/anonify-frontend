@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges, ɵɵsetComponentScope } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   CreateUser,
@@ -15,7 +15,7 @@ import { CountryItem } from 'app/core/interfaces/country.interface';
 import { forkJoin } from 'rxjs';
 import { SpinnerIcon } from 'primeng/icons';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
+import { SelectModule } from 'primeng/select';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -27,6 +27,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     CommonModule,
     SpinnerIcon,
     ProgressSpinnerModule,
+    SelectModule,
   ],
   providers: [MessageService],
   templateUrl: './users.component.html',
@@ -102,6 +103,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnChanges {
 
   createUser(event: Event): void {
     event.preventDefault();
+    console.log('Creando usuario', this.userToCreate);
     this.userService.createUser(this.userToCreate).subscribe({
       next: (res: any) => {
         if (!res.id) {
