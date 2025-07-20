@@ -22,17 +22,26 @@
     </a>
   </ng-template>
 
-  <ng-template #end>
-    <div class="flex items-center px-4 py-3">
-      <p-avatar
-        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-        class="mr-3"
-        shape="circle"
-      />
-      <div class="text-sm">
-        <div class="font-bold">Usuario</div>
-        <div class="text-gray-500 text-xs">Admin</div>
-      </div>
+<ng-template #end>
+  <div
+    class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-100 rounded transition"
+    (click)="navigateToUserInfo()"
+    title="Ver información de usuario"
+  >
+    <p-avatar
+      class="mr-3"
+      shape="circle"
+      styleClass="bg-[#02695d] text-white font-semibold"
+      size="large"
+      [label]="userName ? userName.charAt(0).toUpperCase() : '?'"
+      icon="pi pi-user"
+    />
+    <div class="text-sm">
+      <div class="font-bold">{{ userName }}</div>
+      <div class="text-gray-500 text-xs">{{ userRole }}</div>
     </div>
-  </ng-template>
+  </div>
+</ng-template>
+
+
 </p-menu>

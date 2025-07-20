@@ -26,10 +26,17 @@ import { BadgeModule } from 'primeng/badge';
 })
 export class NavbarComponent implements OnInit {
   items: MenuItem[] = [];
+  userName: string = '';
+  userRole: string = '';
 
   constructor(private router: Router, protected authService: AuthService) {}
 
   ngOnInit(): void {
+    this.authService.currentUser$.subscribe((user) => {
+      this.userName = user?.username || 'Usuario';
+      this.userRole = user?.role?.name || 'Sin rol';
+    });
+
     this.items = [
       {
         label: 'Inicio',
@@ -79,6 +86,10 @@ export class NavbarComponent implements OnInit {
   isActive(route: string): boolean {
     return this.router.url === route;
   }
+  navigateToUserInfo() {
+    this.router.navigate(['/a/user_information']);
+  }
+
 
   onLogout(): void {
     Swal.fire({
