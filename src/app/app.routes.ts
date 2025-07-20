@@ -25,8 +25,6 @@ import { EntitiesComponent } from './shared/pages/entities/entities.component';
 import { isLoggedInGuard } from './features/auth/guards/is-logged-in.guard';
 import { permissionGuard } from './features/auth/guards/permission.guard';
 
-// const auntService =
-
 const validate = (token: string | null = getToken()) => {
   let flag = false;
 
@@ -45,7 +43,7 @@ const validate = (token: string | null = getToken()) => {
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
-    path: 'anonify',
+    path: 'a',
     component: LayoutComponent,
     canMatch: [isLoggedInGuard],
 
@@ -57,24 +55,40 @@ export const routes: Routes = [
         canActivate: [permissionGuard],
         data: { permissions: ['view_project'] },
       },
-      { path: 'projects/:id', component: ProjectDetailPageComponent, canActivate: [permissionGuard],
-        data: { permissions: ['view_project'] },},
-      { path: 'projects/:id/:dataset', component: DatasetDetailPageComponent ,
+      {
+        path: 'projects/:id',
+        component: ProjectDetailPageComponent,
         canActivate: [permissionGuard],
-        data: { permissions: ['view_project','view_dataset','view_data'] },},
+        data: { permissions: ['view_project'] },
+      },
+      {
+        path: 'projects/:id/:dataset',
+        component: DatasetDetailPageComponent,
+        canActivate: [permissionGuard],
+        data: { permissions: ['view_project', 'view_dataset', 'view_data'] },
+      },
       { path: 'preprocess', component: PreprocessingComponent },
       { path: 'management', component: AdministrationComponent },
       { path: 'user_information', component: UserinfoComponent },
       { path: 'notifications', component: NotificationsComponent },
-      { path: 'users', component: UsersComponent ,
+      {
+        path: 'users',
+        component: UsersComponent,
         canActivate: [permissionGuard],
-        data: { permissions: ['view_user'] }, },
-      { path: 'roles', component: RolesComponent ,
+        data: { permissions: ['view_user'] },
+      },
+      {
+        path: 'roles',
+        component: RolesComponent,
         canActivate: [permissionGuard],
-        data: { permissions: ['view_role'] },},
-      { path: 'entities', component: EntitiesComponent,
+        data: { permissions: ['view_role'] },
+      },
+      {
+        path: 'entities',
+        component: EntitiesComponent,
         canActivate: [permissionGuard],
-        data: { permissions: ['view_entity'] }, },
+        data: { permissions: ['view_entity'] },
+      },
       { path: 'a', component: AnonymizationPageComponent },
       { path: '**', redirectTo: 'home' },
     ],

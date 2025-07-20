@@ -16,10 +16,7 @@ html {
   font-size: 14px;
 }
 
-html.my-app-dark {
-  background-color: #636363;
-  color: #f0f0f0;
-}
+
 
 body {
   font-family: var(--font-family);
@@ -53,5 +50,4 @@ body {
   font-weight: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: light-dark(var(--p-surface-0), var(--p-surface-950));
 }

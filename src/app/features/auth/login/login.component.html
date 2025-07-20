@@ -1,106 +1,95 @@
-<div
-  class="flex items-center justify-center min-h-screen bg-surface-50 dark:bg-surface-800"
->
+<div class="min-h-screen flex items-center justify-center bg-[#fefcf7] px-4">
   <div
-    class="card p-6 shadow-md bg-surface-0 dark:bg-surface-900 rounded-border w-full sm:w-[30rem]"
+    class="bg-white rounded-xl shadow-md w-full max-w-md p-8 border border-gray-200"
   >
-    <h2 class="text-center mb-4">Bienvenido</h2>
-    <p class="text-center mb-6 text-secondary">
-      Por favor, ingresa tus credenciales
+    <!-- Título -->
+    <h2 class="text-2xl font-bold text-center text-[#027e6f] mb-2">
+      Bienvenido
+    </h2>
+    <p class="text-center text-gray-600 mb-6">
+      Ingresa tus credenciales para continuar
     </p>
-    <form [formGroup]="loginForm" (ngSubmit)="login($event)">
-      <!-- Campo de Usuario -->
-      <div class="flex flex-col mb-6 justify-center items-center">
-        <div class="w-full"></div>
 
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <!-- <i class="pi pi-user"></i> -->
-          </span>
-          <label
-            for="username"
-            class="flex text-surface-900 dark:text-surface-0 font-medium mb-2"
-            >Usuario</label
-          >
-          <div class="flex-col w-full rounded-border mb-4">
-            <input
-              id="username"
-              type="text"
-              class="w-[208px]"
-              pInputText
-              placeholder="Ingresa tu usuario"
-              formControlName="username"
-              [class.ng-invalid]="
-                loginForm.get('username')?.invalid &&
-                loginForm.get('username')?.touched
-              "
-            />
-          </div>
-          <small
-            *ngIf="
-              loginForm.get('username')?.invalid &&
-              loginForm.get('username')?.touched
-            "
-            class="p-error"
-          >
-            El usuario es requerido.
-          </small>
-        </div>
+    <form [formGroup]="loginForm" (ngSubmit)="login($event)" class="space-y-6">
+      <!-- Usuario -->
+      <div>
+        <label
+          for="username"
+          class="block mb-1 text-sm font-medium text-gray-700"
+          >Usuario</label
+        >
+        <input
+          pInputText
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Ingresa tu usuario"
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#027e6f]"
+          [class.p-invalid]="
+            loginForm.get('username')?.invalid &&
+            loginForm.get('username')?.touched
+          "
+        />
+        <small
+          *ngIf="
+            loginForm.get('username')?.invalid &&
+            loginForm.get('username')?.touched
+          "
+          class="text-red-500 text-xs mt-1 block"
+        >
+          El usuario es requerido.
+        </small>
       </div>
 
-      <!-- Campo de Contraseña -->
-      <div class="flex flex-col justify-center items-center mb-6">
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <!-- <i class="pi pi-lock"></i> -->
-          </span>
+      <!-- Contraseña -->
+      <div>
+        <label
+          for="password"
+          class="block mb-1 text-sm font-medium text-gray-700"
+          >Contraseña</label
+        >
+        <p-password
+          inputId="password"
+          formControlName="password"
+          placeholder="Ingresa tu contraseña"
+          [feedback]="false"
+          toggleMask="true"
+          styleClass="w-full"
+          [inputStyle]="{
+            width: '100%',
+            padding: '0.5rem 1rem',
+            borderRadius: '0.5rem',
+            border: '1px solid #d1d5db'
+          }"
+        />
 
-          <label
-            for="password"
-            class="flex text-surface-900 dark:text-surface-0 font-medium mb-2"
-            >Contraseña</label
-          >
-
-          <p-password
-            class="flex-col w-full rounded-border mb-4"
-            id="password"
-            placeholder="Ingresa tu contraseña"
-            formControlName="password"
-            toggleMask
-            [feedback]="false"
-          ></p-password>
-          <small
-            *ngIf="
-              loginForm.get('password')?.invalid &&
-              loginForm.get('password')?.touched
-            "
-            class="p-error"
-          >
-            La contraseña es requerida.
-          </small>
-        </div>
+        <small
+          *ngIf="
+            loginForm.get('password')?.invalid &&
+            loginForm.get('password')?.touched
+          "
+          class="text-red-500 text-xs mt-1 block"
+        >
+          La contraseña es requerida.
+        </small>
       </div>
 
-      <!-- Botón de inicio de sesión -->
-
-      <div class="w-full flex justify-center items-center mb-6">
-        <p-button
-          label="Iniciar Sesión"
+      <!-- Botón -->
+      <div>
+        <button
           type="submit"
-          [loading]="isSubmitting"
-          [disabled]="loginForm.invalid"
-          
-        ></p-button>
+          class="w-full bg-[#027e6f] hover:bg-[#02695d] text-white font-semibold py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+          [disabled]="loginForm.invalid || isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">Iniciar Sesión</span>
+          <span *ngIf="isSubmitting">Cargando...</span>
+        </button>
       </div>
 
-      <!-- Enlaces auxiliares -->
-      <div class="flex justify-between mt-6">
-        <a href="#" class="text-secondary text-sm no-underline hover:underline"
-          >Olvidé mi contraseña</a
-        >
-        <a href="#" class="text-secondary text-sm no-underline hover:underline"
-          >Crear cuenta</a
-        >
+      <!-- Enlaces -->
+      <div class="flex justify-between text-sm text-gray-500">
+        <a href="#" class="hover:underline">¿Olvidaste tu contraseña?</a>
+        <a href="#" class="hover:underline">Crear cuenta</a>
       </div>
     </form>
   </div>
