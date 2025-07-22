@@ -1,11 +1,11 @@
 <main
-  class="w-screen pt-[150px] min-h-screen border-2 border-red-700 flex justify-center flex-col items-center"
+  class="w-full pt-[10px] min-h-screen flex flex-col items-center"
 >
   <!-- contenedor project detail page -->
 
   <!-- seccion de informaicon general -->
   <div
-    class="border-2 md:w-[80%] max-md:w-[95%] border-yellow-500 flex flex-col"
+    class="md:w-[80%] max-md:w-[95%] flex flex-col"
   >
     <!-- NUEVA INTEGRACION DE DISEÑO -->
     <div class="w-full flex justify-end"></div>
@@ -58,7 +58,7 @@
   </div>
   <!-- seccion botones -->
   <div
-    class="border-2 md:w-[80%] max-md:w-[95%] border-yellow-500 flex flex-col"
+    class="md:w-[80%] max-md:w-[95%] flex flex-col"
     *ngIf="authService.hasPermission('upload_data') || authService.hasPermission('edit_project') || authService.hasPermission('delete_project')"
   >
     <!-- informacion general Proyectos -->
@@ -217,8 +217,8 @@
   <!-- contenedor de carga de datasets test  -->
 
   <!-- contenedor tabla de datasets -->
-  <div class="border-2 md:w-[80%] max-md:w-[95%] border-green-600">
-    tabla de datasets
+  <div class="md:w-[80%] max-md:w-[95%]">
+    <!-- tabla de datasets -->
     <table class="w-full">
       <thead class="bg-gray-200">
         <tr>
