@@ -91,7 +91,7 @@ export class ProjectDetailPageComponent implements OnInit {
   private websocketSubscription: Subscription | null = null;
 
   private messageService = inject(MessageService);
-  
+
 
   ngOnInit(): void {
     // Suscribirse a los parámetros de la ruta
@@ -205,7 +205,7 @@ export class ProjectDetailPageComponent implements OnInit {
   onDatasetInfo(event: Event, dataset_id: string) {
     event.preventDefault();
     console.log('este es el id del dataset:', dataset_id);
-    this.router.navigate(['anonify/projects', this.projectID, dataset_id]);
+    this.router.navigate(['a/projects', this.projectID, dataset_id]);
   }
   onDeleteProject(projectID: string) {
       Swal.fire({
@@ -217,7 +217,7 @@ export class ProjectDetailPageComponent implements OnInit {
         confirmButtonColor: '#F77070',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-  
+
         // denyButtonText: `Don't save`,
       }).then((result) => {
         if (result.isConfirmed) {
@@ -226,7 +226,7 @@ export class ProjectDetailPageComponent implements OnInit {
               console.log('Respuesta del servidor', res);
               // this.getAllProjects();
 
-              this.router.navigate(['anonify/projects']);
+              this.router.navigate(['a/projects']);
 
               this.messageService.add({
                 severity: 'success',

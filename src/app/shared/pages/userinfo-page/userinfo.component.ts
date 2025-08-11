@@ -10,7 +10,7 @@ import { UserService } from 'app/features/users/user.service';
   styleUrl: './userinfo.component.css',
 })
 export class UserinfoComponent implements OnInit {
-  
+
   userInfo: UserPublic = {
     id: '',
     name: '',

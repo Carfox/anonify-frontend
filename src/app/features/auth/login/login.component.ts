@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
               title: 'Inicio de sesion correcto',
               text: 'Bienvenido al sistema',
             }).finally(() => {
-              this.router.navigate(['/anonify/home']);
+              this.router.navigate(['/a/home']);
             });
           },
           error: (err) => {

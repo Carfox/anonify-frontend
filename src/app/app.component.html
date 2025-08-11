@@ -1,1 +1,10 @@
-<router-outlet />
+<p-progressSpinner
+  *ngIf="isLoading$"
+  styleClass="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50"
+  [style]="{ width: '60px', height: '60px' }"
+  strokeWidth="4"
+  animationDuration=".5s"
+  aria-label="Cargando..."
+></p-progressSpinner>
+
+<router-outlet></router-outlet>

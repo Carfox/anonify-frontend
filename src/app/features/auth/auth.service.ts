@@ -22,12 +22,16 @@ interface JwtPayload {
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {
-    this.loadUserPermissionsFromToken(); 
-  }
-  // Use BehaviorSubject to hold and emit the current user's permissions
+  private currentUserSubject = new BehaviorSubject<any>(null); // 👈 FALTABA ESTA LÍNEA
+  public currentUser$ = this.currentUserSubject.asObservable();
+
   private userPermissionsSubject = new BehaviorSubject<string[]>([]);
   public userPermissions$ = this.userPermissionsSubject.asObservable();
+
+  constructor(private http: HttpClient) {
+    this.loadUserPermissionsFromToken();
+  }
+  // Use BehaviorSubject to hold and emit the current user's permissions
   private router = inject(Router);
 
   private apiUrl = environment.apiUrl;
@@ -56,13 +60,34 @@ export class AuthService {
       );
   }
 
-  validateToken() {
+  validateToken(): Observable<any> {
     const token = getToken();
-    return this.http.get(`${this.apiUrl}/api/validate_token`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    return this.http
+      .get(`${this.apiUrl}/api/validate_token`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .pipe(
+        tap((user: any) => {
+          this.currentUserSubject.next(user); // Guardar usuario si es válido
+        }),
+        catchError((err) => {
+          this.currentUserSubject.next(null);
+          return of(null); // devuelve null si falla
+        })
+      );
+  }
+
+  get currentUser() {
+    return this.currentUserSubject.value;
+  }
+
+  // Útil si quieres obtener username directamente
+  get username(): string {
+    return this.currentUser?.username || 'Usuario';
+  }
+
+  get userRole(): string {
+    return this.currentUser?.role?.name || 'Sin rol';
   }
   logout() {
     const token = getToken();
