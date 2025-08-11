@@ -119,6 +119,14 @@
           <!-- content Opciones avanzadas -->
           <div class="p-5 border border-t-0 border-gray-200 text-black">
             <div class="flex w-full flex-col">
+              <button
+                class="p-4 bg-secondary w-[200px]"
+                (click)="showSelectionDialog()"
+              >
+                Agregar Acción
+              </button>
+
+              <h1>Limpieza de datos:</h1>
               <label for="cleanmode-radio-1" class="py-2"
                 >Que desea hacer con los datos incompletos</label
               >
@@ -135,7 +143,7 @@
                 <label
                   for="cleanmode-radio-1"
                   class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Dejar que la herramienta use la opcion mas recomendada</label
+                  >Dejar que la herramienta use la opción mas recomendada</label
                 >
               </div>
               <div class="flex items-center">
@@ -151,7 +159,7 @@
                 <label
                   for="preprocesing-radio-2"
                   class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Eliminacion de datos incompletos</label
+                  >Eliminación de datos incompletos</label
                 >
               </div>
               <div class="flex items-center">
@@ -167,7 +175,7 @@
                 <label
                   for="preprocesing-radio-3"
                   class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Imputacion de datos incompletos</label
+                  >Imputación de datos incompletos</label
                 >
               </div>
               <div class="flex items-center">
@@ -187,8 +195,111 @@
                 >
               </div>
             </div>
+
+            <!-- pregunta 2 -->
+            <div class="flex w-full flex-col">
+              <h1>Técnica de imputación de datos:</h1>
+              <label for="cleanmode-radio-1" class="py-2"
+                >Que técnica de imputación usara:</label
+              >
+
+              <div class="flex items-center">
+                <input
+                  checked
+                  id="cleanmode-radio-2"
+                  type="radio"
+                  [value]="2"
+                  name="cleanmode"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  [(ngModel)]="this.needPreprocessing"
+                />
+                <label
+                  for="preprocesing-radio-2"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >KNN</label
+                >
+              </div>
+              <div class="flex items-center">
+                <input
+                  checked
+                  id="cleanmode-radio-3"
+                  type="radio"
+                  [value]="3"
+                  name="cleanmode"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  [(ngModel)]="this.cleanMode"
+                />
+                <label
+                  for="preprocesing-radio-3"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >Imputación de datos incompletos</label
+                >
+              </div>
+              <div class="flex items-center">
+                <input
+                  checked
+                  id="cleanmode-radio-4"
+                  type="radio"
+                  [value]="4"
+                  name="cleanmode"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  [(ngModel)]="this.cleanMode"
+                />
+                <label
+                  for="preprocesing-radio-4"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >No hacer nada con los datos incompletos</label
+                >
+              </div>
+            </div>
+            <!-- fin pregunta 2 -->
+
+            <!-- salida de acciones -->
           </div>
           <!-- fin contenedor opciones avanzadas -->
+        </div>
+      </div>
+    </div>
+    <div class="mb-6 w-full">
+      <div class="flex w-full justify-between">
+        <div class="relative overflow-x-auto shadow-md rounded-lg w-full">
+          <label class="block font-semibold my-2"
+            >Acciones del preprocesamiento</label
+          >
+          <table class="w-full text-sm text-left text-gray-700">
+            <thead class="text-xs uppercase bg-gray-100 text-gray-700">
+              <tr>
+                <th class="px-6 py-3">Acciones</th>
+                <th class="px-6 py-3">Orden de aplicación</th>
+                <th class="px-6 py-3">Técnica</th>
+                <th class="px-6 py-3">Valor a enviar</th>
+
+                <!-- <th class="px-6 py-3">Rol</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              @for (steps of preprocessingSteps; track steps; let i = $index) {
+              <tr class="bg-white border-b hover:bg-gray-50">
+                <td class="px-6 py-4">
+                  <button class="bg-red-400 text-white p-2 rounded-md text-center">
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </td>
+                <td class="px-6 py-4">{{ i + 1 }}</td>
+                <td class="px-6 py-4">{{ steps.technique }}</td>
+                <td class="px-6 py-4">{{ steps.value }}</td>
+
+                <!-- <td class="px-6 py-4">{{ user.role.name }}</td> -->
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="4" class="text-center px-4 py-4 text-gray-500">
+                  No se ha especificado un paso de preprocesamiento
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -245,4 +356,173 @@
       </button>
     </div>
   </form>
+
+  <!-- dialog de eleccion -->
+  <p-dialog
+    [(visible)]="show_selection_dialog"
+    [modal]="true"
+    [style]="{ width: '90%' }"
+  >
+    <ng-template #header>
+      <span class="font-bold whitespace-nowrap"
+        >Selección de características</span
+      >
+    </ng-template>
+
+    <span class="text-gray-500 block mb-6"
+      >Seleccione las columnas y la técnica que se usara en estas:</span
+    >
+
+    <div class="mb-6">
+      <label class="block font-semibold mb-2">Técnica</label>
+      <select
+        [(ngModel)]="technique_selected"
+        class="border border-gray-400 outline-secondary rounded-md p-2 w-full"
+      >
+        <option
+          *ngFor="let technique of clean_methods"
+          [value]="technique.value"
+        >
+          {{ technique.name }}
+          <i
+            class="pi pi-question-circle bg-black"
+            title="technique.description"
+          ></i>
+        </option>
+      </select>
+    </div>
+    <!-- valor fijo a agregar NOTA: Esto solo se visualizara cuando se elija la técnica de imputación por valores fijos-->
+
+    <div *ngIf="technique_selected == 'const_value'">
+      <label for="in_const_value" class="block font-semibold mb-2"
+        >Texto a agregar en datos faltantes:
+        <i
+          class="pi pi-question-circle"
+          title="Este es el valor fijo que se va a remplazar en los las columnas seleccionadas "
+        ></i>
+      </label>
+      <input
+        id="in_const_value"
+        type="text"
+        placeholder="Ingrese el valor constante"
+        class="p-2 border-gray-400 outline-secondary border-[1px] my-2 rounded-md w-full"
+      />
+    </div>
+    <div *ngIf="technique_selected == 'delete'">
+      <label for="in_delete" class="block font-semibold mb-2"
+        >Porcentaje de atributos vacíos:
+        <i
+          class="pi pi-question-circle"
+          title="Este valor representa el porcentaje de atributos vacíos que tiene que tener el dato para ser eliminado"
+        ></i
+      ></label>
+      <input
+        type="range"
+        id="in_delete"
+        name="in_delete"
+        min="0"
+        [max]="max_columns"
+        step="1"
+        [(ngModel)]="numberToUseOnDelete"
+      />
+      Valor: {{ numberToUseOnDelete }}
+    </div>
+
+    <div class="mb-6">
+      <div class="flex w-full justify-between">
+        <div class="relative overflow-x-auto shadow-md rounded-lg w-[48%]">
+          <label class="block font-semibold mb-2"
+            >Características de dataset</label
+          >
+          <table class="w-full text-sm text-left text-gray-700">
+            <thead class="text-xs uppercase bg-gray-100 text-gray-700">
+              <tr>
+                <th class="px-6 py-3">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="isSelectedAll"
+                    (change)="toggleAllColumns($event.target.checked)"
+                    class="w-4 h-4 text-blue-600 border-gray-300 rounded"
+                  />
+                </th>
+                <th class="px-6 py-3">Nombre Característica</th>
+                <th class="px-6 py-3">Tipo de Dato</th>
+                <!-- <th class="px-6 py-3">Rol</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              @for (column of dataset.files[0].columns; track column) {
+              <tr class="bg-white border-b hover:bg-gray-50">
+                <td class="px-6 py-4">
+                  <input
+                    type="checkbox"
+                    [checked]="selectedColumns.includes(column)"
+                    (change)="
+                      toggleColumnSelection(column, $event.target.checked)
+                    "
+                    class="w-4 h-4 text-blue-600 border-gray-300 rounded"
+                  />
+                </td>
+                <td class="px-6 py-4">{{ column.name }}</td>
+                <td class="px-6 py-4">{{ column.column_type.name }}</td>
+                <!-- <td class="px-6 py-4">{{ user.role.name }}</td> -->
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="4" class="text-center px-4 py-4 text-gray-500">
+                  No hay información de las columnas disponible.
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="relative overflow-x-auto shadow-md rounded-lg w-[48%]">
+          <label class="block font-semibold mb-2"
+            >Características seleccionadas</label
+          >
+          <table class="w-full text-sm text-left text-gray-700">
+            <thead class="text-xs uppercase bg-gray-100 text-gray-700">
+              <tr>
+                <th class="px-6 py-3">Nombre Característica</th>
+                <th class="px-6 py-3">Tipo de Dato</th>
+                <!-- <th class="px-6 py-3">Rol</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              @for (column of selectedColumns; track column) {
+              <tr class="bg-white border-b hover:bg-gray-50">
+                <td class="px-6 py-4">{{ column.name }}</td>
+                <td class="px-6 py-4">{{ column.column_type.name }}</td>
+                <!-- <td class="px-6 py-4">{{ user.role.name }}</td> -->
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="4" class="text-center px-4 py-4 text-gray-500">
+                  No hay Columnas seleccionadas.
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #footer>
+      <p-button
+        label="Cancelar"
+        [text]="true"
+        severity="secondary"
+        (click)="show_selection_dialog = false"
+      />
+      <p-button
+        label="Agregar Proceso"
+        [outlined]="true"
+        severity="secondary"
+        (click)="share = false"
+        (onClick)="savePreprocessStep()"
+      />
+    </ng-template>
+  </p-dialog>
 </div>

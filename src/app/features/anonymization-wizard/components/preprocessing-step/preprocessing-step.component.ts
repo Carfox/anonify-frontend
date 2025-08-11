@@ -9,21 +9,26 @@ import {
   Output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Dataset } from 'app/core/interfaces/dataset.interface';
+import { Columns, Dataset } from 'app/core/interfaces/dataset.interface';
 import { Entity } from 'app/core/interfaces/entity.interface';
 import { WebSocketMessage } from 'app/core/interfaces/websocket.interface';
 import { WebSocketService } from 'app/core/services/websocket.service';
 import { environment } from 'environments/environment.development';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { Subscription } from 'rxjs';
+import { count, filter, Subscription } from 'rxjs';
 import DatasetPreprocess from './preprocess.interface';
 import { PreprocessService } from './preprocess.service';
+import {
+  preprocessStep,
+  preprocessTechnique,
+} from 'app/core/interfaces/preprocess.interface';
+import { Dialog } from 'primeng/dialog';
 
 @Component({
   selector: 'aw-preprocessing-step',
   standalone: true,
-  imports: [ButtonModule, CommonModule, FormsModule],
+  imports: [ButtonModule, CommonModule, FormsModule, Dialog],
   providers: [MessageService],
   templateUrl: './preprocessing-step.component.html',
   styleUrl: './preprocessing-step.component.css',
@@ -50,6 +55,53 @@ export class PreprocessingStepComponent {
   outMessage: string = 'SALIDA:';
   showProgress: boolean = true;
   infoToSend: DatasetPreprocess;
+  technique_selected: string;
+  show_selection_dialog: boolean = false;
+  selectedColumns: Columns[] = [];
+  isSelectedAll: boolean = false;
+  numberToUseOnDelete: number = 0;
+  max_cols: number = 10;
+
+  clean_methods: preprocessTechnique[] = [
+    {
+      name: 'Por defecto',
+      value: 'default',
+      description:
+        'Dejar que el sistema defina la técnica de preprocesamiento para las columnas seleccionadas.',
+    },
+    {
+      name: 'Eliminar Datos',
+      value: 'delete',
+      description:
+        'Eliminar los datos que contengan un numero mayor de datos faltantes en base a un porcentaje (%) del numero de columnas total de dataset.',
+    },
+    {
+      name: 'Imputación por valor constante',
+      value: 'const_value',
+      description:
+        'Para aquellos datos que estén vacíos se remplaza por un valor fijo definido.',
+    },
+    {
+      name: 'Imputación por Media Aritmética',
+      value: 'media_impute',
+      description:
+        'Los valores faltantes se remplazan por la media de los datos del atributo. NOTA: Solo se puede usar en valores numericos.',
+    },
+    {
+      name: 'Imputación por KNN',
+      value: 'knn_impute',
+      description:
+        'Los valores faltantes se remplazan por los valores cercanos a valores vecinos.',
+    },
+    {
+      name: 'Imputación por Moda',
+      value: 'most_frecuent',
+      description:
+        'Los valores faltantes se remplazan por el valor mas frecuente del atributo',
+    },
+  ];
+
+  preprocessingSteps: preprocessStep[] = [];
 
   private websocketSubscription: Subscription | null = null;
   // private messageService = inject(MessageService);
@@ -106,7 +158,9 @@ export class PreprocessingStepComponent {
           }
           if (this.preprocessingProgress === 100 || message.error) {
             this.preprocessingStatus = message.error ? 'Error' : 'Completado';
-            this.outMessage += message.error ? `\n${message.error}` : '\nPreprocesamiento Finalizado.';
+            this.outMessage += message.error
+              ? `\n${message.error}`
+              : '\nPreprocesamiento Finalizado.';
             this.webSocketService.close();
             console.log('Cerrando conexión WebSocket.');
             if (this.websocketSubscription) {
@@ -118,7 +172,8 @@ export class PreprocessingStepComponent {
         error: (err) => {
           console.error('Error en Websocket', err);
           this.preprocessingStatus = 'Error';
-          this.outMessage +=  'Fallo en la conexión o comunicación con el servidor.';
+          this.outMessage +=
+            'Fallo en la conexión o comunicación con el servidor.';
           this.preprocessingProgress = 0;
           this.cdr.detectChanges();
         },
@@ -166,13 +221,12 @@ export class PreprocessingStepComponent {
               'Archivo subido correctamente. Seguimiento de carga iniciado.',
             life: 3000,
           });
-        }
-        else{
-
+        } else {
           this.preprocessingStatus = 'Error';
 
           console.error('El backend no devolvió un ID de operación.');
-          this.outMessage +='El backend no devolvió un ID de operación para el seguimiento.';
+          this.outMessage +=
+            'El backend no devolvió un ID de operación para el seguimiento.';
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -228,5 +282,54 @@ export class PreprocessingStepComponent {
       this.websocketSubscription = null;
     }
     this.cdr.detectChanges();
+  }
+  showSelectionDialog() {
+    this.max_cols = this.dataset.files[0].columns.length;
+    console.log('Total de columnas', this.max_cols);
+    this.show_selection_dialog = true;
+  }
+  savePreprocessStep() {
+    // todo el codig y al final se cierra el dialog
+    const dataToAdd: preprocessStep = {
+      columns: this.selectedColumns,
+      value: this.technique_selected =="delete"? this.numberToUseOnDelete: 0,
+      technique: this.technique_selected
+    }
+
+    this.preprocessingSteps = this.preprocessingSteps.concat(dataToAdd)
+    console.log(this.preprocessingSteps)
+    this.selectedColumns = []
+    this.technique_selected = ""
+    
+
+    this.show_selection_dialog = false;
+  }
+  toggleColumnSelection(column: Columns, checked: boolean): void {
+    if (checked) {
+      if (!this.selectedColumns.includes(column)) {
+        this.selectedColumns.push(column);
+      }
+    } else {
+      if (this.isSelectedAll == true) {
+        this.isSelectedAll = false;
+        // this.cdr.detectChanges()
+      }
+
+      this.selectedColumns = this.selectedColumns.filter(
+        (column) => column.id !== column.id
+      );
+    }
+  }
+  toggleAllColumns(checked: boolean) {
+    if (checked) {
+      this.selectedColumns = [];
+      this.selectedColumns = this.selectedColumns.concat(
+        this.dataset.files[0].columns
+      );
+      // this.cdr.detectChanges()
+    } else {
+      this.selectedColumns = [];
+      // this.cdr.detectChanges()
+    }
   }
 }
