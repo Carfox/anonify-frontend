@@ -48,4 +48,5 @@ interface FileInterface {
   rows: number
   columns: Columns[];
   dataset_id: string; // ID del dataset al que pertenece
+  detail: string
 }

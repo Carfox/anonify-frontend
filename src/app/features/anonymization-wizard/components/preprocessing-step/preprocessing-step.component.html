@@ -4,8 +4,28 @@
     onsubmit="onSubmitPreprocessing($event)"
     class="flex flex-col justify-center items-center"
   >
-    <!-- pregunta 1 contenedor -->
     <div class="w-full">
+      <!-- Pregunta 1 Entidad -->
+      <label for="selected-entity" class="py-2"
+        >Seleccione una entidad de origen de los Datos:
+        <i
+          class="pi pi-question-circle"
+          title="Es la entidad de origen de los datos, &#10;al momento de hacer el preprocesamiento es necesario especificar el origen del dataset&#10;NOTA: esta entidad se puede agregar en en area de entidades en el caso de que no exista."
+        ></i
+      ></label>
+      <div class="flex mb-4 items-center justify-center">
+        <select
+          [(ngModel)]="this.selectedEntity"
+          name="selected-entity"
+          id=""
+          class="border-[1px] border-gray-400 bg-primary p-2 my-2 rounded-md outline-secondary"
+        >
+          <option *ngFor="let entity of entities" [value]="entity">
+            {{ entity.name }}
+          </option>
+        </select>
+      </div>
+      <!-- pregunta 2 necesita preprocesamiento -->
       <label for="default-radio-1" class="py-2"
         >El dataset seleccionado necesita un trabajo de preprocesamiento?</label
       >
@@ -21,11 +41,11 @@
         />
         <label
           for="preprocessing-radio-1"
-          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          class="ms-2 text-sm font-medium text-gray-900"
           >Si</label
         >
       </div>
-      <div class="flex items-center">
+      <div class="flex items-center py-2">
         <input
           checked
           id="preprocessing-radio-2"
@@ -37,39 +57,61 @@
         />
         <label
           for="preprocesing-radio-2"
-          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          class="ms-2 text-sm font-medium text-gray-900"
           >No</label
         >
       </div>
-
-      <!-- contenedor radio button -->
+      <!-- pregunta tres dejar las configuraciones por defecto -->
       <label for="selected-entity" class="py-2"
-        >Seleccione una entidad de origen de los Datos:</label
-      >
-      <div class="flex mb-4 items-center justify-center">
-        <select
-          [(ngModel)]="this.selectedEntity"
-          name="selected-entity"
-          id=""
-          class="border-[1px] border-gray-400 bg-primary p-2 my-2 rounded-md"
+        >Desea que el preprocesamiento se realice automáticamente con las
+        configuraciones por defecto?
+        <i
+          class="pi pi-question-circle"
+          title="SI: el preprocesamiento se hará con las configuraciones por defecto &#10;NO: Se tiene que especificar cada paso con las columnas y técnica que se usara, en opciones avanzadas."
+        ></i
+      ></label>
+      <div class="flex items-center mb-4">
+        <input
+          id="question-3-radio-1"
+          type="radio"
+          [value]="true"
+          name="question-3-radio-1"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          [(ngModel)]="needSpecs"
+          (ngModelChange)="onNeedSpecsChange($event)"
+        />
+        <label
+          for="question-3-radio-1"
+          class="ms-2 text-sm font-medium text-gray-900"
+          >Si</label
         >
-          <!-- @for (entity of this.entities; track entity) {
-      <option value="entity.id" *ngFor="let entity of this.entities">
-        {{ entity.name }}
-      </option>
-      
-      } -->
-
-          <option *ngFor="let entity of entities" [value]="entity">
-            {{ entity.name }}
-          </option>
-        </select>
+      </div>
+      <div class="flex items-center py-2">
+        <input
+          checked
+          id="question-3-radio-2"
+          type="radio"
+          [value]="false"
+          name="question-3-radio-2"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          [(ngModel)]="needSpecs"
+          (ngModelChange)="onNeedSpecsChange($event)"
+        />
+        <label
+          for="question-3-radio-2"
+          class="ms-2 text-sm font-medium text-gray-900"
+          >No</label
+        >
       </div>
     </div>
 
-    <!-- acordion de opciones avanzadas  -->
+    <!-- accordion de opciones avanzadas  -->
 
-    <div id="accordion-open" data-accordion="open" class="bg-slate-200 w-full">
+    <div
+      id="accordion-open"
+      data-accordion="open"
+      class="bg-slate-200 w-full disabled:opacity-50"
+    >
       <div>
         <h2 id="accordion-open-heading-1">
           <button
@@ -80,17 +122,7 @@
             (click)="showAdvancedOptions($event)"
           >
             <span class="flex items-center text-start">
-              <svg
-                class="w-5 h-5 me-2 shrink-0 fill-black stroke-white"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
+              <i class="pi pi-question-circle mx-4"></i>
               Opciones avanzadas
             </span>
             <svg
@@ -113,155 +145,180 @@
         </h2>
         <div
           id="accordion-open-body-1"
-          class="max-h-0 duration-300 overflow-hidden border-[1px] border-gray-400 h-[300px] bg-primary"
+          class="max-h-0 duration-300 overflow-hidden border-[1px] border-gray-400 h-full bg-primary"
           aria-labelledby="accordion-open-heading-1"
         >
           <!-- content Opciones avanzadas -->
           <div class="p-5 border border-t-0 border-gray-200 text-black">
-            <div class="flex w-full flex-col">
-              <button
-                class="p-4 bg-secondary w-[200px]"
-                (click)="showSelectionDialog()"
-              >
-                Agregar Acción
-              </button>
+            <div class="flex w-full flex-col justify-center items-center">
+              <!-- contenedor de preguntas avanzadas -->
+              <div class="w-full">
+                <h1 class="font-bold">Limpieza de datos:</h1>
+                <label for="cleanmode-radio-1" class="py-2"
+                  >Que desea hacer con los datos incompletos</label
+                >
 
-              <h1>Limpieza de datos:</h1>
-              <label for="cleanmode-radio-1" class="py-2"
-                >Que desea hacer con los datos incompletos</label
-              >
+                <div class="flex items-center">
+                  <input
+                    id="cleanmode-radio-1"
+                    type="radio"
+                    [value]="1"
+                    name="cleanmode"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    [(ngModel)]="this.cleanMode"
+                  />
+                  <label
+                    for="cleanmode-radio-1"
+                    class="ms-2 text-sm font-medium text-gray-900"
+                    >Dejar que la herramienta use la opción mas
+                    recomendada</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="cleanmode-radio-2"
+                    type="radio"
+                    [value]="2"
+                    name="cleanmode"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    [(ngModel)]="this.needPreprocessing"
+                  />
+                  <label
+                    for="preprocesing-radio-2"
+                    class="ms-2 text-sm font-medium text-gray-900"
+                    >Eliminación de datos incompletos</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="cleanmode-radio-3"
+                    type="radio"
+                    [value]="3"
+                    name="cleanmode"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    [(ngModel)]="this.cleanMode"
+                  />
+                  <label
+                    for="preprocesing-radio-3"
+                    class="ms-2 text-sm font-medium text-gray-900"
+                    >Imputación de datos incompletos</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="cleanmode-radio-4"
+                    type="radio"
+                    [value]="4"
+                    name="cleanmode"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    [(ngModel)]="this.cleanMode"
+                  />
+                  <label
+                    for="preprocesing-radio-4"
+                    class="ms-2 text-sm font-medium text-gray-900"
+                    >No hacer nada con los datos incompletos</label
+                  >
+                </div>
+              </div>
 
-              <div class="flex items-center">
-                <input
-                  id="cleanmode-radio-1"
-                  type="radio"
-                  [value]="1"
-                  name="cleanmode"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  [(ngModel)]="this.cleanMode"
-                />
-                <label
-                  for="cleanmode-radio-1"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Dejar que la herramienta use la opción mas recomendada</label
+              <!-- pregunta 2 -->
+              <div class="flex w-full flex-col">
+                <h1>Técnica de imputación de datos:</h1>
+                <label for="cleanmode-radio-1" class="py-2"
+                  >Que técnica de imputación usara:</label
                 >
+
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="cleanmode-radio-2"
+                    type="radio"
+                    [value]="2"
+                    name="cleanmode"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    [(ngModel)]="this.needPreprocessing"
+                  />
+                  <label
+                    for="preprocesing-radio-2"
+                    class="ms-2 text-sm font-medium text-gray-900"
+                    >KNN</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="cleanmode-radio-3"
+                    type="radio"
+                    [value]="3"
+                    name="cleanmode"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    [(ngModel)]="this.cleanMode"
+                  />
+                  <label
+                    for="preprocesing-radio-3"
+                    class="ms-2 text-sm font-medium text-gray-900"
+                    >Imputación de datos incompletos</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    checked
+                    id="cleanmode-radio-4"
+                    type="radio"
+                    [value]="4"
+                    name="cleanmode"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    [(ngModel)]="this.cleanMode"
+                  />
+                  <label
+                    for="preprocesing-radio-4"
+                    class="ms-2 text-sm font-medium text-gray-900"
+                    >No hacer nada con los datos incompletos</label
+                  >
+                </div>
               </div>
-              <div class="flex items-center">
-                <input
-                  checked
-                  id="cleanmode-radio-2"
-                  type="radio"
-                  [value]="2"
-                  name="cleanmode"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  [(ngModel)]="this.needPreprocessing"
-                />
-                <label
-                  for="preprocesing-radio-2"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Eliminación de datos incompletos</label
-                >
-              </div>
-              <div class="flex items-center">
-                <input
-                  checked
-                  id="cleanmode-radio-3"
-                  type="radio"
-                  [value]="3"
-                  name="cleanmode"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  [(ngModel)]="this.cleanMode"
-                />
-                <label
-                  for="preprocesing-radio-3"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Imputación de datos incompletos</label
-                >
-              </div>
-              <div class="flex items-center">
-                <input
-                  checked
-                  id="cleanmode-radio-4"
-                  type="radio"
-                  [value]="4"
-                  name="cleanmode"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  [(ngModel)]="this.cleanMode"
-                />
-                <label
-                  for="preprocesing-radio-4"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >No hacer nada con los datos incompletos</label
-                >
-              </div>
+              <!-- fin pregunta 2 -->
             </div>
-
-            <!-- pregunta 2 -->
-            <div class="flex w-full flex-col">
-              <h1>Técnica de imputación de datos:</h1>
-              <label for="cleanmode-radio-1" class="py-2"
-                >Que técnica de imputación usara:</label
-              >
-
-              <div class="flex items-center">
-                <input
-                  checked
-                  id="cleanmode-radio-2"
-                  type="radio"
-                  [value]="2"
-                  name="cleanmode"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  [(ngModel)]="this.needPreprocessing"
-                />
-                <label
-                  for="preprocesing-radio-2"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >KNN</label
-                >
-              </div>
-              <div class="flex items-center">
-                <input
-                  checked
-                  id="cleanmode-radio-3"
-                  type="radio"
-                  [value]="3"
-                  name="cleanmode"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  [(ngModel)]="this.cleanMode"
-                />
-                <label
-                  for="preprocesing-radio-3"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Imputación de datos incompletos</label
-                >
-              </div>
-              <div class="flex items-center">
-                <input
-                  checked
-                  id="cleanmode-radio-4"
-                  type="radio"
-                  [value]="4"
-                  name="cleanmode"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  [(ngModel)]="this.cleanMode"
-                />
-                <label
-                  for="preprocesing-radio-4"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >No hacer nada con los datos incompletos</label
-                >
-              </div>
-            </div>
-            <!-- fin pregunta 2 -->
 
             <!-- salida de acciones -->
           </div>
+
           <!-- fin contenedor opciones avanzadas -->
+
+          <!-- Contenedor parte de opciones manuales -->
+          <div class=""></div>
         </div>
       </div>
     </div>
     <div class="mb-6 w-full">
-      <div class="flex w-full justify-between">
+      <div class="flex w-full flex-col justify-between">
+        <label for="" class="my-4"
+          >Generar configuración de preprocesamiento:
+        </label>
+        <div class="w-full flex flex-col items-center justify-center my-4">
+          <!-- botón de generar configuración de preprocesamiento -->
+
+          <button class="bg-secondary p-4 w-[200px] text-primary rounded-md">
+            <i class="pi pi-cog"></i>
+            Generar Configuración
+          </button>
+          <!-- area de acciones manuales -->
+
+          <h1 class="font-bold"></h1>
+        </div>
+        <label for="">Agregar pasos de preprocesamiento manuales:</label>
+        <div class="w-full flex flex-col items-center justify-center my-4">
+          <button
+            class="p-4 bg-secondary w-[200px] rounded-md text-primary"
+            (click)="showSelectionDialog()"
+          >
+            <i class="pi pi-plus-circle"></i>
+            Agregar Acción
+          </button>
+        </div>
         <div class="relative overflow-x-auto shadow-md rounded-lg w-full">
           <label class="block font-semibold my-2"
             >Acciones del preprocesamiento</label
@@ -273,6 +330,7 @@
                 <th class="px-6 py-3">Orden de aplicación</th>
                 <th class="px-6 py-3">Técnica</th>
                 <th class="px-6 py-3">Valor a enviar</th>
+                <th class="px-6 py-3">Columnas afectadas</th>
 
                 <!-- <th class="px-6 py-3">Rol</th> -->
               </tr>
@@ -281,13 +339,17 @@
               @for (steps of preprocessingSteps; track steps; let i = $index) {
               <tr class="bg-white border-b hover:bg-gray-50">
                 <td class="px-6 py-4">
-                  <button class="bg-red-400 text-white p-2 rounded-md text-center">
+                  <button
+                    class="bg-red-400 text-white p-2 rounded-md text-center"
+                    (click)="deleteStep(i)"
+                  >
                     <i class="pi pi-trash"></i>
                   </button>
                 </td>
                 <td class="px-6 py-4">{{ i + 1 }}</td>
                 <td class="px-6 py-4">{{ steps.technique }}</td>
                 <td class="px-6 py-4">{{ steps.value }}</td>
+                <td class="px-6 py-4">{{ extractNames(steps.columns) }}</td>
 
                 <!-- <td class="px-6 py-4">{{ user.role.name }}</td> -->
               </tr>
@@ -308,6 +370,9 @@
       class="m-5"
       label="Iniciar Pre-Procesamiento"
       severity="primary"
+      [disabled]="
+        this.preprocessingSteps.length == 0 && this.needPreprocessing == true
+      "
       icon="pi pi-file"
       (onClick)="onSubmitPreprocessing($event)"
     />

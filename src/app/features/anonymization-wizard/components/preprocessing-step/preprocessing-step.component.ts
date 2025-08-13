@@ -42,13 +42,13 @@ export class PreprocessingStepComponent {
   @Output() preprocessingData = new EventEmitter<void>();
 
   // ngOnInit(): void {
-
   //   // console.log("Info dentro de preprocesing step", this.projectID,this.datasetID, this.entities)
-
+  //   this.onNeedSpecsChange(this.needSpecs);
   // }
 
   selectedEntity: Entity;
   needPreprocessing: boolean = true;
+  needSpecs: boolean = true;
   cleanMode: number = 1;
   preprocessingStatus: string = 'Inactivo';
   preprocessingProgress: number = 0;
@@ -292,15 +292,14 @@ export class PreprocessingStepComponent {
     // todo el codig y al final se cierra el dialog
     const dataToAdd: preprocessStep = {
       columns: this.selectedColumns,
-      value: this.technique_selected =="delete"? this.numberToUseOnDelete: 0,
-      technique: this.technique_selected
-    }
+      value: this.technique_selected == 'delete' ? this.numberToUseOnDelete : 0,
+      technique: this.technique_selected,
+    };
 
-    this.preprocessingSteps = this.preprocessingSteps.concat(dataToAdd)
-    console.log(this.preprocessingSteps)
-    this.selectedColumns = []
-    this.technique_selected = ""
-    
+    this.preprocessingSteps = this.preprocessingSteps.concat(dataToAdd);
+    console.log(this.preprocessingSteps);
+    this.selectedColumns = [];
+    this.technique_selected = '';
 
     this.show_selection_dialog = false;
   }
@@ -331,5 +330,37 @@ export class PreprocessingStepComponent {
       this.selectedColumns = [];
       // this.cdr.detectChanges()
     }
+  }
+
+  onNeedSpecsChange(newValue: boolean) {
+    console.log('El valor de needSpecs cambió a:', newValue);
+
+    if (newValue) {
+      // Lógica si es "Sí"
+      console.log('Se usará preprocesamiento por defecto');
+      const columns = this.dataset.files.find(
+        (file) => file.detail == 'uploaded'
+      ).columns;
+      const technique = 'default';
+      this.preprocessingSteps = [
+        {
+          columns: columns,
+          technique: technique,
+          value: 0,
+        },
+      ];
+    } else {
+      // Lógica si es "No"
+      console.log('Se deben especificar opciones avanzadas');
+      this.preprocessingSteps = [];
+    }
+  }
+  deleteStep(del_index: number) {
+    this.preprocessingSteps = this.preprocessingSteps.filter(
+      (step, index) => index !== del_index
+    );
+  }
+  extractNames(columns: Columns[], separator: string = ' | '): string {
+    return columns.map((col) => col.name).join(separator);
   }
 }
