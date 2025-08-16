@@ -1,22 +1,30 @@
-import { Columns } from "app/core/interfaces/dataset.interface"
+import { Columns } from "../../../../core/interfaces/dataset.interface";
 
-export default interface DatasetPreprocess{
+export interface PreprocessStep{
+    
+    columns: Columns[];
+    value?: string | number;
+    technique: string;
+}
+export interface PreprocessTechnique{
 
-    // userID: string
-    projectID: string
-    datasetID: string
-    parameters: DatasetParameters
+    name: string;
+    value: string;
+    description: string
+}
+
+export interface DatasetPreprocess {
+    projectID: string;
+    datasetID: string;
+    entityID: string;
+    parameters: PreprocessParameters;
 
 }
 
-interface DatasetParameters{
-
-    dataset_status: string
-    need_preprocess: boolean
-    need_imputation: boolean
-    cleaning_method: string
-    columns: Columns[]
-    rows: number
+export interface PreprocessParameters {
+    dataset_status: string;
+    need_preprocess: boolean;
+    columns: Columns[];
+    rows: number;
+    steps: PreprocessStep[];
 }
-
-

@@ -17,12 +17,12 @@ import { environment } from 'environments/environment.development';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { count, filter, Subscription } from 'rxjs';
-import DatasetPreprocess from './preprocess.interface';
 import { PreprocessService } from './preprocess.service';
 import {
-  preprocessStep,
-  preprocessTechnique,
-} from 'app/core/interfaces/preprocess.interface';
+  DatasetPreprocess,
+  PreprocessStep,
+  PreprocessTechnique,
+} from 'app/features/anonymization-wizard/components/preprocessing-step/preprocess.interface';
 import { Dialog } from 'primeng/dialog';
 
 @Component({
@@ -47,8 +47,8 @@ export class PreprocessingStepComponent {
   // }
 
   selectedEntity: Entity;
-  needPreprocessing: boolean = true;
-  needSpecs: boolean = true;
+  needPreprocessing: boolean;
+  needSpecs: boolean;
   cleanMode: number = 1;
   preprocessingStatus: string = 'Inactivo';
   preprocessingProgress: number = 0;
@@ -62,7 +62,7 @@ export class PreprocessingStepComponent {
   numberToUseOnDelete: number = 0;
   max_cols: number = 10;
 
-  clean_methods: preprocessTechnique[] = [
+  clean_methods: PreprocessTechnique[] = [
     {
       name: 'Por defecto',
       value: 'default',
@@ -101,7 +101,7 @@ export class PreprocessingStepComponent {
     },
   ];
 
-  preprocessingSteps: preprocessStep[] = [];
+  preprocessingSteps: PreprocessStep[] = [];
 
   private websocketSubscription: Subscription | null = null;
   // private messageService = inject(MessageService);
@@ -115,7 +115,7 @@ export class PreprocessingStepComponent {
   // funciones para websocket
 
   ngOnDestroy(): void {
-    // ... Desuscripción y cierre de WebSocket al destruir el componente
+    // ... Descripción y cierre de WebSocket al destruir el componente
     if (this.websocketSubscription) {
       this.websocketSubscription.unsubscribe();
     }
@@ -189,17 +189,49 @@ export class PreprocessingStepComponent {
   // fin funciones para websocket
   onSubmitPreprocessing(event: Event) {
     event.preventDefault();
+    // validar que todos los campos se han llenado 
+    if (!this.selectedEntity) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, selecciona una entidad.',
+        life: 3000,
+      });
+      return;
+    }
+    if (!this.needPreprocessing) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, selecciona si necesitas preprocesamiento.',
+        life: 3000,
+      });
+      return;
+    }
+    if (this.preprocessingSteps.length === 0 && !this,this.needPreprocessing) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, añade al menos un paso de preprocesamiento.',
+        life: 3000,
+      });
     //TODO
+      return;
+    }
+    // Preparar la información a enviar al backend
     this.infoToSend = {
       projectID: this.projectID,
       datasetID: this.datasetID,
+      entityID: this.selectedEntity.id,
       parameters: {
+
         dataset_status: this.dataset.status,
         need_preprocess: this.needPreprocessing,
-        need_imputation: true,
-        cleaning_method: 'imputation',
+        // need_imputation: true,
+        // cleaning_method: 'imputation',
         columns: this.dataset.files[0].columns,
         rows: this.dataset.files[0].rows,
+        steps: this.preprocessingSteps,
       },
     };
 
@@ -290,7 +322,7 @@ export class PreprocessingStepComponent {
   }
   savePreprocessStep() {
     // todo el codig y al final se cierra el dialog
-    const dataToAdd: preprocessStep = {
+    const dataToAdd: PreprocessStep = {
       columns: this.selectedColumns,
       value: this.technique_selected == 'delete' ? this.numberToUseOnDelete : 0,
       technique: this.technique_selected,
