@@ -188,7 +188,12 @@ export class PreprocessingStepComponent {
 
   // fin funciones para websocket
   onSubmitPreprocessing(event: Event) {
+
     event.preventDefault();
+    console.log('Iniciando preprocesamiento con:');
+    console.log('Entidad seleccionada:', this.selectedEntity.name);
+    console.log('Necesita preprocesamiento:', this.needPreprocessing);
+    console.log('Pasos de preprocesamiento:', this.preprocessingSteps);
     // validar que todos los campos se han llenado 
     if (!this.selectedEntity) {
       this.messageService.add({
@@ -208,7 +213,7 @@ export class PreprocessingStepComponent {
       });
       return;
     }
-    if (this.preprocessingSteps.length === 0 && !this,this.needPreprocessing) {
+    if (this.preprocessingSteps.length === 0 && !this.needPreprocessing) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -218,11 +223,13 @@ export class PreprocessingStepComponent {
     //TODO
       return;
     }
+
+    console.log("antes de emitir")
     // Preparar la información a enviar al backend
     this.infoToSend = {
       projectID: this.projectID,
       datasetID: this.datasetID,
-      entityID: this.selectedEntity.id,
+      entityID: "d4182527-cf43-4503-8c17-dc72cbaef2e8",
       parameters: {
 
         dataset_status: this.dataset.status,

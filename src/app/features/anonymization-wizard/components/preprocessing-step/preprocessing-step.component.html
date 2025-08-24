@@ -1,7 +1,6 @@
 <div class="w-full p-4">
   <form
     action=""
-    onsubmit="onSubmitPreprocessing($event)"
     class="flex flex-col justify-center items-center"
   >
     <div class="w-full">
@@ -370,9 +369,7 @@
       class="m-5"
       label="Iniciar Pre-Procesamiento"
       severity="primary"
-      [disabled]="
-        this.preprocessingSteps.length == 0 && this.needPreprocessing == true
-      "
+      
       icon="pi pi-file"
       (onClick)="onSubmitPreprocessing($event)"
     />
