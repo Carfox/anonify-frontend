@@ -63,42 +63,115 @@ export class PreprocessingStepComponent {
   max_cols: number = 10;
 
   clean_methods: PreprocessTechnique[] = [
+    // CHECK
     {
       name: 'Por defecto',
       value: 'default',
       description:
         'Dejar que el sistema defina la técnica de preprocesamiento para las columnas seleccionadas.',
     },
+    // CHECK
     {
-      name: 'Eliminar Datos',
+      name: 'Eliminar Datos con Valores Faltantes',
       value: 'delete',
       description:
         'Eliminar los datos que contengan un numero mayor de datos faltantes en base a un porcentaje (%) del numero de columnas total de dataset.',
     },
+
+    // TODO (CHECK)
+    {
+      name: 'Eliminar Datos Duplicados',
+      value: 'delete_duplicates',
+      description: 'Eliminar los datos que estén duplicados en las columnas seleccionadas.',
+    },
+    // TODO (CHECK)
+    {
+      name: 'Eliminar Datos con Valores Atípicos',
+      value: 'delete_outliers',
+      description:
+        'Eliminar los datos que contengan valores imposibles en las columnas seleccionadas.',
+    },
+    // TODO (CHECK)
+    {
+      name: 'Remplazar valores atípicos por Nan',
+      value: 'outliers_to_nan',
+      description:
+        'Remplazar los valores atípicos que contengan valores imposibles en las columnas seleccionadas por valores nulos (null).',
+    },
+    // TODO (CHECK)
+    {
+      name: 'Remplazar valor atípico por limite inferior o superior',
+      value: 'clip_to_bounds',
+      description:
+        'Remplazar los valores atípicos que contengan valores imposibles en las columnas seleccionadas por el valor limite inferior o superior según corresponda.',
+    },
+    // TODO (FUNCIONA)
+    {
+      name: 'Eliminar Columna',
+      value: 'delete_columns',
+      description:
+        'Eliminar la columna completa seleccionada del dataset.',
+    },
+    // TODO (CHECK)
+    {
+      name: 'Convertir Datos vacíos a Nan',
+      value: 'empty_to_nan',
+      description:
+        'Convertir los datos que estén vacíos a valores nulos (null).',
+      
+    },
+    // TODO (CHECK)
+    {
+      name: 'Convertir Tipo de dato numérico de entero a flotante (INT -> FLOAT)',
+      value: 'fix_int_to_float',
+      description:
+        'Convertir los valores de la columna seleccionada a tipo numérico (INT <- FLOAT).',
+    },
+    {
+      name: 'Convertir Tipo de dato de Flotante a Entero (FLOAT -> INT)',
+      value: 'fix_float_to_int',
+      description:
+        'Convertir los valores de la columna seleccionada a tipo numérico entero (FLOAT -> INT).',
+    },
+
+
+    // (CHECK)
     {
       name: 'Imputación por valor constante',
       value: 'const_value',
       description:
         'Para aquellos datos que estén vacíos se remplaza por un valor fijo definido.',
     },
+    // (CHECK)
     {
       name: 'Imputación por Media Aritmética',
       value: 'media_impute',
       description:
-        'Los valores faltantes se remplazan por la media de los datos del atributo. NOTA: Solo se puede usar en valores numericos.',
+        'Los valores faltantes se remplazan por la media de los datos del atributo. NOTA: Solo se puede usar en valores numéricos.',
     },
+    // (CHECK)
+    {
+      name: 'Imputación por Mediana',
+      value: 'median_impute',
+      description:
+        'Los valores faltantes se remplazan por la mediana de los datos del atributo. NOTA: Solo se puede usar en valores numéricos.',
+    },
+    // CHECK
     {
       name: 'Imputación por KNN',
       value: 'knn_impute',
       description:
         'Los valores faltantes se remplazan por los valores cercanos a valores vecinos.',
     },
+    //CHECK
     {
       name: 'Imputación por Moda',
       value: 'most_frecuent',
       description:
         'Los valores faltantes se remplazan por el valor mas frecuente del atributo',
     },
+
+    
   ];
 
   preprocessingSteps: PreprocessStep[] = [];

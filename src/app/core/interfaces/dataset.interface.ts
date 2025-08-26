@@ -28,9 +28,11 @@ export interface Columns {
   name: string;
   id: string; // UUID
   column_type: {
+
     name: string; // 'string', 'number', etc.
     id: string; // UUID
     // Puedes añadir más propiedades si es necesario
+    
   };
   value_type: {
     name: string; // 'string', 'number', etc.
