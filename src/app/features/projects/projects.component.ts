@@ -48,10 +48,11 @@ import { UserMinInformation } from 'app/core/interfaces/user.interface';
       <div class="max-w-screen-xl">
         <!-- Botones -->
         <div class="flex justify-start gap-4 mb-4">
-          <p-button (click)="showDialog()" label="Nuevo Proyecto"></p-button>
+          <p-button (click)="showDialog()" label="Nuevo Proyecto" styleClass="bg-secondary hover:bg-third"></p-button>
           <p-button
             (click)="showShareDialog()"
             label="Compartir Proyecto"
+            styleClass="bg-secondary hover:bg-third"
           ></p-button>
         </div>
 
@@ -136,7 +137,7 @@ import { UserMinInformation } from 'app/core/interfaces/user.interface';
       </p-dialog>
 
       <!-- Diálogo Compartir Proyecto -->
-      <p-dialog [(visible)]="share" [modal]="true" [style]="{ width: '30rem' }">
+      <p-dialog [(visible)]="share" [modal]="true" [style]="{ width: '40rem'}">
         <ng-template #header>
           <span class="font-bold whitespace-nowrap">Compartir Proyecto</span>
         </ng-template>

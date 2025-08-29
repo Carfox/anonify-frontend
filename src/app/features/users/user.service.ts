@@ -48,4 +48,12 @@ export class UserService {
       },
     })
   }
+  deleteUser(id:string){
+    const token = getToken();
+    return this.http.delete(`${this.apiURL}/api/administration/authors/${id}`,{
+      headers: {  
+      Authorization: `Bearer ${token}`,
+      },
+    });
+  }
 }

@@ -16,6 +16,7 @@
       [routerLink]="item.routerLink"
       routerLinkActive="font-bold bg-[#e6f7f5]"
       [routerLinkActiveOptions]="{ exact: true }"
+      *ngIf="item.visible !== false"
     >
       <i [ngClass]="item.icon" class="mr-3"></i>
       <span>{{ item.label }}</span>
@@ -27,6 +28,7 @@
     class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-100 rounded transition"
     (click)="navigateToUserInfo()"
     title="Ver información de usuario"
+  
   >
     <p-avatar
       class="mr-3"

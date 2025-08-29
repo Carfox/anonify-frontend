@@ -136,6 +136,10 @@ export class ProjectDetailPageComponent implements OnInit {
     // console.log('El valor de route es:', route);
     this.router.navigate([route]);
   }
+  reloadData(event?: Event) {
+    if (event) event.preventDefault();
+    window.location.reload();
+  }
 
   onDeleteDataset(event: Event, dataset_id: string) {
     event.preventDefault();
@@ -196,9 +200,11 @@ export class ProjectDetailPageComponent implements OnInit {
             'El dataset y todos sus datos han sido eliminados correctamente.',
           life: 3000,
         });
+        // setTimeout(()=>this.reloadData(), 2000) // Espera 0.5 segundos para asegurar que el backend haya procesado la eliminación
+        // this.reloadData();
         // Swal.fire('Saved!', '', 'success');
       } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info');
+        Swal.fire('Cambios no guardados', '', 'info');
       }
     });
   }
@@ -382,7 +388,13 @@ export class ProjectDetailPageComponent implements OnInit {
             detail:
               'Archivo subido correctamente. Seguimiento de carga iniciado.',
             life: 3000,
+
           });
+
+          setTimeout(() => {
+            this.reloadData();
+          }, 2000); // Espera 2 segundos antes de recargar para asegurar que
+
         } else {
           this.uploadStatus = 'Error';
 

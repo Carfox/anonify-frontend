@@ -51,4 +51,6 @@ interface FileInterface {
   columns: Columns[];
   dataset_id: string; // ID del dataset al que pertenece
   detail: string
+  prep_log: string | null
+  anon_log: string | null
 }

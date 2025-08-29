@@ -68,6 +68,12 @@ export class NavbarComponent implements OnInit {
         routerLink: '/a/entities',
       },
       {
+        label: 'Notificaciones',
+        icon: 'pi pi-bell',
+        visible: true,
+        routerLink: '/a/notifications',
+      },
+      {
         separator: true,
       },
       {

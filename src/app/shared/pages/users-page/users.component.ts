@@ -16,6 +16,8 @@ import { forkJoin } from 'rxjs';
 import { SpinnerIcon } from 'primeng/icons';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SelectModule } from 'primeng/select';
+import Swal from 'sweetalert2';
+import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -28,6 +30,7 @@ import { SelectModule } from 'primeng/select';
     SpinnerIcon,
     ProgressSpinnerModule,
     SelectModule,
+    ToastModule
   ],
   providers: [MessageService],
   templateUrl: './users.component.html',
@@ -95,10 +98,47 @@ export class UsersComponent implements OnInit, AfterViewInit, OnChanges {
 
   deleteUser(userID: string): void {
     console.log('Id a eliminar', userID);
+    Swal.fire({
+          title:
+            'Estas seguro que deseas eliminar toda la información del Usuario?',
+          // showDenyButton: true,
+          icon: 'warning',
+          confirmButtonText: 'Eliminar',
+          confirmButtonColor: '#F77070',
+          showCancelButton: true,
+          cancelButtonText: 'Cancelar',
+    
+          // denyButtonText: `Don't save`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.userService.deleteUser(userID).subscribe({
+              next: (res: any) => {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Éxito',
+                  detail: 'Usuario eliminado correctamente.',
+                  life: 3000,
+                });
+        
+                this.reloadData();
+              },
+              error: (err) => {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: 'No se pudo eliminar el usuario. Información:'+err,
+                  life: 3000,
+                });
+              },
+            });
+          }
+        }
+        );
   }
 
-  updateUser(userID: string): void {
-    console.log('Id a actualizar', userID);
+  updateUser(user: string ): void {
+    console.log('Id a actualizar', user);
+
   }
 
   createUser(event: Event): void {
@@ -131,12 +171,14 @@ export class UsersComponent implements OnInit, AfterViewInit, OnChanges {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'No se pudo crear el usuario.',
+          detail: 'No se pudo crear el usuario.'+err,
           life: 3000,
         });
       },
     });
   }
+
+  
 
   reloadData(event?: Event) {
     if (event) event.preventDefault();

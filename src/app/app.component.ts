@@ -4,11 +4,12 @@ import { PrimeNG } from 'primeng/config';
 import { Observable } from 'rxjs';
 import { LoadingService } from './core/services/loading.service';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ProgressSpinner],
+  imports: [RouterOutlet, ProgressSpinner, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

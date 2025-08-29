@@ -24,11 +24,12 @@ import {
   PreprocessTechnique,
 } from 'app/features/anonymization-wizard/components/preprocessing-step/preprocess.interface';
 import { Dialog } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'aw-preprocessing-step',
   standalone: true,
-  imports: [ButtonModule, CommonModule, FormsModule, Dialog],
+  imports: [ButtonModule, CommonModule, FormsModule, Dialog, ToastModule ],
   providers: [MessageService],
   templateUrl: './preprocessing-step.component.html',
   styleUrl: './preprocessing-step.component.css',
@@ -263,6 +264,18 @@ export class PreprocessingStepComponent {
   onSubmitPreprocessing(event: Event) {
 
     event.preventDefault();
+    // this.showProgress = true;
+    
+    if(this.needPreprocessing == undefined || this.needSpecs == undefined || this.selectedEntity == undefined){
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Debe completar todos los campos del formulario',
+        life: 3000,
+      });
+      return;
+    }
+
     console.log('Iniciando preprocesamiento con:');
     console.log('Entidad seleccionada:', this.selectedEntity.name);
     console.log('Necesita preprocesamiento:', this.needPreprocessing);
